@@ -1,9 +1,12 @@
-public class UserSearchDTO
+public namespace UserSearchDTO 
 {
-    public String FirstName { get; }
-    public String LastName { get; }
-    public DateTime GradYear { get; }
-    public String LSUEmail { get; }
-    public String System { get; }
-    public String Subsystem { get; }
+    public class UserSearchDTO
+    {
+        public String FirstName { get; set; }
+        public String LastName { get; set; }
+        public DateTime GradYear { get; set; }
+        public String LSUEmail { get; set; }
+        public String System { get; set; }
+        public String Subsystem { get; set; }
+    }
 }

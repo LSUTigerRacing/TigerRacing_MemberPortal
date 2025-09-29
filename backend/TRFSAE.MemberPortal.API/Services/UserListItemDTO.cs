@@ -1,6 +1,9 @@
-public class UserListDTO
+public namespace UserListDTO 
 {
-    public String Name { get; }
-    public int GradYear { get; }
-    public String Subsystem { get; }
+    public class UserListDTO
+    {
+        public String Name { get; set; }
+        public int GradYear { get; set; }
+        public String Subsystem { get; set; }
+    }
 }

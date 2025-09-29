@@ -1,19 +1,23 @@
-public class UserResponseDTO
+
+public namespace UserResponseDTO 
 {
-    public Guid UserId { get; }
-    public String Username { get; }
-    public String FirstName { get; }
-    public String LastName { get; }
-    public DateTime GradYear { get; }
-    public String PersonalEmail { get; }
-    public String LSUEmail { get; }
-    public int EightNine { get; }
-    public Boolean HazingStatus { get; }
-    public Boolean FeeStatus { get; }
-    public Boolean QualificationStatus { get; }
-    public String System { get; }
-    public String Subsystem { get; }
-    public String ShirtSize { get; }
-    public DateTime AccountCreationDate { get; }
-    public DateTime AccountLastUpdatedDate { get; }
+    public class UserResponseDTO
+    {
+        public Guid UserId { get; set; }
+        public String Username { get; set; }
+        public String FirstName { get; set; }
+        public String LastName { get; set; }
+        public DateTime GradYear { get; set; }
+        public String PersonalEmail { get; set; }
+        public String LSUEmail { get; set; }
+        public int EightNine { get; set; }
+        public Boolean HazingStatus { get; set; }
+        public Boolean FeeStatus { get; set; }
+        public Boolean QualificationStatus { get; set; }
+        public String System { get; set; }
+        public String Subsystem { get; set; }
+        public String ShirtSize { get; set; }
+        public DateTime AccountCreationDate { get; set; }
+        public DateTime AccountLastUpdatedDate { get; set; }
+    }
 }
