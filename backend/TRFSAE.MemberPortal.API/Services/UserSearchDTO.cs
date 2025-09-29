@@ -1,4 +1,4 @@
-public namespace UserSearchDTO 
+namespace UserSearchDTO 
 {
     public class UserSearchDTO
     {

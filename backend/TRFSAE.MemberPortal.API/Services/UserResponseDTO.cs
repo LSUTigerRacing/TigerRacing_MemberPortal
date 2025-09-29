@@ -1,5 +1,4 @@
-
-public namespace UserResponseDTO 
+namespace UserResponseDTO 
 {
     public class UserResponseDTO
     {

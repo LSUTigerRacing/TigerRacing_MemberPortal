@@ -1,4 +1,4 @@
-public namespace UserListDTO 
+namespace UserListDTO 
 {
     public class UserListDTO
     {

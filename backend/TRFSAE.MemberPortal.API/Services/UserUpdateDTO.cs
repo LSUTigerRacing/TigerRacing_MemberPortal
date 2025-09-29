@@ -1,4 +1,4 @@
-public namespace UserUpdateDTO 
+namespace UserUpdateDTO 
 {
     public class UserUpdateDTO 
     {
