@@ -1,6 +1,6 @@
 public class UserResponseDTO
 {
-    public int UserId { get; }
+    public Guid UserId { get; }
     public String Username { get; }
     public String FirstName { get; }
     public String LastName { get; }
