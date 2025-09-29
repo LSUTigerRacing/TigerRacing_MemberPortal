@@ -1,4 +1,4 @@
-namespace UserListDTO 
+namespace TRFSAE.MemberPortal.API.DTOs.UserListDTO 
 {
     public class UserListDTO
     {

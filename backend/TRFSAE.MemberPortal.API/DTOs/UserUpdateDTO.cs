@@ -1,4 +1,4 @@
-namespace UserUpdateDTO 
+namespace TRFSAE.MemberPortal.API.DTOs.UserUpdateDTO 
 {
     public class UserUpdateDTO 
     {
