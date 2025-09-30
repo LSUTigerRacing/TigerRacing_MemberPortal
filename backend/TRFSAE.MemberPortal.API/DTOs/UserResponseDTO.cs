@@ -1,4 +1,4 @@
-namespace TRFSAE.MemberPortal.API.DTOs.UserResponseDTO 
+namespace TRFSAE.MemberPortal.API.DTOs
 {
     public class UserResponseDTO
     {
