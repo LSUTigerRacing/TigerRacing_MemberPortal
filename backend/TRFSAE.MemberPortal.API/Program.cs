@@ -4,7 +4,7 @@ using Scalar.AspNetCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // register Supabase client as a singleton for reuse across project
-builder.Services.AddSingleton(provider =>
+builder.Services.AddScoped(provider =>
 {
     var options = new SupabaseOptions
     {
