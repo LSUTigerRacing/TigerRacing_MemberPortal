@@ -1,33 +1,37 @@
 using TRFSAE.MemberPortal.API.DTOs
+using TRFSAE.MemberPortal.API.Controllers
 
 namespace TRFSAE.MemberPortal.API.Services
 {
-
-  public async UserResponseDTO GetUserAsync(string name) 
+  public class UserService 
   {
-    // TODO 
-  }
 
-  public async UserResponseDTO GetUserByIDAsync(Guid userID) 
-  {
-    // TODO 
-  }
-
-  public async void UpdateUserAsync(Guid userID, UserUpdateDTO updateDto) 
-  {
-    // TODO 
-  }
-
-  public async void DeleteUserAsync(Guid currentUserId, string confirmationString) 
-  {
-    if (confirmationString == "confirm")
+    public async Task<UserResponseDTO> GetUserAsync(string name) 
     {
-      //TODO
+      // TODO 
     }
-  }
 
-  public async GetUserRolesAsync(Guid userID)
-  {
-    // TODO 
+    public async Task<UserResponseDTO> GetUserByIDAsync(Guid userID) 
+    {
+      // TODO 
+    }
+
+    public async Task<IActionResult> UpdateUserAsync(Guid userID, UserUpdateDTO updateDto) 
+    {
+      // TODO 
+    }
+
+    public async Task<IActionResult> DeleteUserAsync(Guid currentUserId, string confirmationString) 
+    {
+      if (confirmationString == "confirm")
+      {
+        //TODO
+      }
+    }
+
+    public async Task<UserResponseDTO> GetUserRolesAsync(Guid userID)
+    {
+      // TODO 
+    }
   }
 }

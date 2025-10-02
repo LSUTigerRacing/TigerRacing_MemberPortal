@@ -1,22 +1,45 @@
 namespace TRFSAE.MemberPortal.API.DTOs
 {
+    [Table("user")]
     public class UserResponseDTO
     {
+        [PrimaryKey("id")]
         public Guid UserId { get; set; }
-        public String Username { get; set; }
-        public String FirstName { get; set; }
-        public String LastName { get; set; }
-        public DateTime GradYear { get; set; }
+
+        [Column("name")]
+        public String Name { get; set; }
+
+        [Column("email")]
         public String PersonalEmail { get; set; }
+
+        [Column("lsu_email")]
         public String LSUEmail { get; set; }
+
+        [Column("eight_nine")]
         public int EightNine { get; set; }
+
+        [Column("hazing_status")]
         public Boolean HazingStatus { get; set; }
+
+        [Column("fee_status")]
         public Boolean FeeStatus { get; set; }
-        public Boolean QualificationStatus { get; set; }
-        public String System { get; set; }
-        public String Subsystem { get; set; }
+
+        [Column("grad_date")]
+        public DateTime GradDate { get; set; }
+
+        [Column("shirt_size")]
         public String ShirtSize { get; set; }
+
+        [Column("system")]
+        public String System { get; set; }
+
+        [Column("subsystem")]
+        public String Subsystem { get; set; }
+
+        [Column("created_at")]
         public DateTime AccountCreationDate { get; set; }
+
+        [Column("updated_at")]
         public DateTime AccountLastUpdatedDate { get; set; }
     }
 }
