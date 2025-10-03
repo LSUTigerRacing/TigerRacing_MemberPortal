@@ -3,7 +3,7 @@ using TRFSAE.MemberPortal.API.Controllers
 
 namespace TRFSAE.MemberPortal.API.Services
 {
-  public class UserService 
+  public class UserService : IUserService<UserService>
   {
 
     public async Task<UserResponseDTO> GetUserAsync(string name) 

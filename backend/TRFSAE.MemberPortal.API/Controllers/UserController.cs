@@ -1,57 +1,45 @@
 using TRFSAE.MemberPortal.API.DTOs
-
-DotNetEnv.Env.TraversePath().Load();
+using TRFSAE.MemberPortal.API.Services
 
 namespace TRFSAE.MemberPortal.API.Controllers 
 {
-  public class UserController 
+  [ApiController]
+  [Route("api/user")]
+  public class UserController : ControllerBase
   {
-    var url = Environment.GetEnvironmentVariable("SUPABASE_URL");
-    var key = Environment.GetEnvironmentVariable("SUPABASE_KEY");
+    private readonly IUserService _userService;
 
-    var options = new Supabase.SupabaseOptions 
+    public UserController(IUserService _userService)
     {
-      AutoConnectRealtime = true;
-    };
-
-    var supabase = new SupabaseClient(url, key, options);
-
-    public async Task<UserResponseDTO> GetUserByIDAsync(Guid id)
-    {
-      await supabase.InitializeAsync();
-      return (await supabase
-          .From<UserResponseDTO>()
-          .Where(x => x.UserId == id)
-          .get()
-      );
+      _userService = userService;
     }
 
-    public async Task<UserResponseDTO> UpdateUserAsync(Guid id, UserUpdateDTO model)
+    [HttpGet]
+    public async Task<IActionResult> GetUserByIDAsync(Guid id)
     {
-      await supabase.InitializeAsync();
-      return Ok(await supabase
-        .From<UserUpdateDTO>().Upsert(model)
-      );
+      var User = await _userService.GetUserByIDAsync(id);
+      return Ok(User);
     }
 
-    public async Task<UserResponseDTO> DeleteUserAsync(Guid id)
+    [HttpPatch]
+    public async Task<IActionResult> UpdateUserAsync(Guid id, UserUpdateDTO model)
     {
-      await supabase.InitializeAsync();
-      return Ok(await supabase
-          .From<UserResponseDTO>()
-          .Where(x => x.UserId == id)
-          .Delete()
-      );
+      var taskResult = await _userService.UpdateUserByIDAsync(id);
+      return Ok(taskResult);
     }
 
-    public async Task<UserResponseDTO> GetUserRoles(Guid id)
+    [HttpDelete]
+    public async Task<IActionResult> DeleteUserAsync(Guid id)
     {
-      await supabase.InitializeAsync();
-      return (await supabase
-          .From<UserRoleDTO>()
-          .Where(x => x.UserId == id)
-          .get()
-      );
+      var taskResult = await _userService.GetUserByIDAsync(id);
+      return Ok(taskResult);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetUserRoles(Guid id)
+    {
+      var User = await _userService.GetUserByIDAsync(id);
+      return Ok(User);
     }
   }
 }
