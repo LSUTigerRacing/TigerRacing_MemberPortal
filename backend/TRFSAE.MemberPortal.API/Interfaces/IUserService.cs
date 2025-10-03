@@ -4,6 +4,8 @@ namespace TRFSAE.MemberPortal.API.Interfaces
 {
   interface IUserService<T>
   {
+    public IUserService(Client supabase);
+
     public async Task<UserResponseDTO> GetUserAsync(string name); 
 
     public async Task<UserResponseDTO> GetUserByIDAsync(Guid userID);

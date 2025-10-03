@@ -4,7 +4,7 @@ using TRFSAE.MemberPortal.API.Services
 namespace TRFSAE.MemberPortal.API.Controllers 
 {
   [ApiController]
-  [Route("api/user")]
+  [Route("api/users")]
   public class UserController : ControllerBase
   {
     private readonly IUserService _userService;
