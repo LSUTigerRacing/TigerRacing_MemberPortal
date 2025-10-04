@@ -1,17 +1,15 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-
 function App() {
   return (
-    <div className="min-h-screen bg-background p-8">
+<div className="min-h-screen bg-background p-8">
       <div className="max-w-4xl mx-auto space-y-8">
         
         {/* Tailwind Test */}
         <div className="bg-red-500 text-white p-4 rounded-lg">
           ✓ Tailwind is working - this should have a red background
         </div>
-
-        {/* Button Variants Test */}
+{/* Button Variants Test */}
         <Card>
           <CardHeader>
             <CardTitle>Button Components</CardTitle>
@@ -26,8 +24,7 @@ function App() {
             <Button variant="link">Link</Button>
           </CardContent>
         </Card>
-
-        {/* Button Sizes Test */}
+{/* Button Sizes Test */}
         <Card>
           <CardHeader>
             <CardTitle>Button Sizes</CardTitle>
@@ -38,8 +35,7 @@ function App() {
             <Button size="lg">Large</Button>
           </CardContent>
         </Card>
-
-        {/* Interactive Test */}
+{/* Interactive Test */}
         <Card>
           <CardHeader>
             <CardTitle>Interactive Button</CardTitle>
@@ -50,7 +46,7 @@ function App() {
             </Button>
           </CardContent>
         </Card>
-      </div>
+</div>
     </div>
   )
 }
