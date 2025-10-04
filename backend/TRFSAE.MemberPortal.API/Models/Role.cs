@@ -8,8 +8,9 @@ namespace TRFSAE.MemberPortal.API.Models
     {
         [PrimaryKey("id", false)]
         public Guid Id { get; set; }
-
         [Column("roleName")]
         public string RoleName { get; set; } = null!;
+        [Column("permissions")]
+        public Dictionary<string, object>? Permissions { get; set; }
     }
 }
