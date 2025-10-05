@@ -39,17 +39,19 @@ public class RoleService : IRoleService
         return roles?.FirstOrDefault();
     }
 
-    public Task<RolePermissionDto> UpdateRolePermissionsAsync(Guid id, JsonElement permissions)
+    public async Task<RoleResponseDto> UpdateRolePermissionsAsync(Guid id, JsonElement permissions)
     {
         var parameters = new Dictionary<string, object>
         {
             { "role_id", id },
-            { "permissions", permissions }
+            { "permission_updates", permissions }
         };
 
-        // return _supabaseClient
-        //     .Rpc("update_role_permissions", parameters)
-        //     .Then(response => JsonSerializer.Deserialize<RolePermissionDto>(response.Content));
-        return Task.FromResult(new RolePermissionDto());
+        var response = await _supabaseClient
+            .Rpc("update_role_permissions", parameters);
+
+        var role = JsonSerializer.Deserialize<List<RoleResponseDto>>(response.Content);
+
+        return role?.FirstOrDefault();
     }
 }
