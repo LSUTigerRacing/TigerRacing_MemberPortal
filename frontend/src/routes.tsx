@@ -1,5 +1,5 @@
-import { lazy, Suspense, useEffect, useState } from "react"
-import { Routes, Route, Navigate, useLocation } from "react-router-dom"
+import { lazy, Suspense } from "react"
+import { Routes, Route, Navigate } from "react-router-dom"
 
 // Public pages
 const Home = lazy(() => import('./pages/Home.tsx').then(module => ({ default: module.Home })))
