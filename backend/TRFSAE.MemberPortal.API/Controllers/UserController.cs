@@ -1,5 +1,5 @@
-using TRFSAE.MemberPortal.API.DTOs
-using TRFSAE.MemberPortal.API.Services
+using TRFSAE.MemberPortal.API.DTOs;
+using TRFSAE.MemberPortal.API.Services;
 
 namespace TRFSAE.MemberPortal.API.Controllers 
 {

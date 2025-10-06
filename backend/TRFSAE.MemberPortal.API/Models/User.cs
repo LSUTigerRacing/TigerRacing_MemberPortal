@@ -1,44 +1,48 @@
-namespace TRFSAE.MemberPortal.API.DTOs
+using Supabase.Postgrest.Attributes;
+using Supabase.Postgrest.Models;
+
+namespace TRFSAE.MemberPortal.API.Models
 {
-    public class UserResponseDTO
+    [Table("user")]
+    public class UserResponseDTO: BaseModel
     {
-        [JsonPropertyName("id")]
+        [PrimaryKey("id")]
         public Guid UserId { get; set; }
 
-        [JsonPropertyName("name")]
+        [Column("name")]
         public String Name { get; set; }
 
-        [JsonPropertyName("email")]
+        [Column("email")]
         public String PersonalEmail { get; set; }
 
-        [JsonPropertyName("lsu_email")]
+        [Column("lsu_email")]
         public String LSUEmail { get; set; }
 
-        [JsonPropertyName("eight_nine")]
+        [Column("eight_nine")]
         public int EightNine { get; set; }
 
-        [JsonPropertyName("hazing_status")]
+        [Column("hazing_status")]
         public Boolean HazingStatus { get; set; }
 
-        [JsonPropertyName("fee_status")]
+        [Column("fee_status")]
         public Boolean FeeStatus { get; set; }
 
-        [JsonPropertyName("grad_date")]
+        [Column("grad_date")]
         public DateTime GradDate { get; set; }
 
-        [JsonPropertyName("shirt_size")]
+        [Column("shirt_size")]
         public String ShirtSize { get; set; }
 
-        [JsonPropertyName("system")]
+        [Column("system")]
         public String System { get; set; }
 
-        [JsonPropertyName("subsystem")]
+        [Column("subsystem")]
         public String Subsystem { get; set; }
 
-        [JsonPropertyName("created_at")]
+        [Column("created_at")]
         public DateTime AccountCreationDate { get; set; }
 
-        [JsonPropertyName("updated_at")]
+        [Column("updated_at")]
         public DateTime AccountLastUpdatedDate { get; set; }
     }
 }

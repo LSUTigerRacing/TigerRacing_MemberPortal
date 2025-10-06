@@ -1,6 +1,6 @@
-using TRFSAE.MemberPortal.API.DTOs
-using TRFSAE.MemberPortal.API.Controllers
-using Supabase
+using TRFSAE.MemberPortal.API.DTOs;
+using TRFSAE.MemberPortal.API.Controllers;
+using Supabase;
 
 namespace TRFSAE.MemberPortal.API.Services
 {
@@ -20,7 +20,7 @@ namespace TRFSAE.MemberPortal.API.Services
         .From<UserResponseDTO>()
         .Where(x => x.name = name)
         .get();
-      return userTask
+      return userTask;
     }
 
     public async Task<UserResponseDTO> GetUserByIDAsync(Guid userID) 
@@ -29,7 +29,7 @@ namespace TRFSAE.MemberPortal.API.Services
         .From<UserResponseDTO>()
         .Where(x => x.UserId = userID)
         .get();
-      return userTask
+      return userTask;
     }
 
     public async Task<IActionResult> UpdateUserAsync(Guid userID, UserUpdateDTO updateDto) 
@@ -38,7 +38,7 @@ namespace TRFSAE.MemberPortal.API.Services
         .From<UserResponseDTO>()
         .Where(x => x.UserId, userID)
         .Upsert(updateDto);
-      return taskResult
+      return taskResult;
     }
 
     public async Task<IActionResult> DeleteUserAsync(Guid currentUserId, string confirmationString) 
@@ -49,7 +49,7 @@ namespace TRFSAE.MemberPortal.API.Services
           .From<UserResponseDTO>()
           .Where(x => x.UserId = currentUserId)
           .Delete();
-        return taskResult
+        return taskResult;
       }
     }
 
@@ -59,7 +59,7 @@ namespace TRFSAE.MemberPortal.API.Services
         .From<UserRoleDTO>()
         .Where(x => x.UserId = userID)
         .get();
-      return userTask
+      return userTask;
     }
   }
 }
