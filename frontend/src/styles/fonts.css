@@ -40,43 +40,43 @@
 /* Sora font family */
 
 @font-face {
-  font-family: "sora";
+  font-family: "Sora";
   src: url("/src/assets/fonts/Sora/static/Sora-Bold.ttf");
 }
 
 @font-face {
-  font-family: "Manrope";
-  src: url("/src/assets/fonts/Manrope/static/Sora-ExtraBold.ttf");
+  font-family: "Sora";
+  src: url("/src/assets/fonts/Sora/static/Sora-ExtraBold.ttf");
 }
 
 @font-face {
-  font-family: "Manrope";
-  src: url("/src/assets/fonts/Manrope/static/Sora-ExtraLight.ttf");
+  font-family: "Sora";
+  src: url("/src/assets/fonts/Sora/static/Sora-ExtraLight.ttf");
 }
 
 @font-face {
-  font-family: "Manrope";
-  src: url("/src/assets/fonts/Manrope/static/Sora-Light.ttf");
+  font-family: "Sora";
+  src: url("/src/assets/fonts/Sora/static/Sora-Light.ttf");
 }
 
 @font-face {
-  font-family: "Manrope";
-  src: url("/src/assets/fonts/Manrope/static/Sora-Medium.ttf");
+  font-family: "Sora";
+  src: url("/src/assets/fonts/Sora/static/Sora-Medium.ttf");
 }
 
 @font-face {
-  font-family: "Manrope";
-  src: url("/src/assets/fonts/Manrope/static/Sora-Regular.ttf");
+  font-family: "Sora";
+  src: url("/src/assets/fonts/Sora/static/Sora-Regular.ttf");
 }
 
 @font-face {
-  font-family: "Manrope";
-  src: url("/src/assets/fonts/Manrope/static/Sora-SemiBold.ttf");
+  font-family: "Sora";
+  src: url("/src/assets/fonts/Sora/static/Sora-SemiBold.ttf");
 }
 
 @font-face {
-  font-family: "Manrope";
-  src: url("/src/assets/fonts/Manrope/static/Sora-Thin.ttf");
+  font-family: "Sora";
+  src: url("/src/assets/fonts/Sora/static/Sora-Thin.ttf");
 }
 
 
