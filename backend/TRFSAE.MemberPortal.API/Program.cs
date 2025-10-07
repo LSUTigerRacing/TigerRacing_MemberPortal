@@ -9,6 +9,7 @@ DotEnv.Load();
 var builder = WebApplication.CreateBuilder(args);
 {
     builder.Services.AddScoped<IRoleService, RoleService>();
+    builder.Services.AddScoped<IProjectService, ProjectService>();
 }
 
 // register Supabase client as scoped for reuse across project
