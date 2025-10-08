@@ -1,10 +1,10 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "module": "ESNext",
+    "module": "NodeNext",
     "lib": ["ESNext"],
 
-    "moduleResolution": "Bundler",
+    "moduleResolution": "NodeNext",
    
     "strict": true,
     "strictNullChecks": true,
@@ -17,5 +17,5 @@
 
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo"
   },
-  "include": ["vite.config.ts"]
+  "include": ["eslint.config.js", "vite.config.ts"]
 }
