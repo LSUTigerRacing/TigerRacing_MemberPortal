@@ -22,7 +22,7 @@ public class TaskController : ControllerBase
         return Ok(tasks);
     }
 
-    [HttpGet("id")]
+    [HttpGet("{id}")]
     public async Task<IActionResult> GetTaskById(Guid id)
     {
         var task = await _taskService.GetTaskByIdAsync(id);
@@ -35,11 +35,4 @@ public class TaskController : ControllerBase
         return Ok(task);
     }
 
-    [HttpGet("{id}/taskAllowed")]
-
-    public async Task<IActionResult> ChangeTaskAllowedByID(Guid id, JsonElement taskAllowed)
-    {
-        var update = await _taskService.UpdateTaskAllowedAsync(id, taskAllowed);
-        return Ok(update);
-    }
 }

@@ -7,5 +7,4 @@ public interface ITaskService
 {
     Task<List<TaskResponseDto>> GetAllTasksAsync();
     Task<TaskResponseDto> GetTaskByIdAsync(Guid id);
-    Task<TaskResponseDto> UpdateTaskAllowedAsync(Guid id, JsonElement taskAllowed);
 }

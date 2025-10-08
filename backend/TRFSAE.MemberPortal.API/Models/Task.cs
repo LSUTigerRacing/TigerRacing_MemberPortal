@@ -3,15 +3,17 @@ using Supabase.Postgrest.Models;
 
 namespace TRFSAE.MemberPortal.API.Models
 {
-    [Table("tasks")]
+    [Table("task")]
     public class Task : BaseModel
     {
-        [PrimaryKey("id", false)]
-        public Guid Id { get; set; }
-        [Column("taskName")]
-        public string TaskName { get; set; } = null!;
-        [Column("taskAllowed")]
-        public Dictionary<string, object>? TaskAllowed { get; set; }
+        [PrimaryKey("id", true)]
+        public Guid TaskId { get; set; }
+
+        [Column("name")]
+        public string TaskName { get; set; }
+
+        [Column("Completion_Status")]
+        public bool Completion_Status { get; set; }
         
     }
 }

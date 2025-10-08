@@ -37,20 +37,4 @@ public class TaskService : ITaskService
         return tasks?.FirstOrDefault();
     }
 
-    public async Task<TaskResponseDto> UpdateTaskAllowedAsync(Guid id, JsonElement taskAllowed)
-    {
-        var parameters = new Dictionary<string, object>
-        {
-            { "task_id", id },
-            { "taskAllowed_updates", taskAllowed }
-        };
-
-        var response = await _supabaseClient
-            .Rpc("update_task_taskAllowed", parameters);
-
-        var task = JsonSerializer.Deserialize<List<TaskResponseDto>>(response.Content);
-
-        return task?.FirstOrDefault();
-    }
-
 }
