@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "./fonts.css";
+@import "./typography.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -26,10 +27,10 @@
 }
 
 :root {
-  --primary: #510087;
-  --accent: #FFD500;
-  --primary-background: #F5F0F6;
-  --secondary-background: #ffffff;
+  --primary: oklch(35.242% 0.18482 303.298);
+  --accent: oklch(88.282% 0.18104 94.468);
+  --primary-background: oklch(96.071% 0.00961 320.054);
+  --secondary-background: oklch(100% 0.00011 271.152);
   
   --radius: 0.625rem;
   --background: oklch(1 0 0);
@@ -62,6 +63,7 @@
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.556 0 0);
 }
+
 
 @layer base {
   * {
