@@ -17,6 +17,7 @@ export default defineConfig(
     ...tseslint.configs.recommended,
     ...tseslint.configs.stylistic,
     reactRefresh.configs.vite,
+    reactHooks.configs.flat.recommended,
     stylistic.configs.customize({
         indent: 4,
         semi: true,
@@ -41,13 +42,6 @@ export default defineConfig(
                 version: "detect"
             }
         }
-    },
-    {
-        files: ["**/*.{ts,tsx}"],
-        plugins: {
-            "react-hooks": reactHooks
-        },
-        extends: ["react-hooks/recommended"]
     },
     {
         files: ["**/*.tsx"],
