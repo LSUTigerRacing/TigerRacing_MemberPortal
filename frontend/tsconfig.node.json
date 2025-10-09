@@ -11,6 +11,8 @@
     "alwaysStrict": true,
     "skipLibCheck": true,
     "noEmit": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "useDefineForClassFields": true,
