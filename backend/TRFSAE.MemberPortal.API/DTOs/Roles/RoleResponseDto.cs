@@ -8,6 +8,7 @@ public class RoleResponseDto
     public Guid RoleId { get; set; }
     [JsonPropertyName("name")]
     public string RoleName { get; set; } = null!;
-     [JsonPropertyName("permissions")]
+    [JsonPropertyName("permissions")]
     public Dictionary<string, object>? Permissions { get; set; }
 }
+
