@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 function App() {
   return (
-    <div className="min-h-screen bg-background p-8">
+<div className="min-h-screen bg-background p-8">
       <div className="max-w-4xl mx-auto space-y-8">
         
         {/* Tailwind Test */}
@@ -51,13 +51,3 @@ function App() {
   )
 }
 export default App
-import { BrowserRouter } from 'react-router-dom'
-import { AppRoutes } from './routes'
-
-export default function App() {
-  return (
-      <BrowserRouter>
-        <AppRoutes/>
-      </BrowserRouter>
-  )
-}
