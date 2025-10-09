@@ -1,19 +1,19 @@
-using TRFSAE.MemberPortal.API.DTOs
+using Microsoft.AspNetCore.Mvc;
+using TRFSAE.MemberPortal.API.DTOs;
+
 
 namespace TRFSAE.MemberPortal.API.Interfaces
 {
-  interface IUserService<T>
+  public interface IUserService
   {
-    public IUserService(Client supabase);
+    public Task<UserResponseDTO> GetUserAsync(string name); 
 
-    public async Task<UserResponseDTO> GetUserAsync(string name); 
+    public Task<UserResponseDTO> GetUserByIDAsync(Guid userID);
 
-    public async Task<UserResponseDTO> GetUserByIDAsync(Guid userID);
+    public Task<IActionResult> UpdateUserByIDAsync(Guid userID, UserUpdateDTO updateDto);
 
-    public async Task<IActionResult> UpdateUserAsync(Guid userID, UserUpdateDTO updateDto);
+    public Task<IActionResult> DeleteUserAsync(Guid currentUserId, string confirmationString);
 
-    public async Task<IActionResult> DeleteUserAsync(Guid currentUserId, string confirmationString);
-
-    public async Task<UserResponseDTO> GetUserRolesAsync(Guid userID);
+    public Task<UserResponseDTO> GetUserRolesAsync(Guid userID);
   }
 }

@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Mvc;
 using TRFSAE.MemberPortal.API.DTOs;
+using TRFSAE.MemberPortal.API.Interfaces;
 using TRFSAE.MemberPortal.API.Services;
 
 namespace TRFSAE.MemberPortal.API.Controllers 
@@ -9,7 +11,7 @@ namespace TRFSAE.MemberPortal.API.Controllers
   {
     private readonly IUserService _userService;
 
-    public UserController(IUserService _userService)
+    UserController(IUserService userService)
     {
       _userService = userService;
     }
@@ -17,14 +19,14 @@ namespace TRFSAE.MemberPortal.API.Controllers
     [HttpGet]
     public async Task<IActionResult> GetUserByIDAsync(Guid id)
     {
-      var User = await _userService.GetUserByIDAsync(id);
-      return Ok(User);
+      var user = await _userService.GetUserByIDAsync(id);
+      return Ok(user);
     }
 
     [HttpPatch]
     public async Task<IActionResult> UpdateUserAsync(Guid id, UserUpdateDTO model)
     {
-      var taskResult = await _userService.UpdateUserByIDAsync(id);
+      var taskResult = await _userService.UpdateUserByIDAsync(id, model);
       return Ok(taskResult);
     }
 
@@ -38,8 +40,8 @@ namespace TRFSAE.MemberPortal.API.Controllers
     [HttpGet]
     public async Task<IActionResult> GetUserRoles(Guid id)
     {
-      var User = await _userService.GetUserByIDAsync(id);
-      return Ok(User);
+      var user = await _userService.GetUserByIDAsync(id);
+      return Ok(user);
     }
   }
 }

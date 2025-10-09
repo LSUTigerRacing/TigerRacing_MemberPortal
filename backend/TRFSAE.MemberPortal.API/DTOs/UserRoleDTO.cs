@@ -1,6 +1,8 @@
+using Supabase.Postgrest.Models;
+
 namespace TRFSAE.MemberPortal.API.DTOs
 {
-  public class UserRoleDTO {
+  public class UserRoleDTO : BaseModel {
 
     public Guid RoleID { get; set; }
 

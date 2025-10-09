@@ -1,6 +1,9 @@
+using System.Text.Json.Serialization;
+using Supabase.Postgrest.Models;
+
 namespace TRFSAE.MemberPortal.API.DTOs
 {
-    public class UserResponseDTO
+    public class UserResponseDTO : BaseModel
     {
         [JsonPropertyName("id")]
         public Guid UserId { get; set; }
