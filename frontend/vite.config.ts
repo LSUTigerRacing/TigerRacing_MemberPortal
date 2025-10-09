@@ -19,6 +19,18 @@ export default defineConfig(({ mode }) => {
             cssMinify: "lightningcss"
         },
 
+        server: {
+            port: 3000,
+            strictPort: true,
+            host: "0.0.0.0"
+        },
+
+        preview: {
+            port: 3000,
+            strictPort: true,
+            host: "0.0.0.0"
+        },
+
         css: {
             devSourcemap: isDev
         },
