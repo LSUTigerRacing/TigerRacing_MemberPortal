@@ -7,7 +7,6 @@ import jsxA11y from "eslint-plugin-jsx-a11y";
 import react from "eslint-plugin-react";
 import stylistic from "@stylistic/eslint-plugin";
 import reactHooks from "eslint-plugin-react-hooks";
-import reactRefresh from "eslint-plugin-react-refresh";
 
 import globals from "globals";
 
@@ -16,7 +15,7 @@ export default defineConfig(
     js.configs.recommended,
     ...tseslint.configs.recommended,
     ...tseslint.configs.stylistic,
-    reactRefresh.configs.vite,
+    reactHooks.configs.flat.recommended,
     stylistic.configs.customize({
         indent: 4,
         semi: true,
@@ -41,13 +40,6 @@ export default defineConfig(
                 version: "detect"
             }
         }
-    },
-    {
-        files: ["**/*.{ts,tsx}"],
-        plugins: {
-            "react-hooks": reactHooks
-        },
-        extends: ["react-hooks/recommended"]
     },
     {
         files: ["**/*.tsx"],
@@ -110,8 +102,7 @@ export default defineConfig(
             "@typescript-eslint/no-base-to-string": "off",
             "@typescript-eslint/no-non-null-asserted-optional-chain": "off",
             "jsx-a11y/no-static-element-interactions": "off",
-            "jsx-a11y/click-events-have-key-events": "off",
-            "react-refresh/only-export-components ": "off" // dev issue, don't really care much for the slight dx benefits
+            "jsx-a11y/click-events-have-key-events": "off"
         }
     }
 );
