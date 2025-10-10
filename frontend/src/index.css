@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@import "./fonts.css";
+@import "./styles/fonts.css";
 @import "./typography.css";
 
 @custom-variant dark (&:is(.dark *));
