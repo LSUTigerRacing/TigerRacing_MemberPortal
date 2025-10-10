@@ -11,7 +11,7 @@ import reactHooks from "eslint-plugin-react-hooks";
 import globals from "globals";
 
 export default defineConfig(
-    globalIgnores(["dist"]),
+    globalIgnores(["node_modules", "dist"]),
     js.configs.recommended,
     ...tseslint.configs.recommended,
     ...tseslint.configs.stylistic,
@@ -101,6 +101,7 @@ export default defineConfig(
             "@typescript-eslint/no-redundant-type-constituents": "off",
             "@typescript-eslint/no-base-to-string": "off",
             "@typescript-eslint/no-non-null-asserted-optional-chain": "off",
+            "@typescript-eslint/array-type": "off",
             "jsx-a11y/no-static-element-interactions": "off",
             "jsx-a11y/click-events-have-key-events": "off"
         }
