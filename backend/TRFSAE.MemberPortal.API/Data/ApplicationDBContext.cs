@@ -8,6 +8,6 @@ namespace TRFSAE.MemberPortal.API.Data
         public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options)
             : base(options) { }
 
-        public DbSet<Order> Orders => Set<Order>();
+        public DbSet<PurchaseItem> PurchaseItem => Set<PurchaseItem>();
     }
 }

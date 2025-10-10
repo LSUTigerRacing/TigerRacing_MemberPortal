@@ -6,27 +6,27 @@ namespace TRFSAE.MemberPortal.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class OrderController : ControllerBase
+    public class PurchaseItemController : ControllerBase
     {
-        private readonly OrderService _svc;
-        public OrderController(OrderService svc) => _svc = svc;
+        private readonly PurchaseItemService _svc;
+        public PurchaseItemController(PurchaseItemService svc) => _svc = svc;
 
         // GET /api/order
         [HttpGet]
-        public async Task<ActionResult<List<OrderResponseDto>>> GetAll()
+        public async Task<ActionResult<List<PurchaseItemResponseDto>>> GetAll()
             => Ok(await _svc.GetAllAsync());
 
         // GET /api/order/#
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<OrderResponseDto>> GetById(int id)
+        public async Task<ActionResult<PurchaseItemResponseDto>> GetById(int id)
         {
-            var order = await _svc.GetByIdAsync(id);
-            return order is null ? NotFound() : Ok(order);
+            var PurchaseItem = await _svc.GetByIdAsync(id);
+            return PurchaseItem is null ? NotFound() : Ok(PurchaseItem);
         }
 
         // POST 
         [HttpPost]
-        public async Task<ActionResult<OrderResponseDto>> Create([FromBody] OrderResponseDto dto)
+        public async Task<ActionResult<PurchaseItemResponseDto>> Create([FromBody] PurchaseItemResponseDto dto)
         {
             var created = await _svc.CreateAsync(dto);
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
@@ -34,7 +34,7 @@ namespace TRFSAE.MemberPortal.API.Controllers
 
         // PUT 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult<OrderResponseDto>> Update(int id, [FromBody] OrderResponseDto dto)
+        public async Task<ActionResult<PurchaseItemResponseDto>> Update(int id, [FromBody] PurchaseItemResponseDto dto)
         {
             var updated = await _svc.UpdateAsync(id, dto);
             return updated is null ? NotFound() : Ok(updated);

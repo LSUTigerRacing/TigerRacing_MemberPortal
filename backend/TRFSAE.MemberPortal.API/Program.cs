@@ -11,7 +11,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDBContext>(options =>
     options.UseInMemoryDatabase("MemberPortalDb"));
 
-builder.Services.AddScoped<OrderService>();
+builder.Services.AddScoped<PurchaseItemService>();
 
 var app = builder.Build();
 

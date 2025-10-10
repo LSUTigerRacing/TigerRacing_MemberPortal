@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TRFSAE.MemberPortal.API.Models
 {
-    public class Order
+    public class PurchaseItem
     {
         public int Id { get; set; }
 

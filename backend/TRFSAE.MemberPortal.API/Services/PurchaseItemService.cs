@@ -8,21 +8,21 @@ using System.Threading.Tasks;
 
 namespace TRFSAE.MemberPortal.API.Services
 {
-    public class OrderService
+    public class PurchaseItemService
     {
         private readonly ApplicationDBContext _db;
-        public OrderService(ApplicationDBContext db) => _db = db;
+        public PurchaseItemService(ApplicationDBContext db) => _db = db;
 
-        private static void Apply(OrderResponseDto dto, Order model)
+        private static void Apply(PurchaseItemResponseDto dto, PurchaseItem model)
         {
             model.MemberId = dto.MemberId;
             model.Status = dto.Status;
             model.Total = dto.Total;
         }
 
-        public async Task<List<OrderResponseDto>> GetAllAsync() =>
-            await _db.Orders
-                .Select(o => new OrderResponseDto
+        public async Task<List<PurchaseItemResponseDto>> GetAllAsync() =>
+            await _db.PurchaseItem
+                .Select(o => new PurchaseItemResponseDto
                 {
                     Id = o.Id,
                     MemberId = o.MemberId,
@@ -33,10 +33,10 @@ namespace TRFSAE.MemberPortal.API.Services
                 })
                 .ToListAsync();
 
-        public async Task<OrderResponseDto?> GetByIdAsync(int id) =>
-            await _db.Orders
+        public async Task<PurchaseItemResponseDto?> GetByIdAsync(int id) =>
+            await _db.PurchaseItem
                 .Where(o => o.Id == id)
-                .Select(o => new OrderResponseDto
+                .Select(o => new PurchaseItemResponseDto
                 {
                     Id = o.Id,
                     MemberId = o.MemberId,
@@ -47,14 +47,14 @@ namespace TRFSAE.MemberPortal.API.Services
                 })
                 .FirstOrDefaultAsync();
 
-        public async Task<OrderResponseDto> CreateAsync(OrderResponseDto dto)
+        public async Task<PurchaseItemResponseDto> CreateAsync(PurchaseItemResponseDto dto)
         {
-            var model = new Order();
+            var model = new PurchaseItem();
             Apply(dto, model);
-            _db.Orders.Add(model);
+            _db.PurchaseItem.Add(model);
             await _db.SaveChangesAsync();
 
-            return new OrderResponseDto
+            return new PurchaseItemResponseDto
             {
                 Id = model.Id,
                 MemberId = model.MemberId,
@@ -65,9 +65,9 @@ namespace TRFSAE.MemberPortal.API.Services
             };
         }
 
-        public async Task<OrderResponseDto?> UpdateAsync(int id, OrderResponseDto dto)
+        public async Task<PurchaseItemResponseDto?> UpdateAsync(int id, PurchaseItemResponseDto dto)
         {
-            var model = await _db.Orders.FindAsync(id);
+            var model = await _db.PurchaseItem.FindAsync(id);
             if (model is null) return null;
 
             Apply(dto, model);
@@ -75,7 +75,7 @@ namespace TRFSAE.MemberPortal.API.Services
 
             await _db.SaveChangesAsync();
 
-            return new OrderResponseDto
+            return new PurchaseItemResponseDto
             {
                 Id = model.Id,
                 MemberId = model.MemberId,
@@ -88,10 +88,10 @@ namespace TRFSAE.MemberPortal.API.Services
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var model = await _db.Orders.FindAsync(id);
+            var model = await _db.PurchaseItem.FindAsync(id);
             if (model is null) return false;
 
-            _db.Orders.Remove(model);
+            _db.PurchaseItem.Remove(model);
             await _db.SaveChangesAsync();
             return true;
         }

@@ -1,6 +1,6 @@
 namespace TRFSAE.MemberPortal.API.Dtos
 {
-    public class OrderResponseDto
+    public class PurchaseItemResponseDto
     {
         public int Id { get; set; }
         public int MemberId { get; set; }
