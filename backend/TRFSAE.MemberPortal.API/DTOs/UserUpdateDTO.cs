@@ -2,12 +2,16 @@ namespace TRFSAE.MemberPortal.API.DTOs
 {
     public class UserUpdateDTO 
     {
-        public String Username { get; set; }
-        public String FirstName { get; set; }
-        public String LastName { get; set; }
-        public int GradYear { get; set; }
+        public Guid UserID { get; set; }
+
+        public String Name { get; set; }
+
+        public int GradDate { get; set; }
+
         public String PersonalEmail { get; set; }
+
         public String LSUEmail { get; set; }
+
         public int EightNine { get; set; }
     }
 }
