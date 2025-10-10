@@ -6,11 +6,11 @@ namespace TRFSAE.MemberPortal.API.Models
     [Table("project")]
     public class Project : BaseModel
     {
-        [PrimaryKey("id", false)]
+        [PrimaryKey]
         public Guid ProjectId { get; set; }
 
         [Column("name")]
-        public string ProjectName { get; set; } = null!;
+        public string ProjectName { get; set; }
 
         [Column("due_date")]
         public DateTime ProjectDueDate { get; set; }

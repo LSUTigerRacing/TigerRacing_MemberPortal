@@ -16,10 +16,39 @@ public class ProjectController : ControllerBase
     }
 
     [HttpGet]
-
-    public async Task<IActionResult> GetAllProject()
+    public async Task<IActionResult> GetAllProjects()
     {
-        var projects = await _ProjectService.GetAllProjectAsync();
+        var projects = await _ProjectService.GetAllProjectsAsync();
         return Ok(projects);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetAllProjectTasks(Guid id)
+    {
+        var tasks = await _ProjectService.GetAllProjectTasksAsync(id);
+        return Ok(tasks);
+    }
+
+    [HttpPut("{userId}/projectId")]
+    public async Task<IActionResult> UpdateUserProject(Guid userId, Guid projectId)
+    {
+        var update = await _ProjectService.UpdateUserProjectAsync(userId, projectId);
+        return Ok(update);
+
+    }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetAllAssignedProjects(Guid id)
+    {
+        var projects = await _ProjectService.GetAllAssignedProjectsAsync(id);
+        return Ok(projects);
+    }
+    
+    [HttpPost]
+    public async Task<IActionResult> CreateNewProject()
+    {
+        var project = await _ProjectService.CreateNewProjectAsync();
+        return Ok(project);
+
     }
 }
