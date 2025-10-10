@@ -104,7 +104,8 @@ export default defineConfig(
             "@typescript-eslint/no-base-to-string": "off",
             "@typescript-eslint/no-non-null-asserted-optional-chain": "off",
             "jsx-a11y/no-static-element-interactions": "off",
-            "jsx-a11y/click-events-have-key-events": "off"
+            "jsx-a11y/click-events-have-key-events": "off",
+            "react-refresh/only-export-components ": "off" // dev issue, don't really care much for the slight dx benefits
         }
     }
 );
