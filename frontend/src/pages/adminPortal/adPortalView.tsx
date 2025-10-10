@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { data, type Member } from "@/components/dummyData/members";
 
-import { Navbar } from "@/components/ui/NavBar/shadcn-io/navbar-06";
 import { SearchBar } from "@/components/ui/adminPortal/SearchBar/shadcn-io/SearchBar/index";
 import MemberTable from "@/components/ui/adminPortal/MemberTable/MemberTable";
 import GalleryCard from "@/components/ui/adminPortal/GalleryPageCard/GalleryCard";
@@ -31,7 +30,6 @@ export const PagesView = () => {
 
     return (
         <>
-            <Navbar />
             <SearchBar
                 view={view}
                 setView={setView}
