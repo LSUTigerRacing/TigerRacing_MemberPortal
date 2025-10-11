@@ -1,7 +1,7 @@
 import { Sidebar } from "@/components/dashboard/Sidebar";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 
-export function Dashboard () {
+export default function Dashboard () {
     return (
         <SidebarProvider>
             <Sidebar />

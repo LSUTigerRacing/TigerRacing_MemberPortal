@@ -5,7 +5,7 @@ import { SearchBar } from "@/components/ui/adminPortal/SearchBar/shadcn-io/Searc
 import MemberTable from "@/components/ui/adminPortal/MemberTable/MemberTable";
 import GalleryCard from "@/components/ui/adminPortal/GalleryPageCard/GalleryCard";
 
-export const PagesView = () => {
+export default function Admin () {
     const [view, setView] = useState<"column" | "gallery">("column");
     const [filteredMembers, setFilteredMembers] = useState<Member[]>(
         [...data].sort((a, b) => a.name.localeCompare(b.name))

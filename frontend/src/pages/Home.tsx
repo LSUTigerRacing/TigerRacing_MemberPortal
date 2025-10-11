@@ -6,9 +6,9 @@ import Logo from "@/assets/img/logos/logo_white.png";
 /**
  * Creates a splash button with the given display text and URL.
  */
-const SplashButton = (props: { text: string, url: string }) => <Button variant="default" className="w-60 h-16 cursor-pointer !opacity-100 hover:bg-accent hover:text-black active:bg-black active:text-white motion-safe:duration-300" asChild><a href={props.url}>{props.text}</a></Button>;
+const SplashButton = (props: { text: string, url: string }) => <Button variant="default" className="w-60 h-16 cursor-pointer opacity-100! hover:bg-accent hover:text-black active:bg-black active:text-white motion-safe:duration-300" asChild><a href={props.url}>{props.text}</a></Button>;
 
-export const Home = () => {
+export default function Home () {
     return (
         <>
             <div className="fixed w-screen h-screen overflow-hidden bg-cover" style={{ backgroundImage: `url(${HeroBg})` }}></div>
