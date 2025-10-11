@@ -22,7 +22,7 @@ https://tweakcn.com/editor/theme
   --secondary-foreground: oklch(0.2050 0 0);
   --muted: oklch(0.9500 0 0); /* default: oklch(0.9700 0 0); */
   --muted-foreground: oklch(0.5560 0 0);
-  --accent: oklch(0.9250 0 0); /* default: oklch(0.9700 0 0); */
+  --accent: oklch(0.8720 0.01 258.338); /* default: oklch(0.9700 0 0); */
   --accent-foreground: oklch(0.2050 0 0);
   --destructive: oklch(0.5770 0.2450 27.3250);
   --destructive-foreground: oklch(1 0 0);

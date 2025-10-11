@@ -8,7 +8,7 @@ const Members = lazy(() => import("@/pages/adminPortal/adPortalView.tsx").then(m
 
 export const AppRoutes = () => {
     return (
-        <main className="fixed min-w-screen min-h-screen max-w-screen max-h-screen overflow-y-auto">
+        <main>
             <Suspense fallback={null}>
                 <Routes>
                     {/* public pages */}
