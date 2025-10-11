@@ -15,13 +15,15 @@ import {
     BellIcon,
     ChevronDownIcon,
     FileText,
+    Folder,
     Gauge,
     GraduationCap,
     LogOut,
     Mail,
     Settings,
     ShoppingCart,
-    User
+    User,
+    UserCog
 } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -210,9 +212,17 @@ const UserMenu = ({
                 <Mail />
                 Inbox
             </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => onItemClick?.("projects")} className="cursor-pointer">
+                <Folder />
+                Projects
+            </DropdownMenuItem>
             <DropdownMenuItem onClick={() => onItemClick?.("purchases")} className="cursor-pointer">
                 <ShoppingCart />
                 Purchase Requests
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => onItemClick?.("admin")} className="cursor-pointer">
+                <UserCog />
+                Admin
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => onItemClick?.("settings")} className="cursor-pointer">
                 <Settings />
