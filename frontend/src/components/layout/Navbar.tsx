@@ -20,7 +20,7 @@ import {
     LogOut,
     Mail,
     Settings,
-    TrendingUp,
+    ShoppingCart,
     User
 } from "lucide-react";
 
@@ -210,15 +210,15 @@ const UserMenu = ({
                 <Mail />
                 Inbox
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onItemClick?.("financials")} className="cursor-pointer">
-                <TrendingUp />
-                Financials
+            <DropdownMenuItem onClick={() => onItemClick?.("purchase-requests")} className="cursor-pointer">
+                <ShoppingCart />
+                Purchase Requests
             </DropdownMenuItem>
-            <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => onItemClick?.("settings")} className="cursor-pointer">
                 <Settings />
                 Settings
             </DropdownMenuItem>
+            <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => onItemClick?.("training")} className="cursor-pointer">
                 <GraduationCap />
                 Training
@@ -285,7 +285,7 @@ const NavbarComponent = forwardRef<HTMLElement, NavbarProps>(
             <header
                 ref={combinedRef}
                 className={cn(
-                    "fixed top-0 z-50 w-full border-b-3 shadow-2xl border-primary bg-background px-4 md:px-6 [&_*]:no-underline",
+                    "xl:fixed top-0 z-50 w-full border-b-3 shadow-2xl border-primary bg-background px-4 md:px-6 [&_*]:no-underline",
                     className
                 )}
                 {...props}
@@ -377,8 +377,6 @@ const NavbarComponent = forwardRef<HTMLElement, NavbarProps>(
 
 export default function Navbar (): ReactElement {
     return (
-        <div className="relative w-full">
-            <NavbarComponent />
-        </div>
+        <NavbarComponent />
     );
 };
