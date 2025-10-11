@@ -1,31 +1,13 @@
-/* Manrope font family */
-
 @font-face {
   font-family: "Manrope";
-  src: url("/src/assets/fonts/Manrope/static/Manrope-Regular.ttf");
-  font-weight: 400; 
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "Manrope";
-  src: url("/src/assets/fonts/Manrope/static/Manrope-SemiBold.ttf");
-  font-weight: 600; 
-  font-style: normal;
-}
-
-/* Sora font family */
-
-@font-face {
-  font-family: "Sora";
-  src: url("/src/assets/fonts/Sora/static/Sora-SemiBold.ttf");
-  font-weight: 600; 
+  src: url("../fonts/Manrope/Manrope-VariableFont_wght.ttf");
+  font-optical-sizing: auto;
   font-style: normal;
 }
 
 @font-face {
   font-family: "Sora";
-  src: url("/src/assets/fonts/Sora/static/Sora-Regular.ttf");
-  font-weight: 400; 
+  src: url("../fonts/Sora/Sora-VariableFont_wght.ttf");
+  font-optical-sizing: auto;
   font-style: normal;
 }
