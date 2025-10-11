@@ -2,7 +2,6 @@
 @import "tw-animate-css";
 
 @import "./fonts.css";
-@import "./typography.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -66,6 +65,9 @@ https://tweakcn.com/editor/theme
   --shadow-offset-x: 0;
   --shadow-offset-y: 1px;
   --letter-spacing: 0em;
+
+  /* NOT PART OF SHADCN THEME */
+  --color-body: oklch(0.9607 0.0095 320.55);
 }
 
 .dark {
@@ -159,6 +161,9 @@ https://tweakcn.com/editor/theme
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
+  /* Custom colors (not part of shadcn theme) */
+  --color-body: var(--color-body);
+
   --font-sans: Sora, ui-sans-serif, sans-serif, system-ui;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
@@ -202,6 +207,9 @@ https://tweakcn.com/editor/theme
     @apply border-border outline-ring/50;
   }
   body {
+    /* NOT PART OF SHADCN */
+    background: var(--color-body) !important;
+
     @apply bg-background text-foreground;
     letter-spacing: var(--tracking-normal);
   }
