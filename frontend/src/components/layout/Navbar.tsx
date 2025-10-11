@@ -79,7 +79,7 @@ const NavigationLinks: NavbarItem[] = [
 const Logo = (props: ImgHTMLAttributes<HTMLImageElement>) => {
     return (
         <img
-            className="w-auto h-11 align-middle inline-block"
+            className="w-auto h-11 align-middle inline-block select-none"
             src={LogoImg}
             alt="Logo"
             {...props}
@@ -198,37 +198,37 @@ const UserMenu = ({
                 </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => onItemClick?.("dashboard")}>
+            <DropdownMenuItem onClick={() => onItemClick?.("dashboard")} className="cursor-pointer">
                 <Gauge />
                 Dashboard
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onItemClick?.("profile")}>
+            <DropdownMenuItem onClick={() => onItemClick?.("profile")} className="cursor-pointer">
                 <User />
                 Profile
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onItemClick?.("inbox")}>
+            <DropdownMenuItem onClick={() => onItemClick?.("inbox")} className="cursor-pointer">
                 <Mail />
                 Inbox
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onItemClick?.("financials")}>
+            <DropdownMenuItem onClick={() => onItemClick?.("financials")} className="cursor-pointer">
                 <TrendingUp />
                 Financials
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => onItemClick?.("settings")}>
+            <DropdownMenuItem onClick={() => onItemClick?.("settings")} className="cursor-pointer">
                 <Settings />
                 Settings
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onItemClick?.("training")}>
+            <DropdownMenuItem onClick={() => onItemClick?.("training")} className="cursor-pointer">
                 <GraduationCap />
                 Training
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onItemClick?.("documentation")}>
+            <DropdownMenuItem onClick={() => onItemClick?.("documentation")} className="cursor-pointer">
                 <FileText />
                 Documentation
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => onItemClick?.("logout")}>
+            <DropdownMenuItem onClick={() => onItemClick?.("logout")} className="cursor-pointer">
                 <LogOut />
                 Sign out
             </DropdownMenuItem>
@@ -285,12 +285,12 @@ const NavbarComponent = forwardRef<HTMLElement, NavbarProps>(
             <header
                 ref={combinedRef}
                 className={cn(
-                    "top-0 z-50 w-full border-b bg-background/95 supports-[backdrop-filter]:bg-background/60 px-4 md:px-6 [&_*]:no-underline",
+                    "fixed top-0 z-50 w-full border-b-3 shadow-2xl border-primary bg-background px-4 md:px-6 [&_*]:no-underline",
                     className
                 )}
                 {...props}
             >
-                <div className="container mx-auto flex h-16 max-w-screen-2xl items-center justify-between gap-4">
+                <div className="flex h-16 items-center justify-between gap-4">
                     <div className="flex items-center gap-2">
                         {isMobile && (
                             <Popover>
@@ -313,7 +313,7 @@ const NavbarComponent = forwardRef<HTMLElement, NavbarProps>(
                                                             e.preventDefault();
                                                             if (onNavItemClick && link.href) onNavItemClick(link.href);
                                                         }}
-                                                        className="flex w-full items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground cursor-pointer no-underline"
+                                                        className="flex w-full items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground no-underline"
                                                     >
                                                         {link.title}
                                                     </button>
