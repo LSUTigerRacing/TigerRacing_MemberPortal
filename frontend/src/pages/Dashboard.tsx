@@ -55,7 +55,7 @@ export default function Dashboard (): ReactElement {
                 <CardContent>
                     <div className="flex flex-col gap-2 h-full">
                         <SidebarButton title="Projects" url="/projects" icon={Folder} />
-                        <SidebarButton title="Purchase Requests" url="/purchase-requests" icon={ShoppingCart} />
+                        <SidebarButton title="Purchase Requests" url="/purchases" icon={ShoppingCart} />
                         <SidebarButton title="Inbox" url="/mail" icon={Mail} />
                         <SidebarButton title="Profile" url="/profile" icon={CircleUser} />
                         <SidebarButton title="Settings" url="/settings" icon={Settings} />
