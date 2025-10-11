@@ -241,7 +241,7 @@ const NavbarComponent = forwardRef<HTMLElement, NavbarProps>(
         {
             className,
             logo = <Logo />,
-            logoHref = "#",
+            logoHref = "/",
             navigationLinks = NavigationLinks,
             userName = "Car McCarface",
             userEmail = "cmccar1@lsu.edu",
@@ -326,11 +326,11 @@ const NavbarComponent = forwardRef<HTMLElement, NavbarProps>(
                         )}
                         <div className="flex items-center gap-6">
                             <button
-                                onClick={e => e.preventDefault()}
+                                onClick={(() => window.open(logoHref, "_self"))}
                                 className="flex items-center space-x-2 text-primary hover:text-primary/90 transition-colors cursor-pointer"
                             >
                                 <div className="text-2xl">
-                                    <a href={logoHref}>{logo}</a>
+                                    {logo}
                                 </div>
                             </button>
                             {!isMobile && (
