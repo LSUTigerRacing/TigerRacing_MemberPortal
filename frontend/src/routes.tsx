@@ -11,7 +11,7 @@ const Orders = lazy(() => import("./pages/Orders.tsx"));
 
 export const AppRoutes = () => {
     return (
-        <main className="fixed min-w-screen min-h-screen max-w-screen max-h-screen overflow-y-auto">
+        <main>
             <Suspense fallback={null}>
                 <Routes>
                     {/* Public Pages */}

@@ -37,28 +37,25 @@ import { Separator } from "@/components/ui/separator";
 
 function SidebarButton (props: { title: string, icon: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>, url: string }) {
     return (
-        <Button variant="ghost" className="justify-start" onClick={(() => window.open(props.url, "_self"))}>
+        <Button variant="ghost" className="justify-start hover:bg-primary hover:text-secondary" onClick={(() => window.open(props.url, "_self"))}>
             <props.icon />
             {props.title}
         </Button>
     );
 };
 
-export default function Dashboard (): ReactElement {
+export function Dashboard (): ReactElement {
     return (
         <div className="flex flex-col xl:flex-row w-full xl:h-dvh">
-            {/* for accessibility scoring on homepage */}
-            <h1 className="hidden">Home</h1>
-
             {/* Sidebar */}
-            <Card className="w-full xl:max-w-xs h-full rounded-none bg-gray-300 shadow-none gap-2">
-                <CardHeader className="mt-16">
+            <Card className="w-full xl:max-w-xs h-full rounded-none bg-accent shadow-none gap-2">
+                <CardHeader className="xl:mt-16">
                     <CardTitle>Dashboard</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <div className="flex flex-col gap-2 h-full">
                         <SidebarButton title="Projects" url="/projects" icon={Folder} />
-                        <SidebarButton title="Purchase Requests" url="/purchases" icon={ShoppingCart} />
+                        <SidebarButton title="Purchase Requests" url="/purchase-requests" icon={ShoppingCart} />
                         <SidebarButton title="Inbox" url="/mail" icon={Mail} />
                         <SidebarButton title="Profile" url="/profile" icon={CircleUser} />
                         <SidebarButton title="Settings" url="/settings" icon={Settings} />
@@ -79,8 +76,8 @@ export default function Dashboard (): ReactElement {
 
             {/* Main Dashboard */}
             <div className="sm:px-4 xl:p-8 grow mt-16">
-                <div className="flex flex-col md:flex-row gap-4">
-                    <Card className="bg-primary border-primary text-background rounded-sm md:max-w-xs px-4 pt-8">
+                <div className="flex flex-col lg:flex-row gap-4">
+                    <Card className="bg-primary border-primary text-background rounded-sm lg:max-w-xs px-4 pt-8">
                         <CardContent className="flex flex-col items-center">
                             <Avatar className="mb-4 size-fit max-w-xs">
                                 <AvatarImage src="https://github.com/DamienVesper.png" alt="User profile picture" />
@@ -102,18 +99,18 @@ export default function Dashboard (): ReactElement {
                             <div className="p-8 rounded-sm bg-background">
                                 <Empty>
                                     <EmptyHeader>
-                                        <EmptyMedia variant="icon" className="bg-gray-300">
+                                        <EmptyMedia variant="icon" className="bg-accent">
                                             <ListChecks />
                                         </EmptyMedia>
                                         <EmptyTitle className="text-foreground">No Tasks</EmptyTitle>
-                                        <EmptyDescription className="text-gray-500">You don&apos;t have any tasks!</EmptyDescription>
+                                        <EmptyDescription>You don&apos;t have any tasks!</EmptyDescription>
                                     </EmptyHeader>
                                 </Empty>
                             </div>
                         </CardContent>
                     </Card>
                 </div>
-                <div className="flex flex-col md:flex-row gap-4 mt-4">
+                <div className="flex flex-col lg:flex-row gap-4 my-4">
                     <Card className="bg-background text-foreground rounded-sm grow">
                         <CardHeader className="flex flex-col items-center">
                             <h2 className="flex items-center">
@@ -125,11 +122,11 @@ export default function Dashboard (): ReactElement {
                         <CardContent>
                             <Empty>
                                 <EmptyHeader>
-                                    <EmptyMedia variant="icon" className="bg-gray-300">
+                                    <EmptyMedia variant="icon" className="bg-accent">
                                         <ListChecks />
                                     </EmptyMedia>
                                     <EmptyTitle className="text-foreground">No Announcements</EmptyTitle>
-                                    <EmptyDescription className="text-gray-500">Nothing new today.</EmptyDescription>
+                                    <EmptyDescription>Nothing new today.</EmptyDescription>
                                 </EmptyHeader>
                             </Empty>
                         </CardContent>
@@ -145,11 +142,11 @@ export default function Dashboard (): ReactElement {
                         <CardContent>
                             <Empty>
                                 <EmptyHeader>
-                                    <EmptyMedia variant="icon" className="bg-gray-300">
+                                    <EmptyMedia variant="icon" className="bg-accent">
                                         <Clock />
                                     </EmptyMedia>
                                     <EmptyTitle className="text-foreground">No Upcoming Deadlines</EmptyTitle>
-                                    <EmptyDescription className="text-gray-500">You&apos;re all caught up!</EmptyDescription>
+                                    <EmptyDescription>You&apos;re all caught up!</EmptyDescription>
                                 </EmptyHeader>
                             </Empty>
                         </CardContent>
@@ -165,11 +162,11 @@ export default function Dashboard (): ReactElement {
                         <CardContent>
                             <Empty>
                                 <EmptyHeader>
-                                    <EmptyMedia variant="icon" className="bg-gray-300">
+                                    <EmptyMedia variant="icon" className="bg-accent">
                                         <Presentation />
                                     </EmptyMedia>
                                     <EmptyTitle className="text-foreground">No Upcoming Events</EmptyTitle>
-                                    <EmptyDescription className="text-gray-500">Take it nice and easy.</EmptyDescription>
+                                    <EmptyDescription>Take it nice and easy.</EmptyDescription>
                                 </EmptyHeader>
                             </Empty>
                         </CardContent>
