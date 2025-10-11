@@ -81,7 +81,7 @@ const Logo = (props: ImgHTMLAttributes<HTMLImageElement>) => {
         <img
             className="w-auto h-11 align-middle inline-block select-none"
             src={LogoImg}
-            alt="Logo"
+            alt="TigerRacing purple logo"
             {...props}
         />
     );
