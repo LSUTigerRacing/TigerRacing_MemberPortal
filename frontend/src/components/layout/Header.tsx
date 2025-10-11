@@ -22,6 +22,7 @@ import {
     type HTMLAttributes,
     type ImgHTMLAttributes,
     type ReactElement,
+    type SVGAttributes,
     useCallback,
     type ReactNode
 } from "react";
@@ -87,7 +88,7 @@ const Logo = (props: ImgHTMLAttributes<HTMLImageElement>) => {
     );
 };
 
-const HamburgerIcon = ({ className, ...props }: React.SVGAttributes<SVGElement>) => (
+const HamburgerIcon = ({ className, ...props }: SVGAttributes<SVGElement>) => (
     <svg
         className={cn("pointer-events-none", className)}
         width={16}
@@ -145,7 +146,7 @@ const NotificationMenu = ({
                 </div>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => onItemClick?.("dashboard")}>
+            <DropdownMenuItem onClick={() => onItemClick?.("/dashboard")}>
                 View all notifications
             </DropdownMenuItem>
         </DropdownMenuContent>
@@ -286,7 +287,7 @@ const NavbarComponent = forwardRef<HTMLElement, NavbarProps>(
                 )}
                 {...props}
             >
-                <div className="flex h-16 items-center justify-between gap-4">
+                <nav className="flex h-16 items-center justify-between gap-4">
                     <div className="flex items-center gap-2">
                         {isMobile && (
                             <Popover>
@@ -365,7 +366,7 @@ const NavbarComponent = forwardRef<HTMLElement, NavbarProps>(
                             onItemClick={onUserItemClick}
                         />
                     </div>
-                </div>
+                </nav>
             </header>
         );
     }
