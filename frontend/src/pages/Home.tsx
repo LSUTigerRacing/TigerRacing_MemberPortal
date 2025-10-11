@@ -11,19 +11,22 @@ const SplashButton = (props: { text: string, url: string }) => <Button variant="
 export default function Home () {
     return (
         <>
+            {/* for accessibility scoring on homepage */}
+            <h1 className="hidden">Home</h1>
+
+            {/* Backdrop */}
             <div className="fixed w-screen h-screen overflow-hidden bg-cover" style={{ backgroundImage: `url(${HeroBg})` }}></div>
             <div className="fixed bg-[#00000060] backdrop-blur-xs w-screen h-screen"></div>
 
+            {/* Buttons */}
             <div className="fixed flex flex-col justify-center items-center w-screen h-screen">
-                <img src={Logo} alt="TigerRacing logo" className="size-max mb-10 px-10" />
+                <img src={Logo} alt="TigerRacing splash logo" className="size-max mb-10 px-10" />
                 <div className="flex flex-col md:flex-row justify-center items-center gap-2">
-                    {/* TODO: Change these redirects. */}
-                    <SplashButton text="Member Management" url="/login?redirect_to=/dashboard" />
-                    <SplashButton text="Financials" url="/login?redirect_to=/dashboard" />
-                    <SplashButton text="Gantt Chart" url="/login?redirect_to=/dashboard" />
+                    <SplashButton text="Dashboard" url="/dashboard" />
+                    <SplashButton text="Wiki" url="/wiki" />
+                    <SplashButton text="Projects" url="/projects" />
                 </div>
             </div>
-
         </>
     );
 };
