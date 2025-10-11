@@ -7,7 +7,7 @@ const Dashboard = lazy(() => import("./pages/Dashboard.tsx").then(module => ({ d
 
 export const AppRoutes = () => {
     return (
-        <main className="fixed min-w-screen min-h-screen">
+        <main className="fixed min-w-screen min-h-screen max-w-screen max-h-screen overflow-y-auto">
             <Suspense fallback={null}>
                 <Routes>
                     {/* public pages */}
