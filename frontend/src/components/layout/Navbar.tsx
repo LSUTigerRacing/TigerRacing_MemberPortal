@@ -210,7 +210,7 @@ const UserMenu = ({
                 <Mail />
                 Inbox
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onItemClick?.("purchase-requests")} className="cursor-pointer">
+            <DropdownMenuItem onClick={() => onItemClick?.("purchases")} className="cursor-pointer">
                 <ShoppingCart />
                 Purchase Requests
             </DropdownMenuItem>
