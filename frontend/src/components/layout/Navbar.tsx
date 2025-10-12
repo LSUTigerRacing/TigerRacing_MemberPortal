@@ -200,45 +200,45 @@ const UserMenu = ({
                 </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => onItemClick?.("dashboard")} className="cursor-pointer">
+            <DropdownMenuItem onClick={() => onItemClick?.("dashboard")}>
                 <Gauge />
                 Dashboard
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onItemClick?.("profile")} className="cursor-pointer">
+            <DropdownMenuItem onClick={() => onItemClick?.("profile")}>
                 <User />
                 Profile
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onItemClick?.("inbox")} className="cursor-pointer">
+            <DropdownMenuItem onClick={() => onItemClick?.("inbox")}>
                 <Mail />
                 Inbox
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onItemClick?.("projects")} className="cursor-pointer">
+            <DropdownMenuItem onClick={() => onItemClick?.("projects")}>
                 <Folder />
                 Projects
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onItemClick?.("purchases")} className="cursor-pointer">
+            <DropdownMenuItem onClick={() => onItemClick?.("orders")}>
                 <ShoppingCart />
-                Purchase Requests
+                Orders
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onItemClick?.("admin")} className="cursor-pointer">
+            <DropdownMenuItem onClick={() => onItemClick?.("admin")}>
                 <UserCog />
                 Admin
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onItemClick?.("settings")} className="cursor-pointer">
+            <DropdownMenuItem onClick={() => onItemClick?.("settings")}>
                 <Settings />
                 Settings
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => onItemClick?.("training")} className="cursor-pointer">
+            <DropdownMenuItem onClick={() => onItemClick?.("training")}>
                 <GraduationCap />
                 Training
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onItemClick?.("documentation")} className="cursor-pointer">
+            <DropdownMenuItem onClick={() => onItemClick?.("documentation")}>
                 <FileText />
                 Documentation
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => onItemClick?.("logout")} className="cursor-pointer">
+            <DropdownMenuItem onClick={() => onItemClick?.("logout")}>
                 <LogOut />
                 Sign out
             </DropdownMenuItem>
