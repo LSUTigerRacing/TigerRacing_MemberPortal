@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import logo from "@/assets/logo.png";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/shadcn-components/button";
 import { CircleUserRound } from "lucide-react";
 import {
     DropdownMenu,
@@ -11,8 +11,8 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu";
-import { Avatar } from "@/components/ui/avatar";
+} from "@/components/ui/shadcn-components/dropdown-menu";
+import { Avatar } from "@/components/ui/shadcn-components/avatar";
 import { cn } from "@/lib/utils";
 
 // Logo component for the navbar

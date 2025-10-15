@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/shadcn-components/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/shadcn-components/card";
 function App () {
     return (
         <div className="min-h-screen bg-background p-8">
