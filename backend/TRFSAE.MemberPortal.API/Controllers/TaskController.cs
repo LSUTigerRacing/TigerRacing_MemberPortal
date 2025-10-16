@@ -9,29 +9,36 @@ using TRFSAE.MemberPortal.API.Interfaces;
 
 public class TaskController : ControllerBase
 {
-    private readonly ITaskService _taskService;
+    private readonly ITaskService _TaskService;
     public TaskController(ITaskService taskService)
     {
-        _taskService = taskService;
+        _TaskService = taskService;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAllTasks()
     {
-        var tasks = await _taskService.GetAllTasksAsync();
+        var tasks = await _TaskService.GetAllTasksAsync();
         return Ok(tasks);
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetTaskById(Guid id)
     {
-        var task = await _taskService.GetTaskByIdAsync(id);
-       
+        var task = await _TaskService.GetTasksByIdAsync(id);
+
         if (task == null)
         {
             return NotFound();
         }
 
+        return Ok(task);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateNewTask()
+    {
+        var task = await _TaskService.CreateNewTaskAsync();
         return Ok(task);
     }
 
