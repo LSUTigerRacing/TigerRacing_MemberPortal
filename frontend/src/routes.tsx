@@ -4,7 +4,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 // Public pages
 const Home = lazy(() => import("./pages/Home.tsx").then(module => ({ default: module.Home })));
 const Members = lazy(() => import("@/pages/adminPortal/adPortalView.tsx").then(module => ({ default: module.PagesView })));
-const Projects = lazy(() => import("@/pages/Projects.tsx"));
+const MemberTabs = lazy(() => import("./pages/Task-portal/Kanban.tsx").then(module => ({ default: module.MemberTabs })));
 
 export const AppRoutes = () => {
     return (
@@ -14,7 +14,7 @@ export const AppRoutes = () => {
                     {/* public pages */}
                     <Route path="/" element={<Home />} />
                     <Route path="/members" element={<Members />} />
-                    <Route path="/projects" element={<Projects />} />
+                    <Route path="/projects" element={<MemberTabs />} />
 
                     {/* if they try to go elsewhere */}
                     <Route path="*" element={<Navigate to="/" replace />} />
