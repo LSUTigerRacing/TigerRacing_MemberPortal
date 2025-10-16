@@ -27,10 +27,10 @@
 }
 
 :root {
-  --primary: oklch(35.242% 0.18482 303.298);
-  --accent: oklch(88.282% 0.18104 94.468);
-  --primary-background: oklch(96.071% 0.00961 320.054);
-  --secondary-background: oklch(100% 0.00011 271.152);
+  --primary: oklch(35.242% 0.18482 303.298); /* purple */
+  --accent: oklch(88.282% 0.18104 94.468); /* yellow accent */
+  --primary-background: oklch(96.071% 0.00961 320.054); /* off-purple background */
+  --secondary-background: oklch(100% 0.00011 271.152); /* white background */
   
   --radius: 0.625rem;
   --background: oklch(1 0 0);
