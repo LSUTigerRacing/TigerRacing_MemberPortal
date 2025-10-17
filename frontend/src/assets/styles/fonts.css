@@ -1,0 +1,13 @@
+@font-face {
+  font-family: "Manrope";
+  src: url("../fonts/Manrope/Manrope-VariableFont_wght.ttf");
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Sora";
+  src: url("../fonts/Sora/Sora-VariableFont_wght.ttf");
+  font-optical-sizing: auto;
+  font-style: normal;
+}
