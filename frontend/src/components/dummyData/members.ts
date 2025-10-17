@@ -84,7 +84,7 @@ export const data: Member[] = [
     id: "hiug867n",
     year: "Freshman",
     name: "Car McCarface",
-    grad: "2026",
+    grad: "2025",
     system: "Business",
     email: "carmella@example.com",
     subsystem: "Battery",
@@ -97,7 +97,7 @@ export const data: Member[] = [
     id: "6753g3g5",
     year: "Freshman",
     name: "Jane Doe",
-    grad: "2026",
+    grad: "2028",
     system: "PR",
     email: "carmella@example.com",
     subsystem: "Battery",
@@ -131,6 +131,20 @@ export const data: Member[] = [
     hazing: "Completed",
     dues: "Paid",
     shirtSize: "M"
+  },
+
+  {
+    id: "2753odkgof",
+    year: "Junior",
+    grad: "2027",
+    name: "Mandy Moore",
+    system: "Chassis",
+    email: "carmella@example.com",
+    subsystem: "Aero",
+    joinDate: "2023-09-01",
+    hazing: "Uncompleted",
+    dues: "Unpaid",
+    shirtSize: "XS"
   },
 ]
 

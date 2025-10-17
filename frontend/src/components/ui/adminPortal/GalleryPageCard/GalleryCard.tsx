@@ -3,6 +3,7 @@ import { MoreHorizontal, ListTodoIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
+
 import {
   Carousel,
   CarouselContent,
@@ -10,6 +11,15 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export default function CarouselDemo() {
   return (
@@ -43,7 +53,33 @@ export default function CarouselDemo() {
                           {members.name}
                         </div>
                         <div>
-                          <MoreHorizontal className="h-9 w-9 flex text-foreground" />
+                          
+                          {/* Dropdown Menu */}
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button variant="ghost" className="h-8 w-8 p-0">
+                                <span className="sr-only">Open menu</span>
+                                <MoreHorizontal />
+                              </Button>
+                            </DropdownMenuTrigger>
+
+                            <DropdownMenuContent align="end" className="bg-white">
+                              <DropdownMenuLabel className="font-manrope font-extrabold">
+                                Actions
+                              </DropdownMenuLabel>
+                              <DropdownMenuSeparator />
+                              <DropdownMenuItem
+                                onClick={() => navigator.clipboard.writeText(members.id)}
+                              >
+                                Moderate Member
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => navigator.clipboard.writeText(members.id)}
+                              >
+                                See more
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
                         </div>
                       </div>
 
