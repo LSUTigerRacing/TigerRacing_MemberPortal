@@ -36,9 +36,9 @@ public class TaskController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateNewTask()
+    public async Task<IActionResult> CreateTask()
     {
-        var task = await _TaskService.CreateNewTaskAsync();
+        var task = await _TaskService.CreateTaskAsync();
         return Ok(task);
     }
 

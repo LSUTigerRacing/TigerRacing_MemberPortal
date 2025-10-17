@@ -39,7 +39,7 @@ public class TaskService : ITaskService
         return tasks?.FirstOrDefault();
     }
 
-    public async Task<TaskResponseDto> CreateNewTaskAsync()
+    public async Task<TaskResponseDto> CreateTaskAsync()
     {
         var response = await _supabaseClient
         .Rpc("create_new_task", new Dictionary<string, object>());

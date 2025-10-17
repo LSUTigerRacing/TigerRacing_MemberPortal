@@ -7,5 +7,5 @@ public interface ITaskService
 {
     Task<List<TaskResponseDto>> GetAllTasksAsync();
     Task<TaskResponseDto> GetTasksByIdAsync(Guid id);
-    Task<TaskResponseDto> CreateNewTaskAsync();
+    Task<TaskResponseDto> CreateTaskAsync();
 }
