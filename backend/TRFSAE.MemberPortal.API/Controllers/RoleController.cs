@@ -1,6 +1,7 @@
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Supabase;
+using TRFSAE.MemberPortal.API.DTOs;
 using TRFSAE.MemberPortal.API.Interfaces;
 
 namespace TRFSAE.MemberPortal.API.Controllers;
@@ -34,8 +35,8 @@ public class RoleController : ControllerBase
 
         return Ok(role);
     }
-    [HttpPut("{id}/permissions")]
-    public async Task<IActionResult> ChangeRolePermissionsById(Guid id, JsonElement permissions)
+    [HttpPut("permissions/{id}")]
+    public async Task<IActionResult> ChangeRolePermissionsById(Guid id, UpdateRolePermissionsDto permissions)
     {
         var update = await _roleService.UpdateRolePermissionsAsync(id, permissions);
 

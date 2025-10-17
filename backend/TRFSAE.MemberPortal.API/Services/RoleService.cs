@@ -1,7 +1,6 @@
 using TRFSAE.MemberPortal.API.DTOs;
 using TRFSAE.MemberPortal.API.Interfaces;
 using System.Text.Json;
-using TRFSAE.MemberPortal.API.Models;
 
 namespace TRFSAE.MemberPortal.API.Services;
 
@@ -39,12 +38,12 @@ public class RoleService : IRoleService
         return roles?.FirstOrDefault();
     }
 
-    public async Task<RoleResponseDto> UpdateRolePermissionsAsync(Guid id, JsonElement permissions)
+    public async Task<RoleResponseDto> UpdateRolePermissionsAsync(Guid id, UpdateRolePermissionsDto dto)
     {
         var parameters = new Dictionary<string, object>
         {
             { "role_id", id },
-            { "permission_updates", permissions }
+            { "permission_updates", dto.Permissions }
         };
 
         var response = await _supabaseClient

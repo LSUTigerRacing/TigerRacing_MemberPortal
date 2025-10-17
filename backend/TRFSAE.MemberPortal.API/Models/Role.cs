@@ -6,7 +6,7 @@ namespace TRFSAE.MemberPortal.API.Models
     [Table("roles")]
     public class Role : BaseModel
     {
-        [PrimaryKey("id", false)]
+        [PrimaryKey("id")]
         public Guid Id { get; set; }
         [Column("roleName")]
         public string RoleName { get; set; } = null!;
