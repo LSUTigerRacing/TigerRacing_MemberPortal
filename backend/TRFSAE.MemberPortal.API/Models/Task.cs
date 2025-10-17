@@ -15,8 +15,14 @@ namespace TRFSAE.MemberPortal.API.Models
         [Column("name")]
         public string TaskName { get; set; }
 
-        [Column("Completion_Status")]
+        [Column("completion_status")]
         public bool Completion_Status { get; set; }
+
+        [Column("created_at")]
+        public DateTime CreatedAt { get; set; }
+
+        [Column("start_date")]
+        public DateTime ProjectStartDate { get; set; }
 
         [Column("due_date")]
         public DateTime ProjectDueDate { get; set; }

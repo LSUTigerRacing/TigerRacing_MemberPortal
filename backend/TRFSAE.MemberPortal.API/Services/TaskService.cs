@@ -1,14 +1,15 @@
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore.Query;
 using TRFSAE.MemberPortal.API.DTOs;
+using Supabase;
 
 namespace TRFSAE.MemberPortal.API.Interfaces;
 
 public class TaskService : ITaskService
 {
 
-    private readonly Supabase.Client _supabaseClient;
-    public TaskService(Supabase.Client supabaseClient)
+    private readonly Client _supabaseClient;
+    public TaskService(Client supabaseClient)
     {
         _supabaseClient = supabaseClient;
     }
