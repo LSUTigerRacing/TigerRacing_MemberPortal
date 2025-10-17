@@ -9,6 +9,7 @@ DotEnv.Load();
 var builder = WebApplication.CreateBuilder(args);
 {
     builder.Services.AddScoped<IRoleService, RoleService>();
+    builder.Services.AddScoped<ITaskService, TaskService>();
     builder.Services.AddScoped<IProjectService, ProjectService>();
 }
 
