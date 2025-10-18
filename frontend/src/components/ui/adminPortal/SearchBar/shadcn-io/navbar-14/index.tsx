@@ -103,12 +103,12 @@ export const Navbar14 = React.forwardRef<HTMLElement, Navbar14Props>(
               </div>
 
               {isDropdownOpen && searchValue && (
-                <div className="absolute mt-1 top-full bg-white">
+                <div className="absolute mt-1 top-full w-full shadow bg-white">
                   {filteredItems.length > 0 ? (
                     filteredItems.map((member) => (
                       <div
                         key={member.id}
-                        className="px-4 py-2 hover:bg-accent cursor-pointer"
+                        className="px-4 py-2 border-b border-muted-foreground/30 rounded hover:bg-accent cursor-pointer"
                       >
                         <ul>
                           <li>{member.name}</li>

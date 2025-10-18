@@ -16,11 +16,11 @@ import {
 export default function CardDemo() {
   return (
     <>
-      <div className="flex flex-col gap-9">
+      <div className="flex flex-col gap-6 w-full px-12">
         {(data as Member[]).map((members) => (
           <div
             key={members.id}
-            className="bg-primary-background w-full gap-2 p-6 justify-between flex items-center rounded-4xl"
+            className="bg-primary-background w-full p-6 justify-between flex items-center rounded-4xl"
           >
             {/* Avatar and Member Info */}
             <div className="flex items-center mb-4">

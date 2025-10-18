@@ -47,6 +47,7 @@ export default function CarouselDemo() {
 
                     {/* Container for Name and Details */}
                     <div className="flex flex-col">
+                      
                       {/* Container for Name and More Icon */}
                       <div className="flex flex-row gap-3">
                         <div className="ml-4 font-manrope font-semibold text-2xl text-foreground pb-2">
