@@ -19,8 +19,8 @@ namespace TRFSAE.MemberPortal.API.Services
     {
         static readonly string[] Scopes = { SheetsService.Scope.Spreadsheets };
         static readonly string ApplicationName = "TigerRacing";
-        static readonly string SpreadsheetsId = "1u-78AkyO2ZXX7h1tPM6fIJGY51xtJkbWOKu8Lw3ddfQ";
-        static readonly string sheet = "sheet1";
+        static readonly string SpreadsheetsId = "1u-78AkyO2ZXX7h1tPM6fIJGY51xtJkbWOKu8Lw3ddfQ"; //change to letters after d/ in url
+        static readonly string sheet = "sheet1"; //change to sheet name at the bottom 
         static SheetsService? service;
         private readonly Supabase.Client _supabaseClient;
 
@@ -33,7 +33,7 @@ namespace TRFSAE.MemberPortal.API.Services
         public static void CreateEntry(List<SheetsResponseDTO> data)
         {
             GoogleCredential credential;
-            using (var stream = new FileStream("client_secret.json", FileMode.Open, FileAccess.Read))
+            using (var stream = new FileStream("client_secret.json", FileMode.Open, FileAccess.Read)) //ask me for client_secret.json
             {
                 credential = GoogleCredential.FromStream(stream)
                     .CreateScoped(Scopes);
