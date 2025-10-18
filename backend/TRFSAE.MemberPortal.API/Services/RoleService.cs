@@ -17,7 +17,7 @@ public class RoleService : IRoleService
     {
         var response = await _supabaseClient
             .Rpc("get_all_roles", new Dictionary<string, object>());
-        
+
         var roles = JsonSerializer.Deserialize<List<RoleResponseDto>>(response.Content);
 
         return roles ?? new List<RoleResponseDto>();
@@ -32,7 +32,7 @@ public class RoleService : IRoleService
 
         var response = await _supabaseClient
             .Rpc("get_role_by_id", parameters);
-        
+
         var roles = JsonSerializer.Deserialize<List<RoleResponseDto>>(response.Content);
 
         return roles?.FirstOrDefault();
