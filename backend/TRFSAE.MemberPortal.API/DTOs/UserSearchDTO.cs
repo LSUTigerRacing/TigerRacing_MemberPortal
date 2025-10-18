@@ -1,6 +1,6 @@
 namespace TRFSAE.MemberPortal.API.DTOs
 {
-    public class UserSearchDTO
+    public class UserSearchDto
     {
         public String FirstName { get; set; }
         public String LastName { get; set; }

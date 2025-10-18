@@ -2,7 +2,7 @@ using Supabase.Postgrest.Models;
 
 namespace TRFSAE.MemberPortal.API.DTOs
 {
-  public class UserRoleDTO : BaseModel {
+  public class UserRoleDto : BaseModel {
 
     public Guid RoleID { get; set; }
 

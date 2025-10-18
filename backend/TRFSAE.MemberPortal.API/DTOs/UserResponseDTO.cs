@@ -9,34 +9,34 @@ namespace TRFSAE.MemberPortal.API.DTOs
         public Guid UserId { get; set; }
 
         [JsonPropertyName("name")]
-        public String Name { get; set; }
+        public required string Name { get; set; }
 
         [JsonPropertyName("email")]
-        public String PersonalEmail { get; set; }
+        public required string PersonalEmail { get; set; }
 
         [JsonPropertyName("lsu_email")]
-        public String LSUEmail { get; set; }
+        public required string LSUEmail { get; set; }
 
         [JsonPropertyName("eight_nine")]
         public int EightNine { get; set; }
 
         [JsonPropertyName("hazing_status")]
-        public Boolean HazingStatus { get; set; }
+        public bool HazingStatus { get; set; }
 
         [JsonPropertyName("fee_status")]
-        public Boolean FeeStatus { get; set; }
+        public bool FeeStatus { get; set; }
 
         [JsonPropertyName("grad_date")]
         public DateTime GradDate { get; set; }
 
         [JsonPropertyName("shirt_size")]
-        public String ShirtSize { get; set; }
+        public string? ShirtSize { get; set; }
 
         [JsonPropertyName("system")]
-        public String System { get; set; }
+        public string? System { get; set; }
 
         [JsonPropertyName("subsystem")]
-        public String Subsystem { get; set; }
+        public string? Subsystem { get; set; }
 
         [JsonPropertyName("created_at")]
         public DateTime AccountCreationDate { get; set; }
