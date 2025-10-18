@@ -17,28 +17,28 @@ namespace TRFSAE.MemberPortal.API.Services
       _supabase = supabase;
     }
 
-    public async Task<UserResponseDTO> GetUserAsync(string name) 
+    public async Task<UserResponseDto> GetUserAsync(string name) 
     {
       var userTask = await _supabase
         .From<UserModel>()
         .Where(x => x.Name == name)
         .Get();
-      var userResponse = JsonSerializer.Deserialize<UserResponseDTO>(userTask.Content);  
+      var userResponse = JsonSerializer.Deserialize<UserResponseDto>(userTask.Content);  
       return userResponse;
     }
 
-    public async Task<UserResponseDTO> GetUserByIDAsync(Guid userID) 
+    public async Task<UserResponseDto> GetUserByIDAsync(Guid userID) 
     {
       var userTask = await _supabase
         .From<UserModel>()
         .Where(x => x.UserId == userID)
         .Get();
 
-      var userResponse = JsonSerializer.Deserialize<UserResponseDTO>(userTask.Content);  
+      var userResponse = JsonSerializer.Deserialize<UserResponseDto>(userTask.Content);  
       return userResponse;
     }
 
-    public async Task<IActionResult> UpdateUserAsync(Guid userID, UserUpdateDTO updateDto)
+    public async Task<IActionResult> UpdateUserAsync(Guid userID, UserUpdateDto updateDto)
     {
       var updateModel = new UserModel
       {
@@ -67,34 +67,34 @@ namespace TRFSAE.MemberPortal.API.Services
     {
         var taskResult = await _supabase
             .From<UserModel>()
-            .Where(x => x.UserId == currentUserId);
+            .Where(x => x.UserId = currentUserId);
         if (confirmationString == "confirm")
         {
         taskResult.Delete();
-        taskResult = JsonSerializer.Deserialize<RoleResponseDto>(taskResult.Content);    
+        taskResult = JsonSerializer.Deserialize<UserResponseDto>(taskResult.Content);    
       }
       return taskResult;
 
     }
 
-    public async Task<RoleResponseDto> GetUserRolesAsync(Guid userID)
-    {
-      var userTask = await _supabase
-        .From<UserModel>()
-        .Where(x => x.UserId == userID)
-        .Get();
-      userTask = JsonSerializer.Deserialize<RoleResponseDto>(userTask.Content);    
-      return userTask;
-    }
+    // public async Task<RoleResponseDto> GetUserRolesAsync(Guid userID)
+    // {
+    //   var userTask = await _supabase
+    //     .From<UserModel>()
+    //     .Where(x => x.UserId == userID)
+    //     .Get();
+    //   var userResponse = JsonSerializer.Deserialize<RoleResponseDto>(userTask.Content);    
+    //   return userResponse;
+    // }
 
-        public Task<IActionResult> UpdateUserByIDAsync(Guid userID, UserUpdateDTO updateDto)
-        {
-            throw new NotImplementedException();
-        }
+    //     public Task<IActionResult> UpdateUserByIDAsync(Guid userID, UserUpdateDto updateDto)
+    //     {
+    //         throw new NotImplementedException();
+    //     }
 
-        Task<UserResponseDTO> IUserService.GetUserRolesAsync(Guid userID)
-        {
-            throw new NotImplementedException();
-        }
+    //     Task<UserResponseDto> IUserService.GetUserRolesAsync(Guid userID)
+    //     {
+    //         throw new NotImplementedException();
+    //     }
     }
 }

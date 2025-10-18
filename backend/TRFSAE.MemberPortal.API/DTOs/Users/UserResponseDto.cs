@@ -3,7 +3,7 @@ using Supabase.Postgrest.Models;
 
 namespace TRFSAE.MemberPortal.API.DTOs
 {
-    public class UserResponseDTO : BaseModel
+    public class UserResponseDto
     {
         [JsonPropertyName("id")]
         public Guid UserId { get; set; }
