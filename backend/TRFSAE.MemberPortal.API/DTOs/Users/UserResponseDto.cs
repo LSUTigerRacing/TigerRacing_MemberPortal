@@ -1,5 +1,4 @@
 using System.Text.Json.Serialization;
-using Supabase.Postgrest.Models;
 
 namespace TRFSAE.MemberPortal.API.DTOs
 {

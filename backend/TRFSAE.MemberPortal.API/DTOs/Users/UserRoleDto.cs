@@ -1,5 +1,3 @@
-using Supabase.Postgrest.Models;
-
 namespace TRFSAE.MemberPortal.API.DTOs
 {
   public class UserRoleDto {

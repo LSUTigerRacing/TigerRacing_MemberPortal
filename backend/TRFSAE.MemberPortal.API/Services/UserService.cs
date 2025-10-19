@@ -2,9 +2,7 @@ using TRFSAE.MemberPortal.API.DTOs;
 using Supabase;
 using TRFSAE.MemberPortal.API.Interfaces;
 using System.Text.Json;
-using Microsoft.AspNetCore.Mvc;
 using TRFSAE.MemberPortal.API.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace TRFSAE.MemberPortal.API.Services
 {
@@ -17,31 +15,53 @@ namespace TRFSAE.MemberPortal.API.Services
       _supabase = supabase;
     }
 
-    public async Task<UserResponseDto> GetUserAsync(string name) 
+    public async Task<UserResponseDto> GetUserByIDAsync(Guid userID)
     {
-      var userTask = await _supabase
-        .From<UserModel>()
-        .Where(x => x.Name == name)
-        .Get();
-      var userResponse = JsonSerializer.Deserialize<UserResponseDto>(userTask.Content);  
-      return userResponse;
-    }
-
-    public async Task<UserResponseDto> GetUserByIDAsync(Guid userID) 
-    {
-      var userTask = await _supabase
+      var response = await _supabase
         .From<UserModel>()
         .Where(x => x.UserId == userID)
-        .Get();
+        .Single();
 
-      var userResponse = JsonSerializer.Deserialize<UserResponseDto>(userTask.Content);  
+      if (response == null)
+      {
+        throw new Exception("User not found");
+      }
+
+      var userResponse = new UserResponseDto
+      {
+        UserId = response.UserId,
+        Name = response.Name,
+        PersonalEmail = response.PersonalEmail,
+        LSUEmail = response.LSUEmail,
+        EightNine = response.EightNine,
+        HazingStatus = response.HazingStatus,
+        FeeStatus = response.FeeStatus,
+        GradDate = response.GradDate,
+        ShirtSize = response.ShirtSize,
+        System = response.System,
+        Subsystem = response.Subsystem
+      };
+
       return userResponse;
     }
 
-    public async Task<IActionResult> UpdateUserAsync(Guid userID, UserUpdateDto updateDto)
+    public async Task<List<UserResponseDto>> GetAllUsersAsync(UserSearchDto searchDto)
+    {
+      // var query = _supabase.From<UserModel>();
+
+      // if (!string.IsNullOrWhiteSpace(searchDto.Name))
+      // {
+      //   query = query.Filter("name", Supabase.Postgrest.Constants.Operator.ILike, $"%{searchDto.Name}%");
+      // }
+      // return null;
+      return new List<UserResponseDto>();
+    }
+
+    public async Task<UserResponseDto> UpdateUserByIdAsync(Guid userID, UserUpdateDto updateDto)
     {
       var updateModel = new UserModel
       {
+        UserId = userID,
         Name = updateDto.Name,
         PersonalEmail = updateDto.PersonalEmail,
         LSUEmail = updateDto.LSUEmail,
@@ -54,47 +74,55 @@ namespace TRFSAE.MemberPortal.API.Services
         Subsystem = updateDto.Subsystem
       };
 
-
-      var taskResult = await _supabase
+      var response = await _supabase
         .From<UserModel>()
         .Where(x => x.UserId == userID)
         .Update(updateModel);
-      var taskResponse = JsonSerializer.Deserialize<UserResponseDto>(taskResult.Content);    
-      return Ok(taskResponse);
-    }
 
-    public async Task<IActionResult> DeleteUserAsync(Guid currentUserId, string confirmationString)
-    {
-        var taskResult = await _supabase
-            .From<UserModel>()
-            .Where(x => x.UserId = currentUserId);
-        if (confirmationString == "confirm")
-        {
-        taskResult.Delete();
-        taskResult = JsonSerializer.Deserialize<UserResponseDto>(taskResult.Content);    
+      var updatedUser = response.Models.FirstOrDefault();
+
+      if (updatedUser == null)
+      {
+        throw new Exception("User not found or update failed");
       }
-      return taskResult;
 
+      var userResponse = new UserResponseDto
+      {
+        UserId = updatedUser.UserId,
+        Name = updatedUser.Name,
+        PersonalEmail = updatedUser.PersonalEmail,
+        LSUEmail = updatedUser.LSUEmail,
+        EightNine = updatedUser.EightNine,
+        HazingStatus = updatedUser.HazingStatus,
+        FeeStatus = updatedUser.FeeStatus,
+        GradDate = updatedUser.GradDate,
+        ShirtSize = updatedUser.ShirtSize,
+        System = updatedUser.System,
+        Subsystem = updatedUser.Subsystem
+      };
+      
+      return userResponse;
     }
 
-    // public async Task<RoleResponseDto> GetUserRolesAsync(Guid userID)
-    // {
-    //   var userTask = await _supabase
-    //     .From<UserModel>()
-    //     .Where(x => x.UserId == userID)
-    //     .Get();
-    //   var userResponse = JsonSerializer.Deserialize<RoleResponseDto>(userTask.Content);    
-    //   return userResponse;
-    // }
+    public async Task<bool> DeleteUserAsync(Guid currentUserId, string confirmationString)
+    {
+      if (confirmationString != "confirm")
+      {
+        return false;
+      }
+      try
+      {
+        await _supabase
+          .From<UserModel>()
+          .Where(x => x.UserId == currentUserId)
+          .Delete();
 
-    //     public Task<IActionResult> UpdateUserByIDAsync(Guid userID, UserUpdateDto updateDto)
-    //     {
-    //         throw new NotImplementedException();
-    //     }
+        return true;
 
-    //     Task<UserResponseDto> IUserService.GetUserRolesAsync(Guid userID)
-    //     {
-    //         throw new NotImplementedException();
-    //     }
+      } catch (Exception)
+      {
+          return false;
+      }
     }
+  }
 }

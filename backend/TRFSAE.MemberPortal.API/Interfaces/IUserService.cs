@@ -6,13 +6,10 @@ namespace TRFSAE.MemberPortal.API.Interfaces
 {
   public interface IUserService
   {
-    public Task<UserResponseDto> GetUserAsync(string name); 
-
-    public Task<UserResponseDto> GetUserByIDAsync(Guid userID);
-
-    public Task<IActionResult> UpdateUserByIDAsync(Guid userID, UserUpdateDto updateDto);
-
-    public Task<IActionResult> DeleteUserAsync(Guid currentUserId, string confirmationString);
+    Task<UserResponseDto> GetUserByIDAsync(Guid userID);
+    Task<List<UserResponseDto>> GetAllUsersAsync(UserSearchDto searchDto); 
+    Task<UserResponseDto> UpdateUserByIdAsync(Guid userID, UserUpdateDto updateDto);
+    Task<bool> DeleteUserAsync(Guid currentUserId, string confirmationString);
 
     // public Task<UserResponseDto> GetUserRolesAsync(Guid userID);
   }
