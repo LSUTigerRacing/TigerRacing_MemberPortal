@@ -148,14 +148,13 @@ export default function Dashboard (): ReactElement {
                 <div className="flex flex-col lg:flex-row gap-4">
                     <Card className="bg-primary border-primary text-background rounded-sm lg:max-w-xs px-4 pt-8">
                         <CardContent className="flex flex-col items-center">
-                            <Avatar className="mb-4 size-fit max-w-xs">
-                                {/* TODO: fix incorrectly sized avatar fallback */}
+                            <Avatar className="mb-4 max-w-xs w-64 h-64">
                                 {data?.avatarURL
                                     ? <AvatarImage src={data.avatarURL} alt="User profile picture" />
-                                    : <AvatarFallback>{data?.initials ?? "CM"}</AvatarFallback>
+                                    : <AvatarFallback className="bg-secondary text-primary text-8xl">{data?.initials ?? "CM"}</AvatarFallback>
                                 }
                             </Avatar>
-                            <span>Hi, {data?.displayName ?? "Car McCarface"}!</span>
+                            <span className="mt-4 text-2xl">Hi, {data?.displayName ?? "Car McCarface"}!</span>
                         </CardContent>
                     </Card>
                     <Card className="bg-primary border-primary text-background rounded-sm grow">
