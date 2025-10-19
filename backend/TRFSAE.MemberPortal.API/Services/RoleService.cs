@@ -1,14 +1,15 @@
 using TRFSAE.MemberPortal.API.DTOs;
 using TRFSAE.MemberPortal.API.Interfaces;
-using System.Text.Json;
+using TRFSAE.MemberPortal.API.Models;
+using Supabase;
 
 namespace TRFSAE.MemberPortal.API.Services;
 
 public class RoleService : IRoleService
 {
-    private readonly Supabase.Client _supabaseClient;
+    private readonly Client _supabaseClient;
 
-    public RoleService(Supabase.Client supabaseClient)
+    public RoleService(Client supabaseClient)
     {
         _supabaseClient = supabaseClient;
     }
@@ -16,26 +17,20 @@ public class RoleService : IRoleService
     public async Task<List<RoleResponseDto>> GetAllRolesAsync()
     {
         var response = await _supabaseClient
-            .Rpc("get_all_roles", new Dictionary<string, object>());
+            .From<RoleModel>()
+            .Get();
 
-        var roles = JsonSerializer.Deserialize<List<RoleResponseDto>>(response.Content);
-
-        return roles ?? new List<RoleResponseDto>();
+        return new List<RoleResponseDto>();
     }
 
     public async Task<RoleResponseDto> GetRoleByIdAsync(Guid id)
     {
-        var parameters = new Dictionary<string, object>
-        {
-            { "role_id", id }
-        };
-
         var response = await _supabaseClient
-            .Rpc("get_role_by_id", parameters);
+            .From<RoleModel>()
+            .Where(x => x.Id == id)
+            .Single();
 
-        var roles = JsonSerializer.Deserialize<List<RoleResponseDto>>(response.Content);
-
-        return roles?.FirstOrDefault();
+        return new RoleResponseDto();
     }
 
     public async Task<RoleResponseDto> UpdateRolePermissionsAsync(Guid id, UpdateRolePermissionsDto dto)
@@ -49,8 +44,8 @@ public class RoleService : IRoleService
         var response = await _supabaseClient
             .Rpc("update_role_permissions", parameters);
 
-        var role = JsonSerializer.Deserialize<List<RoleResponseDto>>(response.Content);
+        // var role = JsonSerializer.Deserialize<List<RoleResponseDto>>(response.Content);
 
-        return role?.FirstOrDefault();
+        return new RoleResponseDto();
     }
 }

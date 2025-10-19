@@ -46,6 +46,9 @@ namespace TRFSAE.MemberPortal.API.Services
 
     public async Task<List<UserResponseDto>> GetAllUsersAsync(UserSearchDto searchDto)
     {
+      var response = await _supabaseClient
+        .From<UserModel>()
+        .Get();
       return new List<UserResponseDto>();
     }
 
