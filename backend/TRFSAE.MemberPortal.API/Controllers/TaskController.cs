@@ -1,7 +1,5 @@
-using System.IO.Pipelines;
-using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
-using Supabase;
+using TRFSAE.MemberPortal.API.DTOs;
 using TRFSAE.MemberPortal.API.Interfaces;
 
 [ApiController]
@@ -16,9 +14,9 @@ public class TaskController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllTasks()
+    public async Task<IActionResult> GetAllTasks(TaskSearchDto searchDto)
     {
-        var tasks = await _TaskService.GetAllTasksAsync();
+        var tasks = await _TaskService.GetAllTasksAsync(searchDto);
         return Ok(tasks);
     }
 
@@ -36,9 +34,9 @@ public class TaskController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateTask()
+    public async Task<IActionResult> CreateTask(CreateTaskDto createDto)
     {
-        var task = await _TaskService.CreateTaskAsync();
+        var task = await _TaskService.CreateTaskAsync(createDto);
         return Ok(task);
     }
 

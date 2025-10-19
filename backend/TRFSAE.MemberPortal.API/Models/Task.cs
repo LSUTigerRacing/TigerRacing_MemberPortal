@@ -4,7 +4,7 @@ using Supabase.Postgrest.Models;
 namespace TRFSAE.MemberPortal.API.Models
 {
     [Table("task")]
-    public class Task : BaseModel
+    public class TaskModel : BaseModel
     {
         [PrimaryKey("id")]
         public Guid TaskId { get; set; }
@@ -16,20 +16,18 @@ namespace TRFSAE.MemberPortal.API.Models
         public string TaskName { get; set; }
 
         [Column("completion_status")]
-        public bool Completion_Status { get; set; }
-
-        [Column("created_at")]
-        public DateTime CreatedAt { get; set; }
+        public bool CompletionStatus { get; set; }
 
         [Column("start_date")]
-        public DateTime ProjectStartDate { get; set; }
+        public DateTime StartDate { get; set; }
 
         [Column("due_date")]
-        public DateTime ProjectDueDate { get; set; }
+        public DateTime DueDate { get; set; }
 
         [Column("description")]
         public string Description { get; set; }
-        
 
+        [Column("created_at")]
+        public DateTime CreatedAt { get; set; }
     }
 }

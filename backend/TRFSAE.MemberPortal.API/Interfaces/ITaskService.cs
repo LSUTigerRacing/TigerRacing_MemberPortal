@@ -5,7 +5,7 @@ namespace TRFSAE.MemberPortal.API.Interfaces;
 
 public interface ITaskService
 {
-    Task<List<TaskResponseDto>> GetAllTasksAsync();
+    Task<List<TaskResponseDto>> GetAllTasksAsync(TaskSearchDto searchDto);
     Task<TaskResponseDto> GetTasksByIdAsync(Guid id);
-    Task<TaskResponseDto> CreateTaskAsync();
+    Task<TaskResponseDto> CreateTaskAsync(CreateTaskDto createDto);
 }

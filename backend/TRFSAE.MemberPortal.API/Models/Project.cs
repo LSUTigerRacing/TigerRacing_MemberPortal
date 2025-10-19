@@ -4,7 +4,7 @@ using Supabase.Postgrest.Models;
 namespace TRFSAE.MemberPortal.API.Models
 {
     [Table("project")]
-    public class Project : BaseModel
+    public class ProjectModel : BaseModel
     {
         [PrimaryKey]
         public Guid ProjectId { get; set; }

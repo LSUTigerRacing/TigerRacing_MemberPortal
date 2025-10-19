@@ -1,52 +1,63 @@
-using System.Text.Json;
-using Microsoft.EntityFrameworkCore.Query;
+using TRFSAE.MemberPortal.API.Models;
+using TRFSAE.MemberPortal.API.Interfaces;
 using TRFSAE.MemberPortal.API.DTOs;
+using System.Text.Json;
 using Supabase;
 
-namespace TRFSAE.MemberPortal.API.Interfaces;
+namespace TRFSAE.MemberPortal.API.Services;
 
 public class TaskService : ITaskService
 {
-
     private readonly Client _supabaseClient;
     public TaskService(Client supabaseClient)
     {
         _supabaseClient = supabaseClient;
     }
 
-    public async Task<List<TaskResponseDto>> GetAllTasksAsync()
+    public async Task<List<TaskResponseDto>> GetAllTasksAsync(TaskSearchDto searchDto)
     {
         var response = await _supabaseClient
-        .Rpc("get_all_tasks", new Dictionary<string, object>());
+        .From<TaskModel>()
+        .Get() ?? throw new Exception("No tasks found");
 
-        var tasks = JsonSerializer.Deserialize<List<TaskResponseDto>>(response.Content);
-
-        return tasks ?? new List<TaskResponseDto>();
+        return new List<TaskResponseDto>();
     }
 
     public async Task<TaskResponseDto> GetTasksByIdAsync(Guid id)
     {
-        var parameters = new Dictionary<string, object>
+        var response = await _supabaseClient
+        .From<TaskModel>()
+        .Where(x => x.TaskId == id)
+        .Single() ?? throw new Exception("Task not found");
+
+        var taskResponse = new TaskResponseDto
         {
-            { "task_id", id }
+            TaskId = response.TaskId,
+            TaskName = response.TaskName
+        };
+
+        return taskResponse;
+    }
+
+    public async Task<TaskResponseDto> CreateTaskAsync(CreateTaskDto createDto)
+    {
+        var newTask = new TaskModel
+        {
+            TaskId = Guid.NewGuid(),
+            TaskName = createDto.TaskName,
+            CompletionStatus = createDto.CompletionStatus,
+            DueDate = createDto.DueDate
         };
 
         var response = await _supabaseClient
-            .Rpc("get_task_by_id", parameters);
+        .From<TaskModel>()
+        .Insert(newTask);
 
-        var tasks = JsonSerializer.Deserialize<List<TaskResponseDto>>(response.Content);
 
-        return tasks?.FirstOrDefault();
+        return new TaskResponseDto
+        {
+            TaskId = newTask.TaskId,
+            TaskName = newTask.TaskName
+        };
     }
-
-    public async Task<TaskResponseDto> CreateTaskAsync()
-    {
-        var response = await _supabaseClient
-        .Rpc("create_new_task", new Dictionary<string, object>());
-
-        var task = JsonSerializer.Deserialize<List<TaskResponseDto>>(response.Content);
-
-        return task?.FirstOrDefault();
-    }
-
 }

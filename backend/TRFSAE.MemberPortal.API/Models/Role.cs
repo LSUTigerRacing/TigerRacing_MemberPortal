@@ -3,8 +3,8 @@ using Supabase.Postgrest.Models;
 
 namespace TRFSAE.MemberPortal.API.Models
 {
-    [Table("roles")]
-    public class Role : BaseModel
+    [Table("role")]
+    public class RoleModel : BaseModel
     {
         [PrimaryKey("id")]
         public Guid Id { get; set; }

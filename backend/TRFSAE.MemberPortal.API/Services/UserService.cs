@@ -1,23 +1,22 @@
 using TRFSAE.MemberPortal.API.DTOs;
 using Supabase;
 using TRFSAE.MemberPortal.API.Interfaces;
-using System.Text.Json;
 using TRFSAE.MemberPortal.API.Models;
 
 namespace TRFSAE.MemberPortal.API.Services
 {
   public class UserService : IUserService
   {
-    private readonly Client _supabase;
+    private readonly Client _supabaseClient;
 
-    public UserService(Client supabase)
+    public UserService(Client supabaseClient)
     {
-      _supabase = supabase;
+      _supabaseClient = supabaseClient;
     }
 
     public async Task<UserResponseDto> GetUserByIDAsync(Guid userID)
     {
-      var response = await _supabase
+      var response = await _supabaseClient
         .From<UserModel>()
         .Where(x => x.UserId == userID)
         .Single();
@@ -47,13 +46,6 @@ namespace TRFSAE.MemberPortal.API.Services
 
     public async Task<List<UserResponseDto>> GetAllUsersAsync(UserSearchDto searchDto)
     {
-      // var query = _supabase.From<UserModel>();
-
-      // if (!string.IsNullOrWhiteSpace(searchDto.Name))
-      // {
-      //   query = query.Filter("name", Supabase.Postgrest.Constants.Operator.ILike, $"%{searchDto.Name}%");
-      // }
-      // return null;
       return new List<UserResponseDto>();
     }
 
@@ -74,7 +66,7 @@ namespace TRFSAE.MemberPortal.API.Services
         Subsystem = updateDto.Subsystem
       };
 
-      var response = await _supabase
+      var response = await _supabaseClient
         .From<UserModel>()
         .Where(x => x.UserId == userID)
         .Update(updateModel);
@@ -112,7 +104,7 @@ namespace TRFSAE.MemberPortal.API.Services
       }
       try
       {
-        await _supabase
+        await _supabaseClient
           .From<UserModel>()
           .Where(x => x.UserId == currentUserId)
           .Delete();

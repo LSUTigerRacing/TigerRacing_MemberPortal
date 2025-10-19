@@ -8,6 +8,4 @@ public class TaskResponseDto
 
     [JsonPropertyName("name")]
     public string TaskName { get; set; }
-    
-
 }
