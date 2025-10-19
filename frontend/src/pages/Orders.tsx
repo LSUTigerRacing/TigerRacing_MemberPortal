@@ -271,22 +271,22 @@ function OrderEntry (props: { order: Order, isAdmin: boolean, orderTask: (order:
             <CardFooter className="mt-2 gap-1">
                 <Tooltip>
                     <TooltipTrigger asChild>
-                        <Button ref={viewDetails} variant="default" size="icon-sm" className="hover:bg-black" onClick={() => props.orderTask(props.order, OrderAction.View)}><Ellipsis /></Button>
+                        <Button ref={viewDetails} variant="default" size="icon-sm" className="hover:bg-black" onClick={e => (e.stopPropagation(), props.orderTask(props.order, OrderAction.View))}><Ellipsis /></Button>
                     </TooltipTrigger>
                     <TooltipContent side="bottom">View Details</TooltipContent>
                 </Tooltip>
                 <Tooltip>
-                    <TooltipTrigger asChild><Button variant="default" size="icon-sm" className="bg-gray-500 hover:bg-black hover:text-white" onClick={() => window.open(props.order.url, "_blank")}><Link /></Button></TooltipTrigger>
+                    <TooltipTrigger asChild><Button variant="default" size="icon-sm" className="bg-gray-500 hover:bg-black hover:text-white" onClick={e => (e.stopPropagation(), window.open(props.order.url, "_blank"))}><Link /></Button></TooltipTrigger>
                     <TooltipContent side="bottom">Store Page</TooltipContent>
                 </Tooltip>
                 {props.isAdmin && (
                     <>
                         <Tooltip>
-                            <TooltipTrigger asChild><Button variant="default" size="icon-sm" className="bg-green-500 hover:bg-black hover:text-white" onClick={() => props.orderTask(props.order, OrderAction.Approve)} disabled={props.order.status !== OrderStatus.Pending}><Check /></Button></TooltipTrigger>
+                            <TooltipTrigger asChild><Button variant="default" size="icon-sm" className="bg-green-500 hover:bg-black hover:text-white" onClick={e => (e.stopPropagation(), props.orderTask(props.order, OrderAction.Approve))} disabled={props.order.status !== OrderStatus.Pending}><Check /></Button></TooltipTrigger>
                             <TooltipContent side="bottom">Approve</TooltipContent>
                         </Tooltip>
                         <Tooltip>
-                            <TooltipTrigger asChild><Button variant="default" size="icon-sm" className="bg-red-500 hover:bg-black hover:text-white" onClick={() => props.orderTask(props.order, OrderAction.Deny)} disabled={props.order.status !== OrderStatus.Pending}><X /></Button></TooltipTrigger>
+                            <TooltipTrigger asChild><Button variant="default" size="icon-sm" className="bg-red-500 hover:bg-black hover:text-white" onClick={e => (e.stopPropagation(), props.orderTask(props.order, OrderAction.Deny))} disabled={props.order.status !== OrderStatus.Pending}><X /></Button></TooltipTrigger>
                             <TooltipContent side="bottom">Deny</TooltipContent>
                         </Tooltip>
                     </>
