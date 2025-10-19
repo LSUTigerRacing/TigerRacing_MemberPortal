@@ -8,13 +8,13 @@ namespace TRFSAE.MemberPortal.API.DTOs
         public Guid UserId { get; set; }
 
         [JsonPropertyName("name")]
-        public required string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         [JsonPropertyName("email")]
-        public required string PersonalEmail { get; set; }
+        public string PersonalEmail { get; set; } = string.Empty;
 
         [JsonPropertyName("lsu_email")]
-        public required string LSUEmail { get; set; }
+        public string LSUEmail { get; set; } = string.Empty;
 
         [JsonPropertyName("eight_nine")]
         public int EightNine { get; set; }
@@ -26,7 +26,7 @@ namespace TRFSAE.MemberPortal.API.DTOs
         public bool FeeStatus { get; set; }
 
         [JsonPropertyName("grad_date")]
-        public DateTime GradDate { get; set; }
+        public DateTime? GradDate { get; set; }
 
         [JsonPropertyName("shirt_size")]
         public string? ShirtSize { get; set; }
