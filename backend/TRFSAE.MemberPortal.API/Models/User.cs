@@ -10,16 +10,16 @@ namespace TRFSAE.MemberPortal.API.Models
         public Guid UserId { get; set; }
 
         [Column("name")]
-        public string Name { get; set; }
+        public required string Name { get; set; }
 
         [Column("email")]
-        public string PersonalEmail { get; set; }
+        public string? PersonalEmail { get; set; }
 
         [Column("lsu_email")]
-        public string LSUEmail { get; set; }
+        public required string LSUEmail { get; set; }
 
         [Column("eight_nine")]
-        public int EightNine { get; set; }
+        public required int EightNine { get; set; }
 
         [Column("hazing_status")]
         public bool HazingStatus { get; set; }
@@ -31,13 +31,13 @@ namespace TRFSAE.MemberPortal.API.Models
         public DateTime GradDate { get; set; }
 
         [Column("shirt_size")]
-        public string ShirtSize { get; set; }
+        public string? ShirtSize { get; set; }
 
         [Column("system")]
-        public string System { get; set; }
+        public string? System { get; set; }
 
         [Column("subsystem")]
-        public string Subsystem { get; set; }
+        public string? Subsystem { get; set; }
 
         [Column("created_at")]
         public DateTime AccountCreationDate { get; set; }

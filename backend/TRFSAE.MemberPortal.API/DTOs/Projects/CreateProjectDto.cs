@@ -2,8 +2,7 @@ namespace TRFSAE.MemberPortal.API.DTOs;
 
 public class CreateProjectDto
 {
-    public Guid ProjectId { get; set; }
-    public string ProjectName { get; set; } = null!;
+    public string ProjectName { get; set; } = "untitled project";
     public DateTime ProjectDueDate { get; set; }
     public int ProjectMemberCount { get; set; }
     

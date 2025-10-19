@@ -10,10 +10,10 @@ namespace TRFSAE.MemberPortal.API.Models
         public Guid TaskId { get; set; }
 
         [Column("assigner")]
-        public string Assigner { get; set; }
+        public string? Assigner { get; set; }
 
         [Column("name")]
-        public string TaskName { get; set; }
+        public string TaskName { get; set; } = "untitled task";
 
         [Column("completion_status")]
         public bool CompletionStatus { get; set; }
@@ -25,7 +25,7 @@ namespace TRFSAE.MemberPortal.API.Models
         public DateTime DueDate { get; set; }
 
         [Column("description")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         [Column("created_at")]
         public DateTime CreatedAt { get; set; }

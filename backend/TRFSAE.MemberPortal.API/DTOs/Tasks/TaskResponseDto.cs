@@ -7,5 +7,5 @@ public class TaskResponseDto
     public Guid TaskId { get; set; }
 
     [JsonPropertyName("name")]
-    public string TaskName { get; set; }
+    public required string TaskName { get; set; }
 }

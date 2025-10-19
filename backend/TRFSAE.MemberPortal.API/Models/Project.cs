@@ -10,7 +10,7 @@ namespace TRFSAE.MemberPortal.API.Models
         public Guid ProjectId { get; set; }
 
         [Column("name")]
-        public string ProjectName { get; set; }
+        public string ProjectName { get; set; } = "untitled project";
 
         [Column("due_date")]
         public DateTime ProjectDueDate { get; set; }
