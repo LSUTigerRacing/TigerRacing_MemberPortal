@@ -1,4 +1,4 @@
-import { defineConfig, type UserConfig } from "vite";
+import { defineConfig, type ServerOptions, type UserConfig } from "vite";
 import { resolve } from "path";
 
 import react from "@vitejs/plugin-react";
@@ -7,10 +7,24 @@ import { ViteImageOptimizer } from "vite-plugin-image-optimizer";
 
 export default defineConfig(({ mode }) => {
     const isDev = mode === "development";
+
     const plugins: UserConfig["plugins"] = [
         react(),
         tailwindcss()
     ];
+
+    const serverOptions: ServerOptions = {
+        port: 3000,
+        strictPort: true,
+        host: "0.0.0.0",
+        proxy: {
+            "/api": {
+                target: "http://127.0.0.1:5109",
+                changeOrigin: true,
+                secure: false
+            }
+        }
+    };
 
     if (!isDev) plugins.push(ViteImageOptimizer({ logStats: true }));
 
@@ -19,17 +33,8 @@ export default defineConfig(({ mode }) => {
             cssMinify: "lightningcss"
         },
 
-        server: {
-            port: 3000,
-            strictPort: true,
-            host: "0.0.0.0"
-        },
-
-        preview: {
-            port: 3000,
-            strictPort: true,
-            host: "0.0.0.0"
-        },
+        server: serverOptions,
+        preview: serverOptions,
 
         css: {
             devSourcemap: isDev

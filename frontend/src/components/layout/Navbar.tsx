@@ -1,17 +1,6 @@
 "use client";
 
 import {
-    forwardRef,
-    useEffect,
-    useState,
-    useRef,
-    type HTMLAttributes,
-    type ImgHTMLAttributes,
-    type ReactElement,
-    useCallback,
-    type ReactNode
-} from "react";
-import {
     BellIcon,
     ChevronDownIcon,
     FileText,
@@ -25,6 +14,17 @@ import {
     User,
     UserCog
 } from "lucide-react";
+import {
+    forwardRef,
+    useEffect,
+    useState,
+    useRef,
+    type HTMLAttributes,
+    type ImgHTMLAttributes,
+    type ReactElement,
+    useCallback,
+    type ReactNode
+} from "react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -117,7 +117,7 @@ const HamburgerIcon = ({ className, ...props }: React.SVGAttributes<SVGElement>)
 );
 
 const NotificationMenu = ({
-    notificationCount = 3,
+    notificationCount = 1,
     onItemClick
 }: {
     notificationCount?: number
@@ -140,24 +140,12 @@ const NotificationMenu = ({
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => onItemClick?.("notification1")}>
                 <div className="flex flex-col gap-1">
-                    <p className="text-sm font-medium">New message received</p>
-                    <p className="text-xs text-muted-foreground">2 minutes ago</p>
-                </div>
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onItemClick?.("notification2")}>
-                <div className="flex flex-col gap-1">
-                    <p className="text-sm font-medium">System update available</p>
-                    <p className="text-xs text-muted-foreground">1 hour ago</p>
-                </div>
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onItemClick?.("notification3")}>
-                <div className="flex flex-col gap-1">
-                    <p className="text-sm font-medium">Weekly report ready</p>
-                    <p className="text-xs text-muted-foreground">3 hours ago</p>
+                    <p className="text-sm font-medium">Ricky is a bum</p>
+                    <p className="text-xs text-muted-foreground">Just now</p>
                 </div>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => onItemClick?.("view-all")}>
+            <DropdownMenuItem onClick={() => onItemClick?.("dashboard")}>
                 View all notifications
             </DropdownMenuItem>
         </DropdownMenuContent>
@@ -198,45 +186,45 @@ const UserMenu = ({
                 </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => onItemClick?.("dashboard")} className="cursor-pointer">
+            <DropdownMenuItem onClick={() => onItemClick?.("dashboard")}>
                 <Gauge />
                 Dashboard
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onItemClick?.("profile")} className="cursor-pointer">
+            <DropdownMenuItem onClick={() => onItemClick?.("profile")}>
                 <User />
                 Profile
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onItemClick?.("inbox")} className="cursor-pointer">
+            <DropdownMenuItem onClick={() => onItemClick?.("inbox")}>
                 <Mail />
                 Inbox
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onItemClick?.("projects")} className="cursor-pointer">
+            <DropdownMenuItem onClick={() => onItemClick?.("projects")}>
                 <Folder />
                 Projects
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onItemClick?.("orders")} className="cursor-pointer">
+            <DropdownMenuItem onClick={() => onItemClick?.("orders")}>
                 <ShoppingCart />
                 Orders
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onItemClick?.("admin")} className="cursor-pointer">
+            <DropdownMenuItem onClick={() => onItemClick?.("admin")}>
                 <UserCog />
                 Admin
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onItemClick?.("settings")} className="cursor-pointer">
+            <DropdownMenuItem onClick={() => onItemClick?.("settings")}>
                 <Settings />
                 Settings
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => onItemClick?.("training")} className="cursor-pointer">
+            <DropdownMenuItem onClick={() => onItemClick?.("training")}>
                 <GraduationCap />
                 Training
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onItemClick?.("documentation")} className="cursor-pointer">
+            <DropdownMenuItem onClick={() => onItemClick?.("documentation")}>
                 <FileText />
                 Documentation
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => onItemClick?.("logout")} className="cursor-pointer">
+            <DropdownMenuItem onClick={() => onItemClick?.("logout")}>
                 <LogOut />
                 Sign out
             </DropdownMenuItem>
@@ -254,9 +242,9 @@ const NavbarComponent = forwardRef<HTMLElement, NavbarProps>(
             userName = "Car McCarface",
             userEmail = "cmccar1@lsu.edu",
             userAvatar,
-            notificationCount = 3,
+            notificationCount = 0,
             onNavItemClick = (href: string) => window.open(href, "_blank"),
-            onNotificationItemClick,
+            onNotificationItemClick = (href: string) => window.open(href, "_self"),
             onUserItemClick = (href: string) => window.open(href, "_self"),
             ...props
         },
@@ -334,7 +322,7 @@ const NavbarComponent = forwardRef<HTMLElement, NavbarProps>(
                         )}
                         <div className="flex items-center gap-6">
                             <button
-                                onClick={(() => window.open(logoHref, "_self"))}
+                                onClick={() => window.open(logoHref, "_self")}
                                 className="flex items-center space-x-2 text-primary hover:text-primary/90 transition-colors cursor-pointer"
                             >
                                 <div className="text-2xl">
