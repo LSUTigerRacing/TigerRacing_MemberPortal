@@ -16,74 +16,95 @@ public class ProjectService : IProjectService
         _supabaseClient = supabaseClient;
     }
 
-    public async Task<List<ProjectResponseDto>> GetAllProjectsAsync()
+    public async Task<List<ProjectResponseDto>> GetAllProjectsAsync(ProjectSearchDto searchDto)
     {
         var response = await _supabaseClient
-            .Rpc("get_all_project", new Dictionary<string, object>());
+        .From<ProjectModel>()
+        .Get();
             
-        var projects = JsonSerializer.Deserialize<List<ProjectResponseDto>>(response.Content);
-
-        return projects ?? new List<ProjectResponseDto>();
-    }
-
-    public async Task<List<ProjectResponseDto>> GetAllProjectTasksAsync(Guid id)
-    {
-        var parameters = new Dictionary<string, object>
+        var projectResponse = new ProjectResponseDto
         {
-            {"project_id", id}
+            ProjectId = Guid.NewGuid(),
+            ProjectName = "Sample Project"
         };
 
-        var response = await _supabaseClient
-            .Rpc("get_all_project_tasks", parameters);
-
-        var tasks = JsonSerializer.Deserialize<List<ProjectResponseDto>>(response.Content);
-
-        return tasks ?? new List<ProjectResponseDto>();
-
-
+        return  new List<ProjectResponseDto>();
     }
-    public async Task<ProjectResponseDto> UpdateUserProjectAsync(Guid userId, Guid projectId)
+
+    // public async Task<List<ProjectResponseDto>> GetAllProjectTasksAsync(Guid id)
+    // {
+    //     var parameters = new Dictionary<string, object>
+    //     {
+    //         {"project_id", id}
+    //     };
+
+    //     var response = await _supabaseClient
+    //         .Rpc("get_all_project_tasks", parameters);
+
+    //     var tasks = JsonSerializer.Deserialize<List<ProjectResponseDto>>(response.Content);
+
+    //     return tasks ?? new List<ProjectResponseDto>();
+
+
+    // }
+    // public async Task<ProjectResponseDto> UpdateUserProjectAsync(Guid userId, Guid projectId)
+    // {
+    //     var parameters = new Dictionary<string, object>
+    //     {
+    //         {"user_id" , userId},
+    //         {"project_id", projectId}
+    //     };
+
+    //     var response = await _supabaseClient
+    //         .From<ProjectModel>()
+    //         .Where(x => x.ProjectId == projectId)
+    //         .Not;
+
+    //     var project = JsonSerializer.Deserialize<List<ProjectResponseDto>>(response.Content);
+
+    //     return project?.FirstOrDefault();
+
+
+    // }
+
+    // public async Task<List<ProjectResponseDto>> GetAllAssignedProjectsAsync(Guid id)
+    // {
+    //     var parameters = new Dictionary<string, object>
+    //     {
+    //         {"project_id", id}
+    //     };
+
+    //     var response = await _supabaseClient
+    //         .Rpc("get_all_assigned_projects", parameters);
+
+    //     var projects = JsonSerializer.Deserialize<List<ProjectResponseDto>>(response.Content);
+
+    //     return projects ?? new List<ProjectResponseDto>();
+
+    // }
+
+    public async Task<bool> CreateNewProjectAsync(CreateProjectDto createDto)
     {
-        var parameters = new Dictionary<string, object>
+        var newProject = new ProjectModel
         {
-            {"user_id" , userId},
-            {"project_id", projectId}
+            ProjectId = Guid.NewGuid(),
+            ProjectName = createDto.ProjectName,
+            ProjectDueDate = createDto.ProjectDueDate,
+            ProjectMemberCount = createDto.ProjectMemberCount,
         };
 
-        var response = await _supabaseClient
-            .Rpc("update_user_project", parameters);
-
-        var project = JsonSerializer.Deserialize<List<ProjectResponseDto>>(response.Content);
-
-        return project?.FirstOrDefault();
-
-
-    }
-
-    public async Task<List<ProjectResponseDto>> GetAllAssignedProjectsAsync(Guid id)
-    {
-        var parameters = new Dictionary<string, object>
+        try
         {
-            {"project_id", id}
-        };
-
-        var response = await _supabaseClient
-            .Rpc("get_all_assigned_projects", parameters);
-
-        var projects = JsonSerializer.Deserialize<List<ProjectResponseDto>>(response.Content);
-
-        return projects ?? new List<ProjectResponseDto>();
-
-    }
-
-    public async Task<ProjectResponseDto> CreateNewProjectAsync()
-    {   
             var response = await _supabaseClient
-                .Rpc("create_new_project", new Dictionary<string, object>());
+            .From<ProjectModel>()
+            .Insert(newProject);
 
-            var project = JsonSerializer.Deserialize<List<ProjectResponseDto>>(response.Content);
-
-            return project?.FirstOrDefault();
+            return true;
+        } catch (Exception ex)
+        {
+            Console.WriteLine($"Error creating project: {ex.Message}");
+            return false;
+        }
         
     }
 
