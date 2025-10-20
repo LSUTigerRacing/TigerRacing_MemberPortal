@@ -3,7 +3,7 @@ using Supabase.Postgrest.Models;
 
 namespace TRFSAE.MemberPortal.API.Models
 {
-    [Table("user")]
+    [Table("users")]
     public class UserModel : BaseModel
     {
         [PrimaryKey("id")]

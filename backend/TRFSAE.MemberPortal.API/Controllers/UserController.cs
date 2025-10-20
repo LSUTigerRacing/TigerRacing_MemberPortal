@@ -38,9 +38,9 @@ namespace TRFSAE.MemberPortal.API.Controllers
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteUserAsync(Guid id)
+    public async Task<IActionResult> DeleteUserAsync(Guid id, string confirmationString)
     {
-      var taskResult = await _userService.GetUserByIDAsync(id);
+      var taskResult = await _userService.DeleteUserAsync(id, confirmationString);
       return Ok(taskResult);
     }
   }

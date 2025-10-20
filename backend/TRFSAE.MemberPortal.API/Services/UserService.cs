@@ -1,7 +1,8 @@
 using TRFSAE.MemberPortal.API.DTOs;
-using Supabase;
 using TRFSAE.MemberPortal.API.Interfaces;
 using TRFSAE.MemberPortal.API.Models;
+using System.Text.Json;
+using Supabase;
 
 namespace TRFSAE.MemberPortal.API.Services
 {
@@ -54,69 +55,59 @@ namespace TRFSAE.MemberPortal.API.Services
 
     public async Task<UserResponseDto> UpdateUserByIdAsync(Guid userID, UserUpdateDto updateDto)
     {
-      var updateModel = new UserModel
-      {
-        UserId = userID,
-        Name = updateDto.Name,
-        PersonalEmail = updateDto.PersonalEmail,
-        LSUEmail = updateDto.LSUEmail,
-        EightNine = updateDto.EightNine ?? -1,
-        HazingStatus = updateDto.HazingStatus ?? false,
-        FeeStatus = updateDto.FeeStatus ?? false,
-        GradDate = updateDto.GradDate,
-        ShirtSize = updateDto.ShirtSize,
-        System = updateDto.System,
-        Subsystem = updateDto.Subsystem
-      };
+      var updates = new Dictionary<string, object?>();
+
+      updates["user_id"] = userID;
+      if (updateDto.Name != string.Empty) updates["name"] = updateDto.Name;
+      if (updateDto.PersonalEmail != string.Empty) updates["email"] = updateDto.PersonalEmail;
+      if (updateDto.LSUEmail != string.Empty) updates["lsu_email"] = updateDto.LSUEmail;
+      if (updateDto.EightNine != -1) updates["eight_nine"] = updateDto.EightNine;
+      if (updateDto.HazingStatus != null) updates["hazing_status"] = updateDto.HazingStatus;
+      if (updateDto.FeeStatus != null) updates["fee_status"] = updateDto.FeeStatus;
+      if (updateDto.GradDate != null) updates["grad_date"] = updateDto.GradDate;
+      if (updateDto.ShirtSize != string.Empty) updates["shirt_size"] = updateDto.ShirtSize;
+      if (updateDto.System != string.Empty) updates["system"] = updateDto.System;
+      if (updateDto.Subsystem != string.Empty) updates["subsystem"] = updateDto.Subsystem;
 
       var response = await _supabaseClient
-        .From<UserModel>()
-        .Where(x => x.UserId == userID)
-        .Update(updateModel);
+        .Rpc("update_user", new { updates = updates });
 
-      var updatedUser = response.Models.FirstOrDefault();
-
-      if (updatedUser == null)
+      if (response.Content == null)
       {
         throw new Exception("User not found or update failed");
       }
 
-      var userResponse = new UserResponseDto
+      var userResponse = JsonSerializer.Deserialize<List<UserResponseDto>>(response.Content);
+
+      if (userResponse == null)
       {
-        UserId = updatedUser.UserId,
-        Name = updatedUser.Name,
-        PersonalEmail = updatedUser.PersonalEmail,
-        LSUEmail = updatedUser.LSUEmail,
-        EightNine = updatedUser.EightNine,
-        HazingStatus = updatedUser.HazingStatus,
-        FeeStatus = updatedUser.FeeStatus,
-        GradDate = updatedUser.GradDate,
-        ShirtSize = updatedUser.ShirtSize,
-        System = updatedUser.System,
-        Subsystem = updatedUser.Subsystem
-      };
-      
-      return userResponse;
+        throw new Exception("User not found or update failed");
+      }
+
+      return userResponse.FirstOrDefault() ?? new UserResponseDto();
     }
 
-    public async Task<bool> DeleteUserAsync(Guid currentUserId, string confirmationString)
+    public async Task<bool> DeleteUserAsync(Guid userId, string confirmationString)
     {
       if (confirmationString != "confirm")
       {
         return false;
       }
+      // Console.WriteLine("Attempting to delete user with ID: " + userId);
       try
       {
         await _supabaseClient
           .From<UserModel>()
-          .Where(x => x.UserId == currentUserId)
+          .Where(x => x.UserId == userId)
           .Delete();
 
         return true;
 
-      } catch (Exception)
+      }
+      catch (Exception e)
       {
-          return false;
+        Console.WriteLine(e.ToString());
+        return false;
       }
     }
   }
