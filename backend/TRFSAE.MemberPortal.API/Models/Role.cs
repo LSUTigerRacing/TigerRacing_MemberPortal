@@ -9,7 +9,7 @@ namespace TRFSAE.MemberPortal.API.Models
         [PrimaryKey("id")]
         public Guid Id { get; set; }
         [Column("roleName")]
-        public string RoleName { get; set; } = null!;
+        public string RoleName { get; set; } = string.Empty;
         [Column("permissions")]
         public Dictionary<string, object>? Permissions { get; set; }
     }

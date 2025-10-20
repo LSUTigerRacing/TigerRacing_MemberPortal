@@ -2,13 +2,11 @@ using System.Text.Json.Serialization;
 
 namespace TRFSAE.MemberPortal.API.DTOs;
 
-public class RoleResponseDto
+public class UpdateRoleDto
 {
-    [JsonPropertyName("id")]
-    public Guid RoleId { get; set; }
-    [JsonPropertyName("name")]
+    [JsonPropertyName("roleName")]
     public string RoleName { get; set; } = string.Empty;
+    
     [JsonPropertyName("permissions")]
     public Dictionary<string, object>? Permissions { get; set; }
 }
-
