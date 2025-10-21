@@ -33,12 +33,12 @@ public class RoleService : IRoleService
         return new RoleResponseDto();
     }
 
-    public async Task<RoleResponseDto> UpdateRolePermissionsAsync(Guid id, UpdateRolePermissionsDto dto)
+    public async Task<RoleResponseDto> UpdateRoleAsync(Guid id, UpdateRoleDto dto)
     {
         var parameters = new Dictionary<string, object>
         {
             { "role_id", id },
-            { "permission_updates", dto.Permissions }
+            { "permission_updates", dto }
         };
 
         var response = await _supabaseClient

@@ -14,21 +14,17 @@ public class TaskService : ITaskService
         _supabaseClient = supabaseClient;
     }
 
-    public async Task<List<TaskResponseDto>> GetAllTasksAsync(TaskSearchDto searchDto)
-    {
-        var response = await _supabaseClient
-        .From<TaskModel>()
-        .Get() ?? throw new Exception("No tasks found");
-
-        return new List<TaskResponseDto>();
-    }
-
     public async Task<TaskResponseDto> GetTasksByIdAsync(Guid id)
     {
         var response = await _supabaseClient
         .From<TaskModel>()
         .Where(x => x.TaskId == id)
-        .Single() ?? throw new Exception("Task not found");
+        .Single();
+
+        if (response == null)
+        {
+            throw new Exception("Task not found");
+        }   
 
         var taskResponse = new TaskResponseDto
         {
@@ -38,6 +34,17 @@ public class TaskService : ITaskService
 
         return taskResponse;
     }
+
+
+    public async Task<List<TaskResponseDto>> GetAllTasksAsync(TaskSearchDto searchDto)
+    {
+        var response = await _supabaseClient
+        .From<TaskModel>()
+        .Get() ?? throw new Exception("No tasks found");
+
+        return new List<TaskResponseDto>();
+    }
+
 
     public async Task<TaskResponseDto> CreateTaskAsync(CreateTaskDto createDto)
     {
