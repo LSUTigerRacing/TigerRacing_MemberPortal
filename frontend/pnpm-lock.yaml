@@ -136,13 +136,13 @@ importers:
         specifier: ^5.5.0
         version: 5.5.0(eslint@9.39.1(jiti@2.6.1))
       '@tailwindcss/vite':
-        specifier: ^4.1.14
+        specifier: ^4.1.15
         version: 4.1.17(vite@7.2.2(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2))
       '@types/eslint-plugin-jsx-a11y':
         specifier: ^6.10.1
         version: 6.10.1(jiti@2.6.1)
       '@types/node':
-        specifier: ^24.8.1
+        specifier: ^24.9.1
         version: 24.10.1
       '@types/react':
         specifier: ^19.2.2
@@ -181,7 +181,7 @@ importers:
         specifier: ^3.3.1
         version: 3.4.0
       tailwindcss:
-        specifier: ^4.1.14
+        specifier: ^4.1.15
         version: 4.1.17
       tw-animate-css:
         specifier: ^1.4.0
@@ -190,10 +190,10 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       typescript-eslint:
-        specifier: ^8.46.1
+        specifier: ^8.46.2
         version: 8.46.4(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3)
       vite:
-        specifier: ^7.1.10
+        specifier: ^7.1.11
         version: 7.2.2(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2)
       vite-plugin-image-optimizer:
         specifier: ^2.0.2
