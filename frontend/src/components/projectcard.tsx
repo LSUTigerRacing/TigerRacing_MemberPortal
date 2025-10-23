@@ -1,21 +1,19 @@
 export const ProjectCard = () => {
     return (
-        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
+        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow cursor-pointer max-w-md">
 
             {/* Card content */}
-            <div className="p-5">
+            <div className="p-6">
 
-                {/* Status badge at top */}
-                <div className="flex justify-end mb-3">
-                    <span className="bg-green-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
+                {/* Project title and status badge */}
+                <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-base font-bold text-gray-900">
+                        Formula SAE Engine Development
+                    </h3>
+                    <span className="bg-green-500 text-white text-xs font-semibold px-3 py-1 rounded-full whitespace-nowrap ml-3">
                         Active
                     </span>
                 </div>
-
-                {/* Project title */}
-                <h3 className="text-base font-bold text-gray-900 mb-4">
-                    Formula SAE Engine Development
-                </h3>
 
                 {/* Due date and team size */}
                 <div className="grid grid-cols-2 gap-4 mb-4">
