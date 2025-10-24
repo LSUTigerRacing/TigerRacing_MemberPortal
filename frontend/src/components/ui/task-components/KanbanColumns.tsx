@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card } from "@/components/ui/shadcn-components/card"
 import { Plus, Circle, Ellipsis, Trash } from "lucide-react"
 import {
@@ -23,6 +23,7 @@ import { Button } from '@/components/ui/shadcn-components/button';
 import { Input } from "@/components/ui/shadcn-components/input"
 import { Separator } from "@/components/ui/shadcn-components/separator"
 import { Textarea } from "@/components/ui/shadcn-components/textarea"
+import { KanbanComponents } from './OverallContents';
 
 const buttonColors = [
   'bg-[#59636E]',
@@ -46,36 +47,40 @@ const strokeColors = [
   'stroke-[#8250DF]'
 ];
 
+type Column = {
+  id: number;
+  color: string;
+  colorIndex: number;
+  title: string;
+  description: string;
+};
 
 export function ColumnCreation() {
     const [userTitle, setUserTitle] = useState('');
     const [userDescription, setUserDescription] = useState('');
-    const [isSelected, setIsSelected] = useState<number | null>(null);
-    const [columnColor, setColumnColor] = useState<string | null>(null);
-    const [columns, setColumns] = useState<{
-      id: number;
-      color: string;
-      colorIndex: number;
-      title: string;
-      description: string;
-    }[]>([]);
+    const [isSelected, setIsSelected] = useState<number>(0);
+    const [columnColor, setColumnColor] = useState<string>(buttonColors[0]);
+    const [columns, setColumns] = useState<Column[]>(() => {
+      const savedData = localStorage.getItem("myColumnData");
+      return savedData ? JSON.parse(savedData) : [];
+    });
+    
+    useEffect(() => {
+      localStorage.setItem("myColumnData", JSON.stringify(columns));
+    }, [columns]);
 
     /* Creates a new column onClick with necessary information
       Resets all useState everytime a new column is created */
     const handleCreate = () => {
-        if (columnColor === null || isSelected === null) {
-            alert('Please select a color');
-            return;
-          }
-        const newColumn = {
+        const newColumn: Column = {
           id: Date.now(),
           color: columnColor,
           colorIndex: isSelected,
           title: userTitle,
           description: userDescription,
         };
-        setIsSelected(null);
-        setColumnColor(null);
+        setIsSelected(0);
+        setColumnColor(buttonColors[0]);
         setColumns([...columns, newColumn]);
         setUserTitle('');
         setUserDescription('');
@@ -130,6 +135,9 @@ export function ColumnCreation() {
                       </DropdownMenu>
                     </div>
                     <p>{column.description}</p>
+                    <div className="mt-auto">
+                      <KanbanComponents/>
+                    </div>
                 </Card>
                 ))}
                 <div>
