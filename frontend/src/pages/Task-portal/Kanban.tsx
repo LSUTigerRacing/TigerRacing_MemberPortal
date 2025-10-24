@@ -8,6 +8,7 @@ import { FilterSelection } from "@/components/ui/task-components/Filter";
 import { ColumnCreation } from "@/components/ui/task-components/KanbanColumns";
 import { Navbar } from "@/components/ui/NavBar/shadcn-io/navbar-06";
 import { LearnMore } from "@/components/ui/task-components/LearnMore";
+import { MyTask } from "@/components/ui/task-components/MyTaskContent";
 
 export function MemberTabs () {
     return (
@@ -23,7 +24,7 @@ export function MemberTabs () {
                     </div>
                 </div>
                 <Tabs defaultValue="my-task" className="bg-gray-100">
-                    <TabsList className="justify-start grid grid-cols-2 gap-2">
+                    <TabsList className="justify-start grid grid-cols-2 gap-2 pl-5">
                         <TabsTrigger
                             value="my-task"
                             className="h-11 rounded-none px-4 text-sm font-medium
@@ -48,7 +49,8 @@ export function MemberTabs () {
                     </TabsList>
 
                     <TabsContent value="my-task" className="mt-0 bg-white p-0">
-                        <div className="p-5 justify-center text-gray-500">
+                        <div className="p-5 gap-10 justify-center flex text-gray-500">
+                            <MyTask />
                             <FilterSelection />
                         </div>
                     </TabsContent>
