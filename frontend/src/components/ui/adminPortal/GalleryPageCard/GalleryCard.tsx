@@ -1,5 +1,5 @@
-import { data, type Member } from "@/components/dummyData/members";
-import { MoreHorizontal, ListTodoIcon } from "lucide-react";
+import type { Member } from "@/components/dummyData/members";
+import { ListTodoIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
@@ -12,21 +12,18 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import DropdownMenuDemo from "@/components/ui/adminPortal/dropdownMenu/dropdownMenu"
 
-export default function CarouselDemo() {
+interface FilterMemberCarouselProps {
+  members: Member[];
+}
+
+export default function CarouselDemo( { members }: FilterMemberCarouselProps) {
   return (
     <Carousel className="max-h-screen max-w-3xl flex flex-column justify-self-center">
       <CarouselContent>
-        {(data as Member[]).map((members) => (
-          <CarouselItem key={members.id}>
+        {members.map((member) => (
+          <CarouselItem key={member.id}>
             <div className="flex justify-between p-1 max-w-full gap-2">
               <Card className="w-full h-full bg-primary-background rounded-2xl">
                 <CardContent className="flex flex-col w-full p-5">
@@ -51,49 +48,26 @@ export default function CarouselDemo() {
                       {/* Container for Name and More Icon */}
                       <div className="flex flex-row gap-3">
                         <div className="ml-4 font-manrope font-semibold text-2xl text-foreground pb-2">
-                          {members.name}
+                          {member.name}
                         </div>
                         <div>
                           
                           {/* Dropdown Menu */}
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" className="h-8 w-8 p-0">
-                                <span className="sr-only">Open menu</span>
-                                <MoreHorizontal />
-                              </Button>
-                            </DropdownMenuTrigger>
-
-                            <DropdownMenuContent align="end" className="bg-white">
-                              <DropdownMenuLabel className="font-manrope font-extrabold">
-                                Actions
-                              </DropdownMenuLabel>
-                              <DropdownMenuSeparator />
-                              <DropdownMenuItem
-                                onClick={() => navigator.clipboard.writeText(members.id)}
-                              >
-                                Moderate Member
-                              </DropdownMenuItem>
-                              <DropdownMenuItem
-                                onClick={() => navigator.clipboard.writeText(members.id)}
-                              >
-                                See more
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
+                          <DropdownMenuDemo 
+                          onModerate={() => navigator.clipboard.writeText(member.id)}/>
                         </div>
                       </div>
 
                       {/* Details Section */}
                       <div className="flex gap-20">
                         <div className="ml-4 font-sora text-muted-foreground">
-                          {members.year}
+                          {member.year}
                         </div>
                         <div className="ml-4 font-sora text-muted-foreground">
-                          {members.system}
+                          {member.system}
                         </div>
                         <div className="ml-4 font-sora text-muted-foreground">
-                          {members.grad}
+                          {member.grad}
                         </div>
                       </div>
                     </div>
@@ -112,19 +86,19 @@ export default function CarouselDemo() {
                       {/* Info Content */}
                       <div className="p-3 space-y-2 flex flex-wrap justify-center">
                         <Button className="px-3 py-2 font-sora rounded-full bg-primary text-white">
-                          Subsystem: {members.system}
+                          Subsystem: {member.system}
                         </Button>
                         <Button className="px-3 py-2 font-sora rounded-full bg-primary text-white">
-                          Join Date: {members.joinDate}
+                          Join Date: {member.joinDate}
                         </Button>
                         <Button className="px-3 py-2 font-sora rounded-full bg-primary text-white">
-                          Hazing: {members.hazing}
+                          Hazing: {member.hazing}
                         </Button>
                         <Button className="px-3 py-2 font-sora rounded-full bg-primary text-white">
-                          Fees: {members.dues}
+                          Fees: {member.dues}
                         </Button>
                         <Button className="px-3 py-2 font-sora rounded-full bg-primary text-white">
-                          T-Shirt Size: {members.shirtSize}
+                          T-Shirt Size: {member.shirtSize}
                         </Button>
                       </div>
                     </div>
