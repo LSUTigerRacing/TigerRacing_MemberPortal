@@ -1,48 +1,53 @@
 using Microsoft.AspNetCore.Mvc;
-using TRFSAE.MemberPortal.API.Dtos;
-using TRFSAE.MemberPortal.API.Services;
+using TRFSAE.MemberPortal.API.DTOs;
+using TRFSAE.MemberPortal.API.Interfaces;
 
 namespace TRFSAE.MemberPortal.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/purchase-item")]
     public class PurchaseItemController : ControllerBase
     {
-        private readonly PurchaseItemService _svc;
-        public PurchaseItemController(PurchaseItemService svc) => _svc = svc;
+        private readonly IPurchaseItemService _purchaseItemService;
 
-        // GET /api/order
+        public PurchaseItemController(IPurchaseItemService purchaseItemService)
+        {
+            _purchaseItemService = purchaseItemService;
+        }
+
         [HttpGet]
-        public async Task<ActionResult<List<PurchaseItemResponseDto>>> GetAll()
-            => Ok(await _svc.GetAllAsync());
-
-        // GET /api/order/#
-        [HttpGet("{id:int}")]
-        public async Task<ActionResult<PurchaseItemResponseDto>> GetById(int id)
+        public async Task<IActionResult> GetAllPurchaseItemsAsync()
         {
-            var PurchaseItem = await _svc.GetByIdAsync(id);
-            return PurchaseItem is null ? NotFound() : Ok(PurchaseItem);
+            var items = await _purchaseItemService.GetAllPurchaseItemsAsync();
+            return Ok(items);
         }
 
-        // POST 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetPurchaseItemByIDAsync(Guid id)
+        {
+            var item = await _purchaseItemService.GetPurchaseItemByIDAsync(id);
+            return item is null ? NotFound() : Ok(item);
+        }
+
         [HttpPost]
-        public async Task<ActionResult<PurchaseItemResponseDto>> Create([FromBody] PurchaseItemResponseDto dto)
+        public async Task<IActionResult> CreatePurchaseItemAsync(PurchaseItemResponseDto dto)
         {
-            var created = await _svc.CreateAsync(dto);
-            return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+            var created = await _purchaseItemService.CreatePurchaseItemAsync(dto);
+            return CreatedAtAction(nameof(GetPurchaseItemByIDAsync), new { id = created.Id }, created);
         }
 
-        // PUT 
-        [HttpPut("{id:int}")]
-        public async Task<ActionResult<PurchaseItemResponseDto>> Update(int id, [FromBody] PurchaseItemResponseDto dto)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdatePurchaseItemByIDAsync(Guid id, PurchaseItemResponseDto dto)
         {
-            var updated = await _svc.UpdateAsync(id, dto);
+            var updated = await _purchaseItemService.UpdatePurchaseItemByIDAsync(id, dto);
             return updated is null ? NotFound() : Ok(updated);
         }
 
-        // DELETE 
-        [HttpDelete("{id:int}")]
-        public async Task<IActionResult> Delete(int id)
-            => await _svc.DeleteAsync(id) ? NoContent() : NotFound();
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletePurchaseItemAsync(Guid id, string confirmationString)
+        {
+            var deleted = await _purchaseItemService.DeletePurchaseItemAsync(id, confirmationString);
+            return deleted ? NoContent() : NotFound();
+        }
     }
 }

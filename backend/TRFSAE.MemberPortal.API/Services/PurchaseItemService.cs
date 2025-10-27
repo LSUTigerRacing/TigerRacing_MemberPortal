@@ -1,99 +1,165 @@
-using Microsoft.EntityFrameworkCore;
-using TRFSAE.MemberPortal.API.Data;
-using TRFSAE.MemberPortal.API.Dtos;
+using TRFSAE.MemberPortal.API.DTOs;
+using TRFSAE.MemberPortal.API.Interfaces;
 using TRFSAE.MemberPortal.API.Models;
-using System.Linq;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Text.Json;
+using Supabase;
 
 namespace TRFSAE.MemberPortal.API.Services
 {
-    public class PurchaseItemService
+    public class PurchaseItemService : IPurchaseItemService
     {
-        private readonly ApplicationDBContext _db;
-        public PurchaseItemService(ApplicationDBContext db) => _db = db;
+        private readonly Client _supabaseClient;
 
-        private static void Apply(PurchaseItemResponseDto dto, PurchaseItem model)
+        public PurchaseItemService(Client supabaseClient)
         {
-            model.MemberId = dto.MemberId;
-            model.Status = dto.Status;
-            model.Total = dto.Total;
+            _supabaseClient = supabaseClient;
+        }
+        public async Task<List<PurchaseItemResponseDto>> GetAllPurchaseItemsAsync()
+        {
+            var response = await _supabaseClient
+                .From<PurchaseItemModel>()
+                .Get();
+
+            if (response.Models == null || response.Models.Count == 0)
+                return new List<PurchaseItemResponseDto>();
+
+            return response.Models.Select(MapToDto).ToList();
         }
 
-        public async Task<List<PurchaseItemResponseDto>> GetAllAsync() =>
-            await _db.PurchaseItem
-                .Select(o => new PurchaseItemResponseDto
-                {
-                    Id = o.Id,
-                    MemberId = o.MemberId,
-                    Status = o.Status,
-                    Total = o.Total,
-                    CreatedAt = o.CreatedAt,
-                    UpdatedAt = o.UpdatedAt
-                })
-                .ToListAsync();
-
-        public async Task<PurchaseItemResponseDto?> GetByIdAsync(int id) =>
-            await _db.PurchaseItem
-                .Where(o => o.Id == id)
-                .Select(o => new PurchaseItemResponseDto
-                {
-                    Id = o.Id,
-                    MemberId = o.MemberId,
-                    Status = o.Status,
-                    Total = o.Total,
-                    CreatedAt = o.CreatedAt,
-                    UpdatedAt = o.UpdatedAt
-                })
-                .FirstOrDefaultAsync();
-
-        public async Task<PurchaseItemResponseDto> CreateAsync(PurchaseItemResponseDto dto)
+        public async Task<PurchaseItemResponseDto> GetPurchaseItemByIDAsync(Guid id)
         {
-            var model = new PurchaseItem();
-            Apply(dto, model);
-            _db.PurchaseItem.Add(model);
-            await _db.SaveChangesAsync();
+            var response = await _supabaseClient
+              .From<PurchaseItemModel>()
+              .Where(x => x.Id == id)
+              .Single();
 
+            if (response == null)
+            {
+                throw new Exception("Purchase item not found");
+            }
+
+            return MapToDto(response);
+        }
+
+        public async Task<PurchaseItemResponseDto> CreatePurchaseItemAsync(PurchaseItemResponseDto dto)
+        {
+            var newModel = MapToModel(dto);
+            if (newModel.Id == Guid.Empty) newModel.Id = Guid.NewGuid();
+            if (newModel.CreatedAt == default) newModel.CreatedAt = DateTime.UtcNow;
+
+            var insert = await _supabaseClient
+                .From<PurchaseItemModel>()
+                .Insert(newModel);
+
+            if (insert.Models is null || insert.Models.Count == 0)
+                throw new Exception("Failed to create purchase item");
+
+            return MapToDto(insert.Models.First());
+        }
+        public async Task<PurchaseItemResponseDto> UpdatePurchaseItemByIDAsync(Guid id, PurchaseItemResponseDto updateDto)
+        {
+            var updates = new Dictionary<string, object?>();
+
+            updates["id"] = id;
+            if (updateDto.Requester != Guid.Empty) updates["requester"] = updateDto.Requester;
+            if (!string.IsNullOrWhiteSpace(updateDto.PartUrl)) updates["part_url"] = updateDto.PartUrl;
+            if (!string.IsNullOrWhiteSpace(updateDto.PartName)) updates["part_name"] = updateDto.PartName;
+            if (updateDto.ManufacturerPtNo != 0) updates["manufacturer_pt_no"] = updateDto.ManufacturerPtNo;
+            if (updateDto.UnitPrice > 0) updates["unit_price"] = updateDto.UnitPrice;
+            if (updateDto.Quantity > 0) updates["quantity"] = updateDto.Quantity;
+            if (!string.IsNullOrWhiteSpace(updateDto.Supplier)) updates["supplier"] = updateDto.Supplier;
+            if (!string.IsNullOrWhiteSpace(updateDto.Status)) updates["status"] = updateDto.Status;
+            if (updateDto.Notes != null) updates["notes"] = updateDto.Notes;
+            if (updateDto.NeededBy != null) updates["needed_by"] = updateDto.NeededBy;
+            if (!string.IsNullOrWhiteSpace(updateDto.PoNumber)) updates["po_no"] = updateDto.PoNumber;
+            if (updateDto.OrderDate != null) updates["order_date"] = updateDto.OrderDate;
+            if (updateDto.OrderReceivedDate != null) updates["order_received_date"] = updateDto.OrderReceivedDate;
+            if (!string.IsNullOrWhiteSpace(updateDto.OrderActiveStatus)) updates["order_active_status"] = updateDto.OrderActiveStatus;
+            if (updateDto.RequestId != null) updates["request_id"] = updateDto.RequestId;
+            if (updateDto.Subtotal != null) updates["subtotal"] = updateDto.Subtotal;
+            if (updateDto.Approvals != null) updates["approvals"] = updateDto.Approvals;
+            updates["updated_at"] = DateTime.UtcNow;
+
+            var rpc = await _supabaseClient
+                .Rpc("update_purchase_item", new { updates });
+
+            var updated = JsonSerializer.Deserialize<List<PurchaseItemResponseDto>>(rpc.Content ?? "[]");
+
+            if (updated == null)
+                throw new Exception("Purchase item not found or update failed");
+
+            return updated.FirstOrDefault() ?? new PurchaseItemResponseDto();
+        }
+
+        public async Task<bool> DeletePurchaseItemAsync(Guid id, string confirmationString)
+        {
+            if (confirmationString != "confirm")
+                return false;
+
+            try
+            {
+                await _supabaseClient
+                  .From<PurchaseItemModel>()
+                  .Where(x => x.Id == id)
+                  .Delete();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private static PurchaseItemResponseDto MapToDto(PurchaseItemModel m)
+        {
             return new PurchaseItemResponseDto
             {
-                Id = model.Id,
-                MemberId = model.MemberId,
-                Status = model.Status,
-                Total = model.Total,
-                CreatedAt = model.CreatedAt,
-                UpdatedAt = model.UpdatedAt
+                Id = m.Id,
+                Requester = m.Requester,
+                PartUrl = m.PartUrl,
+                PartName = m.PartName,
+                ManufacturerPtNo = m.ManufacturerPtNo,
+                UnitPrice = m.UnitPrice,
+                Quantity = m.Quantity,
+                Supplier = m.Supplier,
+                Status = m.Status,
+                Notes = m.Notes,
+                CreatedAt = m.CreatedAt,
+                NeededBy = m.NeededBy,
+                PoNumber = m.PoNo,
+                OrderDate = m.OrderDate,
+                OrderReceivedDate = m.OrderReceivedDate,
+                OrderActiveStatus = m.OrderActiveStatus,
+                RequestId = m.RequestId,
+                Subtotal = m.Subtotal,
+                Approvals = m.Approvals
             };
         }
 
-        public async Task<PurchaseItemResponseDto?> UpdateAsync(int id, PurchaseItemResponseDto dto)
+        private static PurchaseItemModel MapToModel(PurchaseItemResponseDto d)
         {
-            var model = await _db.PurchaseItem.FindAsync(id);
-            if (model is null) return null;
-
-            Apply(dto, model);
-            model.UpdatedAt = DateTime.UtcNow;
-
-            await _db.SaveChangesAsync();
-
-            return new PurchaseItemResponseDto
+            return new PurchaseItemModel
             {
-                Id = model.Id,
-                MemberId = model.MemberId,
-                Status = model.Status,
-                Total = model.Total,
-                CreatedAt = model.CreatedAt,
-                UpdatedAt = model.UpdatedAt
+                Id = d.Id,
+                Requester = d.Requester,
+                PartUrl = d.PartUrl,
+                PartName = d.PartName,
+                ManufacturerPtNo = d.ManufacturerPtNo,
+                UnitPrice = d.UnitPrice,
+                Quantity = d.Quantity,
+                Supplier = d.Supplier,
+                Status = d.Status,
+                Notes = d.Notes,
+                CreatedAt = d.CreatedAt,
+                NeededBy = d.NeededBy,
+                PoNo = d.PoNumber,
+                OrderDate = d.OrderDate,
+                OrderReceivedDate = d.OrderReceivedDate,
+                OrderActiveStatus = d.OrderActiveStatus,
+                RequestId = d.RequestId,
+                Subtotal = d.Subtotal,
+                Approvals = d.Approvals
             };
-        }
-
-        public async Task<bool> DeleteAsync(int id)
-        {
-            var model = await _db.PurchaseItem.FindAsync(id);
-            if (model is null) return false;
-
-            _db.PurchaseItem.Remove(model);
-            await _db.SaveChangesAsync();
-            return true;
         }
     }
 }

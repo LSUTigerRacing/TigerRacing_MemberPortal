@@ -1,21 +1,66 @@
-using System;
-using System.ComponentModel.DataAnnotations;
+using Supabase.Postgrest.Attributes;
+using Supabase.Postgrest.Models;
 
 namespace TRFSAE.MemberPortal.API.Models
 {
-    public class PurchaseItem
+    [Table("purchase_item")]
+    public class PurchaseItemModel : BaseModel
     {
-        public int Id { get; set; }
+        [PrimaryKey("id", false)]
+        public Guid Id { get; set; }
 
-        [Required] public int MemberId { get; set; }
+        [Column("requester")]
+        public Guid Requester { get; set; }
 
-        [Required, MaxLength(40)]
-        public string Status { get; set; } = "Pending";
+        [Column("part_url")]
+        public string PartUrl { get; set; } = string.Empty;
 
-        [Range(0, double.MaxValue)]
-        public decimal Total { get; set; }
+        [Column("part_name")]
+        public string PartName { get; set; } = string.Empty;
 
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public DateTime? UpdatedAt { get; set; }
+        [Column("manufacturer_pt_no")]
+        public int ManufacturerPtNo { get; set; }
+
+        [Column("unit_price")]
+        public decimal UnitPrice { get; set; }
+
+        [Column("quantity")]
+        public int Quantity { get; set; }
+
+        [Column("supplier")]
+        public string Supplier { get; set; } = string.Empty;
+
+        [Column("status")]
+        public string Status { get; set; } = string.Empty;
+
+        [Column("notes")]
+        public string? Notes { get; set; }
+
+        [Column("created_at")]
+        public DateTime CreatedAt { get; set; }
+
+        [Column("needed_by")]
+        public DateTime? NeededBy { get; set; }
+
+        [Column("po_no")]
+        public string? PoNo { get; set; }
+
+        [Column("order_date")]
+        public DateTime? OrderDate { get; set; }
+
+        [Column("order_received_date")]
+        public DateTime? OrderReceivedDate { get; set; }
+
+        [Column("order_active_status")]
+        public string? OrderActiveStatus { get; set; }
+
+        [Column("request_id")]
+        public Guid? RequestId { get; set; }
+
+        [Column("subtotal")]
+        public decimal? Subtotal { get; set; }
+
+        [Column("approvals")]
+        public bool[]? Approvals { get; set; }
     }
 }
