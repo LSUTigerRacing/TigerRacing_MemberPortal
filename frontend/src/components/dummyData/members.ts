@@ -1,11 +1,11 @@
 export type Member = {
   id: string
-  year: "Freshman" | "Sophomore" | "Junior" | "Senior+"
-  grad: "2024" | "2025" | "2026" | "2027" | "2028" | "2029+"
-  system: "Powertrain" | "Chassis" | "PR" | "Business"
   name: string
   email: string
-  subsystem?: string
+  year: "Freshman" | "Sophomore" | "Junior" | "Senior+"
+  grad: "2025" | "2026" | "2027" | "2028" | "2029" | "2030+"
+  system: System[]
+  subsystem: Subsystem[]
   joinDate: string
   hazing: "Completed" | "Uncompleted" 
   dues: "Paid" | "Unpaid"
@@ -13,15 +13,24 @@ export type Member = {
   other?: string
 }
 
+export const subsystemCategories = {
+  Powertrain: ["Electronics", "Battery", "Controls", "Low Voltage", "Tractive System"],
+  Chassis: ["Frame", "Aero", "Ergo", "Brakes", "Suspension", "Drivetrain"],
+  Business: ["Financial", "General Business", "Public Relations"],
+} as const;
+
+export type System = keyof typeof subsystemCategories;
+export type Subsystem = typeof subsystemCategories[System][number];
+
 export const data: Member[] = [
   {
     id: "m5gr84i9",
     year: "Senior+",
     name: "John Smith",
-    grad: "2029+",
-    system: "Powertrain",
+    grad: "2030+",
+    system: ["Powertrain"],
     email: "ken99@example.com",
-    subsystem: "Battery",
+    subsystem: ["Battery"],
     joinDate: "2023-09-01",
     hazing: "Completed",
     dues: "Unpaid",
@@ -32,10 +41,10 @@ export const data: Member[] = [
     id: "3u1reuv4",
     year: "Sophomore",
     name: "CarMella McCarface",
-    grad: "2029+",
-    system: "Powertrain",
+    grad: "2026",
+    system: ["Powertrain"],
     email: "Abe45@example.com",
-    subsystem: "PR",
+    subsystem: ["Low Voltage"],
     joinDate: "2023-09-01",
     hazing: "Completed",
     dues: "Paid",
@@ -46,9 +55,9 @@ export const data: Member[] = [
     year: "Junior",
     name: "Ricky Liang",
     grad: "2026",
-    system: "Powertrain",
+    system: ["Powertrain"],
     email: "Monserrat44@example.com",
-    subsystem: "Battery",
+    subsystem: ["Controls"],
     joinDate: "2023-09-01",
     hazing: "Completed",
     dues: "Paid",
@@ -58,10 +67,10 @@ export const data: Member[] = [
     id: "5kma53ae",
     year: "Freshman",
     name: "Anna Johnson",
-    grad: "2026",
-    system: "Chassis",
+    grad: "2027",
+    system: ["Chassis"],
     email: "Silas22@example.com",
-    subsystem: "Battery",
+    subsystem: ["Ergo"],
     joinDate: "2023-09-01",
     hazing: "Completed",
     dues: "Paid",
@@ -71,10 +80,10 @@ export const data: Member[] = [
     id: "bhqecj4p",
     year: "Senior+",
     name: "Harry Potter",
-    grad: "2029+",
-    system: "Business",
+    grad: "2030+",
+    system: ["Business"],
     email: "carmella@example.com",
-    subsystem: "Battery",
+    subsystem: ["General Business"],
     joinDate: "2023-09-01",
     hazing: "Completed",
     dues: "Paid",
@@ -85,9 +94,9 @@ export const data: Member[] = [
     year: "Freshman",
     name: "Car McCarface",
     grad: "2025",
-    system: "Business",
+    system: ["Business"],
     email: "carmella@example.com",
-    subsystem: "Battery",
+    subsystem: ["Financial"],
     joinDate: "2023-09-01",
     hazing: "Completed",
     dues: "Paid",
@@ -98,9 +107,9 @@ export const data: Member[] = [
     year: "Freshman",
     name: "Jane Doe",
     grad: "2028",
-    system: "PR",
+    system: ["Business"],
     email: "carmella@example.com",
-    subsystem: "Battery",
+    subsystem: ["Public Relations"],
     joinDate: "2023-09-01",
     hazing: "Completed",
     dues: "Paid",
@@ -111,9 +120,9 @@ export const data: Member[] = [
     year: "Freshman",
     grad: "2026",
     name: "Lorem Ipsum",
-    system: "Chassis",
+    system: ["Chassis"],
     email: "carmella@example.com",
-    subsystem: "Battery",
+    subsystem: ["Brakes"],
     joinDate: "2023-09-01",
     hazing: "Completed",
     dues: "Paid",
@@ -122,11 +131,11 @@ export const data: Member[] = [
   {
     id: "09pkih7n",
     year: "Freshman",
-    grad: "2026",
+    grad: "2027",
     name: "Rachael Bergeron",
-    system: "Powertrain",
+    system: ["Powertrain"],
     email: "carmella@example.com",
-    subsystem: "Battery",
+    subsystem: ["Controls"],
     joinDate: "2023-09-01",
     hazing: "Completed",
     dues: "Paid",
@@ -136,11 +145,11 @@ export const data: Member[] = [
   {
     id: "2753odkgof",
     year: "Junior",
-    grad: "2027",
+    grad: "2030+",
     name: "Mandy Moore",
-    system: "Chassis",
+    system: ["Chassis"],
     email: "carmella@example.com",
-    subsystem: "Aero",
+    subsystem: ["Aero"],
     joinDate: "2023-09-01",
     hazing: "Uncompleted",
     dues: "Unpaid",

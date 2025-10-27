@@ -4,16 +4,27 @@ import * as React from 'react';
 import { useId, useState, useRef, useEffect } from 'react';
 
 import { data, type Member } from "@/components/dummyData/members";
-import { LayoutGridIcon, FunnelIcon, SearchIcon } from 'lucide-react';
+import { TableProperties, FunnelIcon, SearchIcon, GalleryHorizontalIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
+import FilterDropdown from "@/components/ui/adminPortal/SearchBar/FilterDropdown"
+
+
 export interface Navbar14Props extends React.HTMLAttributes<HTMLElement> {
   searchPlaceholder?: string;
   searchValue?: string;
+  view: "column" | "gallery";
+  setView: React.Dispatch<React.SetStateAction<"column" | "gallery">>;
+  onFiltersChange: (filteredMembers: Member[]) => void;
   onSearchChange?: (value: string) => void;
-  onLayoutClick?: () => void;
 }
 
 export const Navbar14 = React.forwardRef<HTMLElement, Navbar14Props>(
@@ -21,7 +32,9 @@ export const Navbar14 = React.forwardRef<HTMLElement, Navbar14Props>(
     {
       className,
       searchPlaceholder = 'Search for members...',
-      onLayoutClick,
+      view,
+      setView,
+      onFiltersChange,
       ...props
     },
     ref
@@ -49,6 +62,8 @@ export const Navbar14 = React.forwardRef<HTMLElement, Navbar14Props>(
       }
     };
 
+    {/* Dropdown Menu Click Outside */}
+
     useEffect(() => {
       function handleClickOutside(event: MouseEvent) {
         if (
@@ -68,6 +83,7 @@ export const Navbar14 = React.forwardRef<HTMLElement, Navbar14Props>(
       };
     }, [isDropdownOpen]);
 
+
     return (
       <header
         ref={ref}
@@ -77,15 +93,22 @@ export const Navbar14 = React.forwardRef<HTMLElement, Navbar14Props>(
         <div className="flex h-16 items-center justify-between gap-4">
           {/* Left side: Filter button + input */}
           <div className="flex items-center gap-2 flex-1 z-10">
-            <Button
-              size="icon"
-              variant="ghost"
-              className="text-muted-foreground w-8 h-8 rounded-full shadow-none"
-              aria-label="Open search menu"
-              onClick={(e) => e.preventDefault()}
-            >
-              <FunnelIcon size={16} aria-hidden="true" />
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="text-muted-foreground w-8 h-8 rounded-full shadow-none"
+                  aria-label="Open search menu"
+                  onClick={(e) => e.preventDefault()}
+                >
+                  <FunnelIcon size={16} aria-hidden="true" />
+                </Button>
+              </DropdownMenuTrigger>
+             <DropdownMenuContent className="max-w-fit" align="start">
+              <FilterDropdown onFiltersChange={onFiltersChange} />
+             </DropdownMenuContent>
+            </DropdownMenu>
 
             {/* Input with search icon */}
             <div className="relative flex-1 max-w-xs" ref={dropdownRef}>
@@ -126,18 +149,20 @@ export const Navbar14 = React.forwardRef<HTMLElement, Navbar14Props>(
           </div>
 
           {/* Right side: Layout button */}
-          <Button
-            size="icon"
-            variant="ghost"
-            className="text-muted-foreground w-8 h-8 rounded-full shadow-none"
-            aria-label="Open layout menu"
-            onClick={(e) => {
-              e.preventDefault();
-              onLayoutClick?.();
-            }}
-          >
-            <LayoutGridIcon size={16} aria-hidden="true" />
-          </Button>
+         
+              <Button
+                size="icon"
+                variant="ghost"
+                className="text-muted-foreground w-8 h-8 rounded-full shadow-none"
+                aria-label="Open layout menu"
+                onClick={() => view === "column" ? setView("gallery") : setView("column")}  
+              >
+              {view === "column" ? (
+                <GalleryHorizontalIcon size={16} aria-hidden />) : (
+                <TableProperties size={16} aria-hidden="true" />
+              )}
+              </Button>
+            
         </div>
       </header>
     );
