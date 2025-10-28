@@ -59,13 +59,13 @@ export default function CarouselDemo( { members }: FilterMemberCarouselProps) {
 
                       {/* Details Section */}
                       <div className="flex gap-20">
-                        <div className="ml-4 font-sora text-muted-foreground">
+                        <div className="ml-4 font-sora text-gray-600">
                           {member.year}
                         </div>
-                        <div className="ml-4 font-sora text-muted-foreground">
+                        <div className="ml-4 font-sora text-gray-600">
                           {member.system}
                         </div>
-                        <div className="ml-4 font-sora text-muted-foreground">
+                        <div className="ml-4 font-sora text-gray-600">
                           {member.grad}
                         </div>
                       </div>

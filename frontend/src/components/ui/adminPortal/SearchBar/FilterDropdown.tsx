@@ -10,14 +10,15 @@ interface FilterDropdownProps {
 
 const FilterDropdown = ({ onFiltersChange }: FilterDropdownProps) => {
 
-  // States/Consts for Selected Systems
-
+  // States and Constants
+  
   const [filteredCount, setFilteredCount] = useState(0);
   const [filters, setFilters] = useState({
     selectedSystems: [] as System[],
     selectedSubsystems: [] as Subsystem[],
     selectedYears: [] as Member["grad"][],
   });
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
   // Derived Data (Filtered Members)
 
@@ -46,7 +47,15 @@ const FilterDropdown = ({ onFiltersChange }: FilterDropdownProps) => {
     return systemMatch && subsystemMatch && yearMatch;
   });
 
-  // Handlers for Toggles and Reset
+  const sortedMembers = [...filteredMembers].sort((a, b) => {
+    if (sortOrder === "asc") {
+      return a.name.localeCompare(b.name);
+    } else {
+      return b.name.localeCompare(a.name);
+    }
+  });
+
+  // Event Handlers
 
   const handleSystemToggle = (system: System) => {
     setFilters((prev) => ({
@@ -75,6 +84,8 @@ const FilterDropdown = ({ onFiltersChange }: FilterDropdownProps) => {
     }));
   };
 
+  const handleSort = (order: "asc" | "desc") => setSortOrder(order);
+
   const handleReset = () => {
     setFilters({
       selectedSystems: [],
@@ -83,78 +94,73 @@ const FilterDropdown = ({ onFiltersChange }: FilterDropdownProps) => {
     });
   };
 
-  // Active Filtering
+  // Active Filtering Summary
 
   const getActiveFilters = () => {
     const active = [];
-    if (filters.selectedSystems.length > 0) {
+    if (filters.selectedSystems.length > 0)
       active.push(`Systems: ${filters.selectedSystems.join(", ")}`);
-    }
-    if (filters.selectedSubsystems.length > 0) {
+    if (filters.selectedSubsystems.length > 0)
       active.push(`Subsystem: ${filters.selectedSubsystems.join(", ")}`);
-    }
-    if (filters.selectedYears.length > 0) {
+    if (filters.selectedYears.length > 0)
       active.push(`Graduation Years: ${filters.selectedYears.join(", ")}`);
-    }
     return active;
   };
 
-  // Filter Change and Filter count
-
+  // Hooks: Filter Updates and Count Tracking
+ 
   useEffect(() => {
-    onFiltersChange(filteredMembers);
-  }, [filters, onFiltersChange]);
+    onFiltersChange(sortedMembers);
+  }, [filters, sortOrder, onFiltersChange]);
 
   useEffect(() => {
     setFilteredCount(filteredMembers.length);
-  }, [filters]);
+  }, [filteredMembers]);
 
+  // Render
+  
   return (
-    <div className="bg-background px-6 py-4 mx-auto overflow-y-auto max-h-[80vh]">
+    <div className="bg-background px-6 py-4 mx-auto overflow-y-auto max-h-[80vh] max-w-full">
       <div className="space-y-6">
         <div className="flex flex-col justify-between gap-6 mb-4">
-
           {/* Graduation Year Filter */}
           <div className="space-y-4">
             <h3 className="inline-block shadow-none font-manrope font-semibold border-b border-b-black">
               Grad Year
             </h3>
-            <div className="flex flex-wrap gap-4">
-              <div className="grid grid-cols-3 gap-2">
-                {Array.from(new Set(data.map((member) => member.grad)))
-                  .sort()
-                  .map((gradYear) => (
-                    <button
-                      key={gradYear}
-                      onClick={() => handleYearToggle(gradYear)}
-                      className={`font-sora inline-block not-first:items-center gap-2 p-2 rounded-lg transition-colors ${
-                        filters.selectedYears.includes(gradYear)
-                          ? "bg-primary-background text-white"
-                          : "bg-gray-100 dark:bg-gray-700"
-                      }`}
-                    >
-                      {gradYear}
-                    </button>
-                  ))}
-              </div>
+            <div className="flex justify-between">
+              {Array.from(new Set(data.map((member) => member.grad)))
+                .sort()
+                .map((gradYear) => (
+                  <button
+                    key={gradYear}
+                    onClick={() => handleYearToggle(gradYear)}
+                    className={`font-sora inline-block not-first:items-center gap-2 p-2 rounded-lg transition-colors ${
+                      filters.selectedYears.includes(gradYear)
+                        ? "bg-primary/60 text-background"
+                        : "bg-gray-100 dark:bg-gray-700"
+                    }`}
+                  >
+                    {gradYear}
+                  </button>
+                ))}
             </div>
           </div>
 
           {/* System Filters */}
           <div className="gap-2">
             <div className="space-y-4">
-              <h3 className="inline-block font-manrope font-semibold border-b border-b-black">
+              <h3 className="inline-block font-manrope mb-2 font-semibold border-b border-b-black">
                 System & Subsystem
               </h3>
-
-              {(Object.keys(subsystemCategories) as System[]).map((system) => (
-                <div key={system} className="grid grid-cols-1 lg:grid-cols-2">
-                  <div className="grid grid-cols-1 gap-4">
+              <div className="flex justify-between gap-3">
+                {(Object.keys(subsystemCategories) as System[]).map((system) => (
+                  <div key={system} className="flex flex-col gap-4">
                     <button
                       onClick={() => handleSystemToggle(system)}
-                      className={`flex items-center gap-2 p-2 rounded-lg transition-colors ${
+                      className={`flex text-2xl items-center gap-2 p-2 rounded-xl max-h-fit transition-colors ${
                         filters.selectedSystems.includes(system)
-                          ? "bg-primary/50 text-foreground"
+                          ? "bg-primary/60 text-foreground"
                           : "bg-primary text-background dark:bg-gray-700"
                       }`}
                     >
@@ -163,15 +169,15 @@ const FilterDropdown = ({ onFiltersChange }: FilterDropdownProps) => {
                     </button>
 
                     {/* Subsystem Filters */}
-                    <div className="grid grid-cols-1 gap-2">
+                    <div className="flex flex-col gap-2">
                       {subsystemCategories[system].map((subsystem) => (
                         <button
                           key={subsystem}
                           onClick={() => handleSubsystemToggle(subsystem)}
-                          className={`flex items-center gap-2 p-2 rounded-lg transition-colors ${
+                          className={`flex items-center gap-2 p-2 max-h-fit rounded-lg transition-colors ${
                             filters.selectedSubsystems.includes(subsystem)
-                              ? "bg-primary-background text-foreground"
-                              : "bg-muted-foreground/50 dark:bg-gray-700"
+                              ? "bg-primary/25 text-foreground"
+                              : "bg-background dark:bg-gray-700"
                           }`}
                         >
                           <Circle size={16} />
@@ -180,8 +186,37 @@ const FilterDropdown = ({ onFiltersChange }: FilterDropdownProps) => {
                       ))}
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Ascending/Descending Filters */}
+          <div className="space-y-4">
+            <h3 className="inline-block shadow-none font-manrope font-semibold border-b border-b-black">
+              Sort by Members
+            </h3>
+            <div className="flex justify-between pb-3">
+              <button
+                onClick={() => handleSort("asc")}
+                className={`font-sora inline-block not-first:items-center gap-2 p-2 rounded-lg transition-colors ${
+                  sortOrder === "asc"
+                    ? "bg-primary/60 text-background"
+                    : "bg-gray-100 dark:bg-gray-700"
+                }`}
+              >
+                Ascending (Z-A)
+              </button>
+              <button
+                onClick={() => handleSort("desc")}
+                className={`font-sora inline-block not-first:items-center gap-2 p-2 rounded-lg transition-colors ${
+                  sortOrder === "desc"
+                    ? "bg-primary/60 text-background"
+                    : "bg-gray-100 dark:bg-gray-700"
+                }`}
+              >
+                Descending (A-Z)
+              </button>
             </div>
           </div>
         </div>
@@ -189,11 +224,11 @@ const FilterDropdown = ({ onFiltersChange }: FilterDropdownProps) => {
         {/* Active Filters */}
         <div className="border-t dark:border-gray-700 pt-4">
           <h3 className="font-sora mb-2">Active Filters</h3>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 pb-2 max-w-full">
             {getActiveFilters().map((filter, index) => (
               <span
                 key={index}
-                className="font-sora px-3 py-1 bg-primary-background dark:bg-primary-foreground text-foreground dark:text-blue-200 rounded-full text-sm"
+                className="font-sora px-3 py-1 bg-primary-background dark:bg-primary-foreground text-foreground dark:text-blue-200 rounded-full text-sm flex-shrink-0 max-w-full break-words"
               >
                 {filter}
               </span>
@@ -207,7 +242,7 @@ const FilterDropdown = ({ onFiltersChange }: FilterDropdownProps) => {
         </div>
 
         {/* Reset Filters */}
-        <div className="flex flex-col items-center gap-4 pt-4 border-t dark:border-gray-700 font-sora">
+        <div className="flex justify-between items-center gap-4 pt-4 border-t dark:border-gray-700 font-sora">
           <div className="text-sm text-gray-600 dark:text-gray-400">
             {filteredCount} results found
           </div>
