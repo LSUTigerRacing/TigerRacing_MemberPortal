@@ -20,6 +20,12 @@ jobs:
         run: |
           curl -L https://github.com/supabase/cli/releases/latest/download/supabase_$(uname)_amd64.tar.gz | tar xz
           sudo mv supabase /usr/local/bin/  
+
+      #Necessary To Push To Supabase
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20' 
           
       - name: Link to Supabase project
         env:
