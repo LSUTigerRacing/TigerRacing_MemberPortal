@@ -15,7 +15,10 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install Supabase CLI
-        run: npm install -g supabase
+        run: |
+          curl -L https://github.com/supabase/cli/releases/latest/download/supabase_$(uname)_amd64.tar.gz | tar xz
+          sudo mv supabase /usr/local/bin/
+   
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
