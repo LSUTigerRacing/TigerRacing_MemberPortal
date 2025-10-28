@@ -1,5 +1,13 @@
 import { Navbar06 } from "@/components/ui/NavBar/shadcn-io/navbar-06";
 import { ProjectCard } from "@/components/projectcard";
+import { Button } from "@/components/ui/button";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from "@/components/ui/select";
 
 export const AdminDashboard = () => {
     return (
@@ -23,29 +31,39 @@ export const AdminDashboard = () => {
                             />
 
                             {/* Status filter */}
-                            <select className="px-4 py-2 border border-gray-300 rounded-md text-sm bg-white cursor-pointer focus:outline-none">
-                                <option>All Status</option>
-                                <option>Active</option>
-                                <option>Planning</option>
-                                <option>Completed</option>
-                                <option>On Hold</option>
-                            </select>
+                            <Select defaultValue="all-status">
+                                <SelectTrigger className="w-[140px]">
+                                    <SelectValue placeholder="All Status" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="all-status">All Status</SelectItem>
+                                    <SelectItem value="active">Active</SelectItem>
+                                    <SelectItem value="planning">Planning</SelectItem>
+                                    <SelectItem value="completed">Completed</SelectItem>
+                                    <SelectItem value="on-hold">On Hold</SelectItem>
+                                </SelectContent>
+                            </Select>
 
                             {/* Priority filter */}
-                            <select className="px-4 py-2 border border-gray-300 rounded-md text-sm bg-white cursor-pointer focus:outline-none">
-                                <option>All Priorities</option>
-                                <option>High Priority</option>
-                                <option>Medium Priority</option>
-                                <option>Low Priority</option>
-                            </select>
+                            <Select defaultValue="all-priorities">
+                                <SelectTrigger className="w-[150px]">
+                                    <SelectValue placeholder="All Priorities" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="all-priorities">All Priorities</SelectItem>
+                                    <SelectItem value="high">High Priority</SelectItem>
+                                    <SelectItem value="medium">Medium Priority</SelectItem>
+                                    <SelectItem value="low">Low Priority</SelectItem>
+                                </SelectContent>
+                            </Select>
 
                             {/* New project button */}
-                            <button
+                            <Button
                                 style={{ backgroundColor: "#510087" }}
-                                className="text-white px-5 py-2 rounded-md text-sm font-semibold flex items-center gap-2"
+                                className="hover:opacity-90"
                             >
-                                <span className="text-lg">+</span> New Project
-                            </button>
+                                <span className="text-lg leading-none">+</span> New Project
+                            </Button>
                         </div>
                     </div>
 
