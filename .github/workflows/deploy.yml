@@ -19,20 +19,15 @@ jobs:
       - name: Install Supabase CLI
         run: |
           curl -L https://github.com/supabase/cli/releases/latest/download/supabase_$(uname)_amd64.tar.gz | tar xz
-          sudo mv supabase /usr/local/bin/
-   
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'  
+          sudo mv supabase /usr/local/bin/  
           
       - name: Link to Supabase project
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
         run: supabase link --project-ref ${{ secrets.SUPABASE_PROJECT_REF }}
 
-      - name: Dry-run on PR
+      #Runs Final Check to Validate migrate for Pull Request
+      - name: Dry-run on PR                                    
         if: github.event_name == 'pull_request'
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
