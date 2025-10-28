@@ -8,13 +8,14 @@ import { data, type Member } from "@/components/dummyData/members";
 export const PagesView = () => {
  const [view, setView] = useState<"column" | "gallery">("column");
  const [filteredMembers, setFilteredMembers] = useState<Member[]>(data);
+ 
     return (
         <>
             <Navbar06 />
             <Navbar14 view={view} setView={setView} onFiltersChange={setFilteredMembers} />
 
             {view === "column" ? (
-              <MemberTable members={filteredMembers} /> // why would we use filtered Members and not the set constant of this?
+              <MemberTable members={filteredMembers} /> 
             ) : (
               <GalleryCard members={filteredMembers}/>
             )}

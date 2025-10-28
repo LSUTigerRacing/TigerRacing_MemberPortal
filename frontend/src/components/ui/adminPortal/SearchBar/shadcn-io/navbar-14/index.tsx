@@ -98,11 +98,11 @@ export const Navbar14 = React.forwardRef<HTMLElement, Navbar14Props>(
                 <Button
                   size="icon"
                   variant="ghost"
-                  className="text-muted-foreground w-8 h-8 rounded-full shadow-none"
+                  className="text-muted-foreground h-10 w-10 rounded-full shadow-none"
                   aria-label="Open search menu"
                   onClick={(e) => e.preventDefault()}
                 >
-                  <FunnelIcon size={16} aria-hidden="true" />
+                  <FunnelIcon className="scale-115" aria-hidden="true" />
                 </Button>
               </DropdownMenuTrigger>
              <DropdownMenuContent className="max-w-fit" align="start">
@@ -111,10 +111,10 @@ export const Navbar14 = React.forwardRef<HTMLElement, Navbar14Props>(
             </DropdownMenu>
 
             {/* Input with search icon */}
-            <div className="relative flex-1 max-w-xs" ref={dropdownRef}>
+            <div className="relative flex-1 max-w-lg" ref={dropdownRef}>
               <Input
                 id={`input-${id}`}
-                className="peer h-8 w-full pl-8 pr-2"
+                className="peer h-12 w-full pl-8 pr-2 text-lg placeholder:text-base md:placeholder:text-lg"
                 placeholder={searchPlaceholder}
                 type="search"
                 value={searchValue}
@@ -153,13 +153,13 @@ export const Navbar14 = React.forwardRef<HTMLElement, Navbar14Props>(
               <Button
                 size="icon"
                 variant="ghost"
-                className="text-muted-foreground w-8 h-8 rounded-full shadow-none"
+                className="text-muted-foreground w-10 h-10 rounded-full shadow-none"
                 aria-label="Open layout menu"
                 onClick={() => view === "column" ? setView("gallery") : setView("column")}  
               >
               {view === "column" ? (
-                <GalleryHorizontalIcon size={16} aria-hidden />) : (
-                <TableProperties size={16} aria-hidden="true" />
+                <GalleryHorizontalIcon className="scale-115" aria-hidden />) : (
+                <TableProperties className="scale-115" aria-hidden="true" />
               )}
               </Button>
             
