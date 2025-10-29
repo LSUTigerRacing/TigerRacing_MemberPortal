@@ -90,7 +90,7 @@ export const Navbar14 = React.forwardRef<HTMLElement, Navbar14Props>(
         className={cn('px-4 md:px-6 [&_*]:no-underline', className)}
         {...props}
       >
-        <div className="flex h-16 items-center justify-between gap-4">
+        <div className="flex h-16 items-center justify-between gap-4 pt-2">
           {/* Left side: Filter button + input */}
           <div className="flex items-center gap-2 flex-1 z-10">
             <DropdownMenu>
