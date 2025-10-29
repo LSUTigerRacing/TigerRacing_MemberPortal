@@ -155,5 +155,18 @@ export const data: Member[] = [
     dues: "Unpaid",
     shirtSize: "XS"
   },
+  {
+    id: "2934dig",
+    year: "Freshman",
+    grad: "2029",
+    name: "Jayden David",
+    system: ["Business"],
+    email: "jdavid19@example.com",
+    subsystem: ["General Business"],
+    joinDate: "2022-10-05",
+    hazing: "Uncompleted",
+    dues: "Unpaid",
+    shirtSize: "XS"
+  },
 ]
 

@@ -163,7 +163,7 @@ function MemberTable( {members}: FilterMemberTableProps) {
         </Table>
       </div>
 
-      <div className="mt-4 px-4 flex justify-between items- text-xl space-x-2">
+      <div className="mt-4 px-4 flex justify-between items-center text-xl space-x-2">
         <Button
           variant="outline"
           size="sm"
@@ -172,6 +172,10 @@ function MemberTable( {members}: FilterMemberTableProps) {
         >
           Previous
         </Button>
+
+        <div className="text-muted-foreground flex text-center text-sm">
+          1 of 10 row(s) shown.
+        </div>
 
         <Button
           variant="outline"

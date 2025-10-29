@@ -20,7 +20,7 @@ interface FilterMemberCarouselProps {
 
 export default function CarouselDemo( { members }: FilterMemberCarouselProps) {
   return (
-    <Carousel className="max-h-screen max-w-3xl flex flex-column justify-self-center">
+    <Carousel className="max-h-screen max-w-3xl mx-auto flex flex-column justify-self-center-safe">
       <CarouselContent>
         {members.map((member) => (
           <CarouselItem key={member.id}>
@@ -84,19 +84,19 @@ export default function CarouselDemo( { members }: FilterMemberCarouselProps) {
 
                       {/* Info Content */}
                       <div className="p-3 space-y-2 flex flex-wrap justify-center">
-                        <Button className="px-3 py-2 font-sora rounded-full bg-primary text-white">
-                          Subsystem: {member.system}
+                        <Button className="px-3 py-2 w-[200px] h-fit font-sora rounded-full bg-primary text-white whitespace-break-spaces break-words">
+                          Subsystem: {member.subsystem}
                         </Button>
-                        <Button className="px-3 py-2 font-sora rounded-full bg-primary text-white">
+                        <Button className="px-3  w-[200px] py-2 font-sora rounded-full bg-primary text-white">
                           Join Date: {member.joinDate}
                         </Button>
-                        <Button className="px-3 py-2 font-sora rounded-full bg-primary text-white">
+                        <Button className="px-3 w-[200px] py-2 font-sora rounded-full bg-primary text-white">
                           Hazing: {member.hazing}
                         </Button>
-                        <Button className="px-3 py-2 font-sora rounded-full bg-primary text-white">
+                        <Button className="px-3 w-[200px] py-2 font-sora rounded-full bg-primary text-white">
                           Fees: {member.dues}
                         </Button>
-                        <Button className="px-3 py-2 font-sora rounded-full bg-primary text-white">
+                        <Button className="px-3 w-[200px] py-2 font-sora rounded-full bg-primary text-white">
                           T-Shirt Size: {member.shirtSize}
                         </Button>
                       </div>
