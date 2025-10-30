@@ -16,6 +16,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # CLI: Install Supabase CLI For Database Operations
       - name: Install Supabase CLI
         run: |
           curl -L https://github.com/supabase/cli/releases/latest/download/supabase_$(uname)_amd64.tar.gz | tar xz
@@ -26,26 +27,41 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20' 
-          
+
+      # CLI: Link Local Workflow to Supabase Project
       - name: Link to Supabase project
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
         run: supabase link --project-ref ${{ secrets.SUPABASE_PROJECT_REF }}
+      
+      # CI: Prepares Temporary Workflow Folder Structure for Supabase CLI
+      # Copies Database Folder(SoT) into Supabase Folder so CLI Can Consume Migration History
+      - name: Prepare migrations for CI
+        run: |
+          #Removes Sym Link In CI; local Directories Remain Untouched
+          rm -rf supabase            
+          #Create a supabase folder for CLI Use           
+          mkdir -p supabase      
+          #Copy DB Folder for CLI Access               
+          cp -r database/* supabase 
+          #Fails Fast If Copy Process Fails
+          ls -l supabase/migrations           
 
-      #Validates Population Of Migration Directory For Symbolic Link supabse -> database
+      # CI: Verifies Presence of Migrations for Supabase CLI in Workflow Run
       - name: List migrations
         run: |
             echo "Current working directory: $(pwd)"
-            ls -l supabase
+            ls -l supabase 
             ls -l supabase/migrations || echo "No migrations directory found"
 
-      #Runs Final Check to Validate migrate for Pull Request
+      # CLI + CI: Run Supabase CLI Dry-run in CI to Validate PR Migrations
       - name: Dry-run on PR                                    
         if: github.event_name == 'pull_request'
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
         run: supabase db push --dry-run
 
+      # CLI + CI: Push Migrations to Remote Supabase Database on Main Branch
       - name: Push migrations to Supabase
         if: github.ref == 'refs/heads/main'
         env:
