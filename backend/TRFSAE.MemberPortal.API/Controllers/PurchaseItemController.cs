@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TRFSAE.MemberPortal.API.DTOs;
 using TRFSAE.MemberPortal.API.Interfaces;
+using Supabase;
 
 namespace TRFSAE.MemberPortal.API.Controllers
 {
@@ -16,10 +17,10 @@ namespace TRFSAE.MemberPortal.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllPurchaseItemsAsync()
+        public async Task<IActionResult> GetAllPurchaseItemsAsync([FromQuery] PurchaseItemSearchDto? dto)
         {
-            var items = await _purchaseItemService.GetAllPurchaseItemsAsync();
-            return Ok(items);
+            var result = await _purchaseItemService.GetAllPurchaseItemsAsync(dto ?? new PurchaseItemSearchDto());
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
@@ -30,14 +31,14 @@ namespace TRFSAE.MemberPortal.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreatePurchaseItemAsync(PurchaseItemResponseDto dto)
+        public async Task<IActionResult> CreatePurchaseItemAsync(PurchaseItemCreateDto dto)
         {
             var created = await _purchaseItemService.CreatePurchaseItemAsync(dto);
             return CreatedAtAction(nameof(GetPurchaseItemByIDAsync), new { id = created.Id }, created);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdatePurchaseItemByIDAsync(Guid id, PurchaseItemResponseDto dto)
+        public async Task<IActionResult> UpdatePurchaseItemByIDAsync(Guid id, PurchaseItemUpdateDto dto)
         {
             var updated = await _purchaseItemService.UpdatePurchaseItemByIDAsync(id, dto);
             return updated is null ? NotFound() : Ok(updated);

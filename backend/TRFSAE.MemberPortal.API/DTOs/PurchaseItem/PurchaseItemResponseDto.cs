@@ -32,7 +32,7 @@ namespace TRFSAE.MemberPortal.API.DTOs
         public string Status { get; set; } = string.Empty;
 
         [JsonPropertyName("notes")]
-        public string? Notes { get; set; }
+        public string Notes { get; set; } = string.Empty;
 
         [JsonPropertyName("created_at")]
         public DateTime CreatedAt { get; set; }
@@ -41,7 +41,7 @@ namespace TRFSAE.MemberPortal.API.DTOs
         public DateTime? NeededBy { get; set; }
 
         [JsonPropertyName("po_no")]
-        public string? PoNumber { get; set; }
+        public string PoNumber { get; set; } = string.Empty;
 
         [JsonPropertyName("order_date")]
         public DateTime? OrderDate { get; set; }
@@ -50,7 +50,7 @@ namespace TRFSAE.MemberPortal.API.DTOs
         public DateTime? OrderReceivedDate { get; set; }
 
         [JsonPropertyName("order_active_status")]
-        public string? OrderActiveStatus { get; set; }
+        public string OrderActiveStatus { get; set; } = string.Empty;
 
         [JsonPropertyName("request_id")]
         public Guid? RequestId { get; set; }
