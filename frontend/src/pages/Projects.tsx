@@ -1,9 +1,16 @@
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from "@/components/ui/select";
 
 import { ProjectCard, type Project } from "@/components/projects/ProjectCard";
+import { Input } from "@/components/ui/input";
 
 export default function Projects () {
     // Projects Data
@@ -142,10 +149,10 @@ export default function Projects () {
     });
 
     return (
-        <div className="min-h-screen bg-white">
+        <div className="xl:mt-16.75">
 
             {/* Main content */}
-            <main className="px-8 py-6 max-w-[1600px] mx-auto">
+            <div className="px-8 py-6 max-w-[1600px] mx-auto xl:mt-16.75">
 
                 {/* Page header with filters */}
                 <div className="mb-6 flex justify-between items-center">
@@ -153,20 +160,20 @@ export default function Projects () {
                     <div className="flex gap-3 items-center">
 
                         {/* Search input */}
-                        <input
+                        <Input
                             type="text"
                             value={searchTerm}
                             onChange={e => setSearchTerm(e.target.value)}
                             placeholder="Search projects..."
-                            className="px-4 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:border-purple-600 w-48"
+                            className="px-4 py-2 border border-gray-300 bg-background rounded-md text-sm focus:outline-none focus:border-purple-600 w-48"
                         />
 
                         {/* Status filter */}
                         <Select value={statusFilter} onValueChange={setStatusFilter}>
-                            <SelectTrigger className="w-[140px]">
+                            <SelectTrigger className="w-[140px] bg-white">
                                 <SelectValue placeholder="All Status" />
                             </SelectTrigger>
-                            <SelectContent>
+                            <SelectContent className="bg-white">
                                 <SelectItem value="All Status">All Status</SelectItem>
                                 <SelectItem value="Active">Active</SelectItem>
                                 <SelectItem value="Planning">Planning</SelectItem>
@@ -177,10 +184,10 @@ export default function Projects () {
 
                         {/* Priority filter */}
                         <Select value={priorityFilter} onValueChange={setPriorityFilter}>
-                            <SelectTrigger className="w-[150px]">
+                            <SelectTrigger className="w-[150px] bg-white">
                                 <SelectValue placeholder="All Priorities" />
                             </SelectTrigger>
-                            <SelectContent>
+                            <SelectContent className="bg-white">
                                 <SelectItem value="All Priorities">All Priorities</SelectItem>
                                 <SelectItem value="HIGH">High Priority</SelectItem>
                                 <SelectItem value="MEDIUM">Medium Priority</SelectItem>
@@ -216,7 +223,7 @@ export default function Projects () {
                         <p className="text-gray-500">No projects found</p>
                     </div>
                 )}
-            </main>
+            </div>
 
             {/* CREATE PROJECT MODAL */}
             {showModal && (
@@ -281,40 +288,38 @@ export default function Projects () {
                                         </div>
 
                                         {/* Category, Status, Priority - 3 column grid */}
-                                        <div className="grid grid-cols-3 gap-3">
+                                        <div className="grid grid-cols-[2fr_2fr_1fr] gap-4">
 
                                             {/* Category dropdown */}
                                             <div>
                                                 <label htmlFor="category" className="block text-xs font-semibold mb-1.5 text-slate-700">Category</label>
-                                                <select
-                                                    id="category"
-                                                    value={category}
-                                                    onChange={e => setCategory(e.target.value)}
-                                                    className="w-full px-3 py-2.5 text-sm border-2 border-slate-200 rounded-xl focus:outline-none focus:border-[#510087] transition-all bg-white"
-                                                >
-                                                    <option value="">Select</option>
-                                                    <option value="engine">Engine</option>
-                                                    <option value="chassis">Chassis</option>
-                                                    <option value="electronics">Electronics</option>
-                                                    <option value="aero">Aero & Design</option>
-                                                </select>
+                                                <Select value={category} onValueChange={setCategory}>
+                                                    <SelectTrigger id="category" className="rounded-xl bg-white w-full">
+                                                        <SelectValue placeholder="Select" />
+                                                    </SelectTrigger>
+                                                    <SelectContent className="bg-white">
+                                                        <SelectItem value="engine">Engine</SelectItem>
+                                                        <SelectItem value="chassis">Chassis</SelectItem>
+                                                        <SelectItem value="electronics">Electronics</SelectItem>
+                                                        <SelectItem value="aero">Aero & Design</SelectItem>
+                                                    </SelectContent>
+                                                </Select>
                                             </div>
 
                                             {/* Status dropdown */}
                                             <div>
                                                 <label htmlFor="project-status" className="block text-xs font-semibold mb-1.5 text-slate-700">Status <span className="text-red-500">*</span></label>
-                                                <select
-                                                    id="project-status"
-                                                    value={projectStatus}
-                                                    onChange={e => setProjectStatus(e.target.value)}
-                                                    className="w-full px-3 py-2.5 text-sm border-2 border-slate-200 rounded-xl focus:outline-none focus:border-[#510087] transition-all bg-white"
-                                                >
-                                                    <option value="">Select</option>
-                                                    <option value="active">Active</option>
-                                                    <option value="planning">Planning</option>
-                                                    <option value="completed">Completed</option>
-                                                    <option value="on-hold">On Hold</option>
-                                                </select>
+                                                <Select value={projectStatus} onValueChange={setProjectStatus}>
+                                                    <SelectTrigger id="project-status" className="rounded-xl bg-white w-full">
+                                                        <SelectValue placeholder="Select" />
+                                                    </SelectTrigger>
+                                                    <SelectContent className="bg-white">
+                                                        <SelectItem value="active">Active</SelectItem>
+                                                        <SelectItem value="planning">Planning</SelectItem>
+                                                        <SelectItem value="completed">Completed</SelectItem>
+                                                        <SelectItem value="on-hold">On Hold</SelectItem>
+                                                    </SelectContent>
+                                                </Select>
                                             </div>
 
                                             {/* Priority selector - Button group for visual selection */}
@@ -379,14 +384,14 @@ export default function Projects () {
                                                     className="flex-1 px-3 py-2.5 text-sm border-2 border-slate-200 rounded-xl focus:outline-none focus:border-[#510087] transition-all"
                                                 />
                                                 {/* Add button */}
-                                                <button
+                                                <Button
                                                     type="button"
                                                     onClick={handleAddMember}
                                                     style={{ backgroundColor: "#510087" }}
-                                                    className="px-5 py-2.5 text-sm text-white rounded-xl font-semibold hover:opacity-90 transition-opacity"
+                                                    className="hover:opacity-90 px-6 py-2.5 rounded-xl h-auto"
                                                 >
                                                     Add
-                                                </button>
+                                                </Button>
                                             </div>
                                             {/* Display added team members as removable tags */}
                                             {teamMembers.length > 0 && (
@@ -449,22 +454,25 @@ export default function Projects () {
                             {/* Action buttons */}
                             <div className="flex gap-3">
                                 {/* Cancel button */}
-                                <button
+                                <Button
                                     type="button"
                                     onClick={() => setShowModal(false)}
-                                    className="px-5 py-2.5 text-sm border-2 border-slate-200 rounded-xl font-semibold text-slate-600 hover:bg-white transition-colors"
+                                    variant="outline"
+                                    className="rounded-xl px-6"
+                                    size="default"
                                 >
                                     Cancel
-                                </button>
+                                </Button>
                                 {/* Create button */}
-                                <button
+                                <Button
                                     type="button"
                                     onClick={handleCreateProject}
                                     style={{ backgroundColor: "#510087" }}
-                                    className="px-6 py-2.5 text-sm text-white rounded-xl font-semibold hover:opacity-90 transition-opacity"
+                                    className="hover:opacity-90 rounded-xl px-8"
+                                    size="default"
                                 >
                                     Create Project
-                                </button>
+                                </Button>
                             </div>
                         </div>
                     </div>
