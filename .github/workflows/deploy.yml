@@ -27,12 +27,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20' 
-
-      # CLI: Link Local Workflow to Supabase Project
-      - name: Link to Supabase project
-        env:
-          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
-        run: supabase link --project-ref ${{ secrets.SUPABASE_PROJECT_REF }}
       
       # CI: Prepares Temporary Workflow Folder Structure for Supabase CLI
       # Copies Database Folder(SoT) into Supabase Folder so CLI Can Consume Migration History
@@ -53,6 +47,12 @@ jobs:
             echo "Current working directory: $(pwd)"
             ls -l supabase 
             ls -l supabase/migrations || echo "No migrations directory found"
+            
+      # CLI: Link Local Workflow to Supabase Project
+      - name: Link to Supabase project
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+        run: supabase link --project-ref ${{ secrets.SUPABASE_PROJECT_REF }}
 
       # CLI + CI: Run Supabase CLI Dry-run in CI to Validate PR Migrations
       - name: Dry-run on PR                                    
