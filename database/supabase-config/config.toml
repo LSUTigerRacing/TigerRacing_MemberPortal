@@ -32,6 +32,7 @@ shadow_port = 54320
 # The database major version to use. This has to be the same as your remote database's. Run `SHOW
 # server_version;` on the remote database to check.
 major_version = 17
+temp_dir = "database/.temp"
 
 [db.pooler]
 enabled = false
@@ -53,14 +54,16 @@ max_client_conn = 100
 enabled = true
 # Specifies an ordered list of schema files that describe your database.
 # Supports glob patterns relative to supabase directory: "./schemas/*.sql"
-schema_paths = ["../migrations/*.sql"]
+schema_paths = ["database/migrations/*.sql"]
+
+
 
 [db.seed]
 # If enabled, seeds the database after migrations during a db reset.
 enabled = true
 # Specifies an ordered list of seed files to load during db reset.
 # Supports glob patterns relative to supabase directory: "./seeds/*.sql"
-sql_paths = ["../seed_data/*.sql"]
+sql_paths = ["database/seed_data/*.sql"]
 
 [db.network_restrictions]
 # Enable management of network restrictions.

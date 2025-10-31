@@ -1,0 +1,27 @@
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+# Node modules
+node_modules/
+# Environment files
+env
+env.local
+env.test
+env.production
+# Supabase-specific directories
+**/database/.branches
+**/database/.temp
+**/database/seed_data
+# IDE and editor settings
+vscode/
+idea/
+# Build outputs
+next/
+nuxt/
+dist/
+cache/
+# Miscellaneous
+DS_Store
+*.swp

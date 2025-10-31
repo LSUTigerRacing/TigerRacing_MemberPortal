@@ -21,19 +21,11 @@ jobs:
         run: |
           curl -L https://github.com/supabase/cli/releases/latest/download/supabase_$(uname)_amd64.tar.gz | tar xz
           sudo mv supabase /usr/local/bin/  
-
-      #Necessary To Push SQL Artifacts To Supabase
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20' 
       
       # CI: Prepares Temporary Workflow Folder Structure for Supabase CLI
-      # Copies Database Folder(SoT) into Supabase Folder so CLI Can Consume Migration History
+      # Copies Database Folder(SoT) into Dummy Supabase Folder so CLI Can Consume Migration History
       - name: Prepare migrations for CI
-        run: |
-          #Removes Sym Link In CI; local Directories Remain Untouched
-          rm -rf supabase            
+        run: |           
           #Create a supabase folder for CLI Use           
           mkdir -p supabase      
           #Copy DB Folder for CLI Access               
@@ -47,7 +39,7 @@ jobs:
             echo "Current working directory: $(pwd)"
             ls -l supabase 
             ls -l supabase/migrations || echo "No migrations directory found"
-            
+
       # CLI: Link Local Workflow to Supabase Project
       - name: Link to Supabase project
         env:
