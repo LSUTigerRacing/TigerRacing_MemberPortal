@@ -3,7 +3,7 @@ name: Deploy to Supabase
 on:
   push:         #Only Pushes Migrations Deployed On Main Branch
     branches:
-    - '**'
+    - master
   pull_request: #Run Dry-Run To Validate Schema Pre-Merge
     branches: 
     - '**'
