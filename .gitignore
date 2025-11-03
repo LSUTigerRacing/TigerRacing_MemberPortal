@@ -30,9 +30,18 @@ obj/
 *.vssscc
 
 # Database
+/supabase/
 *.db
 *.sqlite
 *.sqlite3
+local_SB.session.sql
+database/seed_data
+database/supabase
+database/.branches
+
+# Ignore any .temp folders or files
+**/.temp/
+*.temp
 
 # Logs
 logs/

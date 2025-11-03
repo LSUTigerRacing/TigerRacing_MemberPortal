@@ -10,11 +10,6 @@ env
 env.local
 env.test
 env.production
-# Supabase-specific directories
-**/database/.branches
-**/database/.temp
-**/database/seed_data
-**/database/supabase-config/supabase/.temp
 # IDE and editor settings
 vscode/
 idea/
