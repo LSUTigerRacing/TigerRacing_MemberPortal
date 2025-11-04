@@ -1,4 +1,6 @@
 import type { Member } from "@/components/dummyData/members";
+import * as React from 'react';
+import { useEffect } from 'react';
 import { ListTodoIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -10,27 +12,49 @@ import {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
+  type CarouselApi,
 } from "@/components/ui/carousel";
 
-import DropdownMenuDemo from "@/components/ui/adminPortal/dropdownMenu/dropdownMenu"
+import DropdownMenuDemo from "@/components/ui/adminPortal/dropdownMenu/dropdownMenu";
 
 interface FilterMemberCarouselProps {
   members: Member[];
+  onDeleteMember: (memberId: string) => void;
+  selectedMemberId: string | null;
 }
 
-export default function CarouselDemo( { members }: FilterMemberCarouselProps) {
+export default function CarouselDemo({
+  members,
+  onDeleteMember,
+  selectedMemberId,
+}: FilterMemberCarouselProps) {
+  const [carouselApi, setCarouselApi] = React.useState<CarouselApi>();
+
+  useEffect(() => {
+    if (!carouselApi || !selectedMemberId) return;
+
+    const selectedIndex = members.findIndex(
+      (member) => member.id === selectedMemberId
+    );
+
+    if (selectedIndex !== -1) {
+      carouselApi.scrollTo(selectedIndex);
+    }
+  }, [carouselApi, selectedMemberId, members]);
+
   return (
-    <Carousel className="max-h-screen max-w-3xl mx-auto flex flex-column justify-self-center-safe">
+    <Carousel
+      className="max-h-screen max-w-3xl mx-auto flex flex-column justify-self-center-safe"
+      setApi={setCarouselApi}
+    >
       <CarouselContent>
         {members.map((member) => (
           <CarouselItem key={member.id}>
             <div className="flex justify-between p-1 max-w-full gap-2">
               <Card className="w-full h-full bg-primary-background rounded-2xl">
                 <CardContent className="flex flex-col w-full p-5">
-                  
                   {/* Avatar and Member Info Section */}
                   <div className="flex mb-4">
-                    
                     {/* Avatar Section */}
                     <div className="flex max-h-full text-4xl">
                       <Avatar className="h-15 w-15">
@@ -49,12 +73,10 @@ export default function CarouselDemo( { members }: FilterMemberCarouselProps) {
                         <div className="ml-4 font-manrope font-semibold text-2xl text-foreground pb-2">
                           {member.name}
                         </div>
-                        <div>
-                          
-                          {/* Dropdown Menu */}
-                          <DropdownMenuDemo 
-                          onModerate={() => navigator.clipboard.writeText(member.id)}/>
-                        </div>
+                        <DropdownMenuDemo
+                          member={member}
+                          onDeleteMember={onDeleteMember}
+                        />
                       </div>
 
                       {/* Details Section */}
@@ -74,20 +96,16 @@ export default function CarouselDemo( { members }: FilterMemberCarouselProps) {
 
                   {/* Three Column Info Section */}
                   <div className="flex gap-x-20 w-full mb-4">
-                    
                     {/* Info Section */}
                     <div className="flex flex-col flex-1">
-                      {/* Info Header */}
                       <div className="border-b border-black inline-block pt-4 font-manrope text-center font-semibold text-2xl text-foreground p-2">
                         Info
                       </div>
-
-                      {/* Info Content */}
                       <div className="p-3 space-y-2 flex flex-wrap justify-center">
                         <Button className="px-3 py-2 w-[200px] h-fit font-sora rounded-full bg-primary text-white whitespace-break-spaces break-words">
                           Subsystem: {member.subsystem}
                         </Button>
-                        <Button className="px-3  w-[200px] py-2 font-sora rounded-full bg-primary text-white">
+                        <Button className="px-3 w-[200px] py-2 font-sora rounded-full bg-primary text-white">
                           Join Date: {member.joinDate}
                         </Button>
                         <Button className="px-3 w-[200px] py-2 font-sora rounded-full bg-primary text-white">
@@ -104,32 +122,23 @@ export default function CarouselDemo( { members }: FilterMemberCarouselProps) {
 
                     {/* Tasks Section */}
                     <div className="flex flex-col flex-1">
-                      {/* Tasks Header */}
                       <div className="border-b border-black inline-block pt-4 font-manrope text-center font-semibold text-2xl text-foreground p-2">
                         Tasks
                       </div>
-
-                      {/* Tasks Information */}
                       <div className="flex p-2 max-w-full gap-4">
-                        <div className="w-4 h-4">
-                          <ListTodoIcon className="w-5 h-5" />
-                        </div>
+                        
+                        {/* Tasks Info */}
+                        <ListTodoIcon className="w-5 h-5" />
                         <div className="text-sora text-sm">
                           Create ToDo List on Saturday, October 32nd
                         </div>
                       </div>
-
                       <div className="flex p-2 max-w-full gap-4">
-                        <div className="w-4 h-4">
-                          <ListTodoIcon className="w-5 h-5" />
-                        </div>
+                        <ListTodoIcon className="w-5 h-5" />
                         <div className="text-sora text-sm">Create member portal</div>
                       </div>
-
                       <div className="flex p-2 max-w-full gap-4">
-                        <div className="w-4 h-4">
-                          <ListTodoIcon className="w-5 h-5" />
-                        </div>
+                        <ListTodoIcon className="w-5 h-5" />
                         <div className="text-sora text-sm">Create thingy</div>
                       </div>
                     </div>
@@ -153,3 +162,4 @@ export default function CarouselDemo( { members }: FilterMemberCarouselProps) {
     </Carousel>
   );
 }
+

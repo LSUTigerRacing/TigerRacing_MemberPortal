@@ -8,21 +8,23 @@ import { TableProperties, FunnelIcon, SearchIcon, GalleryHorizontalIcon } from '
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
+import type { System, Subsystem } from "@/components/dummyData/members";
 
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 
-import FilterDropdown from "@/components/ui/adminPortal/SearchBar/FilterDropdown"
-
+import FilterDropdown from "@/components/ui/adminPortal/SearchBar/FilterDropdown";
 
 export interface Navbar14Props extends React.HTMLAttributes<HTMLElement> {
   searchPlaceholder?: string;
   searchValue?: string;
   view: "column" | "gallery";
   setView: React.Dispatch<React.SetStateAction<"column" | "gallery">>;
+  sortOrder: "asc" | "desc";
+  setSortOrder: React.Dispatch<React.SetStateAction<"asc" | "desc">>;
   onFiltersChange: (filteredMembers: Member[]) => void;
   onSearchChange?: (value: string) => void;
 }
@@ -34,6 +36,8 @@ export const Navbar14 = React.forwardRef<HTMLElement, Navbar14Props>(
       searchPlaceholder = 'Search for members...',
       view,
       setView,
+      sortOrder,
+      setSortOrder,
       onFiltersChange,
       ...props
     },
@@ -41,11 +45,10 @@ export const Navbar14 = React.forwardRef<HTMLElement, Navbar14Props>(
   ) => {
     const id = useId();
 
-    {/* Consts for Filtering and Search */}
-    const [searchValue, setSearchValue] = React.useState("");
+    // Search and filtering state
+    const [searchValue, setSearchValue] = useState("");
     const [filteredItems, setFilteredItems] = useState<Member[]>([]);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
     const dropdownRef = useRef<HTMLDivElement>(null);
 
     const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,33 +59,26 @@ export const Navbar14 = React.forwardRef<HTMLElement, Navbar14Props>(
         member.name.toLowerCase().includes(value.toLowerCase())
       );
       setFilteredItems(filtered);
-
-      if (value.length > 0) {
-        setIsDropdownOpen(true);
-      }
+      if (value.length > 0) setIsDropdownOpen(true);
     };
 
-    {/* Dropdown Menu Click Outside */}
-
+    // Close dropdown when clicking outside
     useEffect(() => {
       function handleClickOutside(event: MouseEvent) {
-        if (
-          dropdownRef.current &&
-          !dropdownRef.current.contains(event.target as Node)
-        ) {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
           setIsDropdownOpen(false);
         }
       }
-
-      if (isDropdownOpen) {
-        document.addEventListener('mousedown', handleClickOutside);
-      }
-
-      return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
-      };
+      if (isDropdownOpen) document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [isDropdownOpen]);
 
+    const [filteredCount, setFilteredCount] = useState(0);
+    const [filters, setFilters] = useState({
+      selectedSystems: [] as System[],
+      selectedSubsystems: [] as Subsystem[],
+      selectedYears: [] as Member["grad"][],
+    });
 
     return (
       <header
@@ -91,7 +87,7 @@ export const Navbar14 = React.forwardRef<HTMLElement, Navbar14Props>(
         {...props}
       >
         <div className="flex h-16 items-center justify-between gap-4 pt-2">
-          {/* Left side: Filter button + input */}
+          {/* Left side: Filter button + search input */}
           <div className="flex items-center gap-2 flex-1 z-10">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -105,12 +101,20 @@ export const Navbar14 = React.forwardRef<HTMLElement, Navbar14Props>(
                   <FunnelIcon className="scale-115" aria-hidden="true" />
                 </Button>
               </DropdownMenuTrigger>
-             <DropdownMenuContent className="max-w-fit" align="start">
-              <FilterDropdown onFiltersChange={onFiltersChange} />
-             </DropdownMenuContent>
+              <DropdownMenuContent className="max-w-fit" align="start">
+                <FilterDropdown
+                  filters={filters}
+                  setFilters={setFilters}
+                  filteredCount={filteredCount}
+                  setFilteredCount={setFilteredCount}
+                  sortOrder={sortOrder}
+                  setSortOrder={setSortOrder}
+                  onFiltersChange={onFiltersChange}
+                />
+              </DropdownMenuContent>
             </DropdownMenu>
 
-            {/* Input with search icon */}
+            {/* Search Input */}
             <div className="relative flex-1 max-w-lg" ref={dropdownRef}>
               <Input
                 id={`input-${id}`}
@@ -148,21 +152,20 @@ export const Navbar14 = React.forwardRef<HTMLElement, Navbar14Props>(
             </div>
           </div>
 
-          {/* Right side: Layout button */}
-         
-              <Button
-                size="icon"
-                variant="ghost"
-                className="text-muted-foreground w-10 h-10 rounded-full shadow-none"
-                aria-label="Open layout menu"
-                onClick={() => view === "column" ? setView("gallery") : setView("column")}  
-              >
-              {view === "column" ? (
-                <GalleryHorizontalIcon className="scale-115" aria-hidden />) : (
-                <TableProperties className="scale-115" aria-hidden="true" />
-              )}
-              </Button>
-            
+          {/* Right side: View toggle button */}
+          <Button
+            size="icon"
+            variant="ghost"
+            className="text-muted-foreground w-10 h-10 rounded-full shadow-none"
+            aria-label="Toggle view"
+            onClick={() => setView(view === "column" ? "gallery" : "column")}
+          >
+            {view === "column" ? (
+              <GalleryHorizontalIcon className="scale-115" aria-hidden />
+            ) : (
+              <TableProperties className="scale-115" aria-hidden="true" />
+            )}
+          </Button>
         </div>
       </header>
     );

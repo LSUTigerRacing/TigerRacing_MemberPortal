@@ -4,6 +4,7 @@ import * as React from "react";
 import {
   type ColumnDef,
   type ColumnFiltersState,
+  type PaginationState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -13,10 +14,7 @@ import {
 } from "@tanstack/react-table";
 import type { SortingState, VisibilityState } from "@tanstack/react-table";
 
-import { Button } from "@/components/ui/button";
-
-import DropdownMenuDemo from "@/components/ui/adminPortal/dropdownMenu/dropdownMenu"
-
+import DropdownMenuDemo from "@/components/ui/adminPortal/dropdownMenu/dropdownMenu";
 import {
   Table,
   TableBody,
@@ -25,85 +23,78 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
-import { data, type Member } from "@/components/dummyData/members";
+import type { Member } from "@/components/dummyData/members";
 
 interface FilterMemberTableProps {
   members: Member[];
+  onDeleteMember: (memberId: string) => void;
+  onRowClick?: (rowId: string) => void;
 }
 
-export const columns: ColumnDef<Member>[] = [
-  {
-    accessorKey: "name",
-    header: () => <div className="text-center text-xl">Name</div>,
-    cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
-  },
-  {
-    accessorKey: "email",
-    header: () => <div className="text-center text-xl">Email</div>,
-    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
-  },
-  {
-    accessorKey: "year",
-    header: () => <div className="text-center text-xl">Class</div>,
-    cell: ({ row }) => <div className="capitalize">{row.getValue("year")}</div>,
-  },
-  {
-    accessorKey: "grad",
-    header: () => <div className="text-center text-xl">Grad Year</div>,
-    cell: ({ row }) => <div className="uppercase">{row.getValue("grad")}</div>,
-  },
-  {
-    accessorKey: "system",
-    header: () => <div className="text-center text-xl">System</div>,
-    cell: ({ row }) => (
-      <div className="caption-bottom">{row.getValue("system")}</div>
-    ),
-  },
-  {
-    id: "actions",
-    enableHiding: false,
-    header: () => null,
-    cell: ({ row }) => {
-      const members = row.original;
-
-      return (
-        <>
-          {/* Dropdown Menu */}
-            <DropdownMenuDemo 
-              onModerate={() => navigator.clipboard.writeText(members.id)}/>
-        </>
-      );
-    },
-  },
-];
-
-function MemberTable( {members}: FilterMemberTableProps) {
+export default function MemberTable({
+  members,
+  onDeleteMember,
+  onRowClick,
+}: FilterMemberTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
+  const [pagination, setPagination] = React.useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 8,
+  });
+
+  const columns: ColumnDef<Member>[] = [
+    {
+      accessorKey: "name",
+      header: () => <div className="text-center text-xl">Name</div>,
+      cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
+    },
+    {
+      accessorKey: "email",
+      header: () => <div className="text-center text-xl">Email</div>,
+      cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
+    },
+    {
+      accessorKey: "year",
+      header: () => <div className="text-center text-xl">Class</div>,
+      cell: ({ row }) => <div className="capitalize">{row.getValue("year")}</div>,
+    },
+    {
+      accessorKey: "grad",
+      header: () => <div className="text-center text-xl">Grad Year</div>,
+      cell: ({ row }) => <div className="uppercase">{row.getValue("grad")}</div>,
+    },
+    {
+      accessorKey: "system",
+      header: () => <div className="text-center text-xl">System</div>,
+      cell: ({ row }) => <div className="caption-bottom">{row.getValue("system")}</div>,
+    },
+    {
+      id: "actions",
+      enableHiding: false,
+      header: () => null,
+      cell: ({ row }) => (
+        <DropdownMenuDemo member={row.original} onDeleteMember={onDeleteMember} />
+      ),
+    },
+  ];
 
   const table = useReactTable({
     data: members,
     columns,
+    state: { sorting, columnFilters, columnVisibility, rowSelection, pagination },
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
+    onPaginationChange: setPagination,
     onRowSelectionChange: setRowSelection,
-    state: {
-      sorting,
-      columnFilters,
-      columnVisibility,
-      rowSelection,
-    },
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    manualPagination: false,
   });
 
   return (
@@ -119,9 +110,7 @@ function MemberTable( {members}: FilterMemberTableProps) {
                     header.getContext()
                   );
 
-                  if (header.id === "actions") {
-                    return <TableHead key={header.id}></TableHead>;
-                  }
+                  if (header.id === "actions") return <TableHead key={header.id}></TableHead>;
 
                   return (
                     <TableHead key={header.id} className="px-3 text-center text-xl">
@@ -138,12 +127,13 @@ function MemberTable( {members}: FilterMemberTableProps) {
           </TableHeader>
 
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {table.getRowModel().rows.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                   className="border-b border-primary/10 hover:bg-accent hover:text-accent-foreground"
+                  onClick={() => onRowClick?.(row.original.id)}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id} className="py-4 text-center text-lg">
@@ -154,7 +144,7 @@ function MemberTable( {members}: FilterMemberTableProps) {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24">
+                <TableCell colSpan={columns.length} className="h-24 text-center">
                   No results.
                 </TableCell>
               </TableRow>
@@ -163,31 +153,73 @@ function MemberTable( {members}: FilterMemberTableProps) {
         </Table>
       </div>
 
-      <div className="mt-4 px-4 flex justify-between items-center text-xl space-x-2">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Previous
-        </Button>
-
-        <div className="text-muted-foreground flex text-center text-sm">
-          1 of 10 row(s) shown.
+      {/* Navigation of Pages Buttons */}
+      <div className="mt-4 px-4 flex justify-center text-xl space-x-2">
+        <div className="flex justify-between gap-2">
+          <button
+            className="border rounded p-1 hover:bg-accent hover:text-accent-foreground"
+            onClick={() => table.firstPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            {"<<"}
+          </button>
+          <button
+            className="border rounded p-1 hover:bg-accent hover:text-accent-foreground"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            {"<"}
+          </button>
         </div>
 
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Next
-        </Button>
+        <div className="flex gap-4 items-center">
+          <div className="flex gap-2 items-center">
+            <span className="flex gap-1">
+              <div className="font-sora text-sm">Page</div>
+              <strong className="font-sora text-sm">
+                {table.getState().pagination.pageIndex + 1} of{" "}
+                {table.getPageCount().toLocaleString()}
+              </strong>
+            </span>
+            <span className="flex items-center font-sora text-sm gap-1">
+              | Go to page:
+              <input
+                type="number"
+                min={1}
+                max={table.getPageCount()}
+                defaultValue={table.getState().pagination.pageIndex + 1}
+                onChange={(e) => {
+                  const page = e.target.value ? Number(e.target.value) - 1 : 0;
+                  table.setPageIndex(page);
+                }}
+                className="border p-1 rounded w-10"
+              />
+            </span>
+          </div>
+
+          <div className="text-gray-400 font-sora text-sm">
+            Showing {table.getRowModel().rows.length.toLocaleString()} of{" "}
+            {table.getRowCount().toLocaleString()} Rows
+          </div>
+        </div>
+
+        <div className="flex justify-end gap-2">
+          <button
+            className="border rounded p-1 hover:bg-accent hover:text-accent-foreground"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
+            {">"}
+          </button>
+          <button
+            className="border rounded p-1 hover:bg-accent hover:text-accent-foreground"
+            onClick={() => table.lastPage()}
+            disabled={!table.getCanNextPage()}
+          >
+            {">>"}
+          </button>
+        </div>
       </div>
     </div>
   );
 }
-
-export default MemberTable;
