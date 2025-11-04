@@ -42,6 +42,9 @@ database/.branches
 # Ignore any .temp folders or files
 **/.temp/
 *.temp
+*.db
+*.sqlite
+*.sqlite3
 
 # Logs
 logs/

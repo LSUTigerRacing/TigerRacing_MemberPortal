@@ -55,3 +55,4 @@ database/
 These files **do NOT** necessarily represent the SQL code on the Supabase. Note that the Supabase contains the real, working database, while this folder acts as a source of truth (SoT).
 
 **However**, the remote database **should NOT** be accessed directly. The GitHub Actions automated workflow will move all changes in main to Supabase automatically after PR merge.
+https://supabase.com/docs/guides/local-development/cli/getting-started?queryGroups=platform&platform=macos
