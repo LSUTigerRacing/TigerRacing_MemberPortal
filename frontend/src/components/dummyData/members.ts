@@ -14,7 +14,8 @@ export type Member = {
 }
 
 export const subsystemCategories = {
-  Powertrain: ["Electronics", "Battery", "Controls", "Low Voltage", "Tractive System"],
+  Powertrain: ["Electronics", "Battery", "Low Voltage", "Tractive System"],
+  Software: ["Embedded", "App Dev", "Daq"],
   Chassis: ["Frame", "Aero", "Ergo", "Brakes", "Suspension", "Drivetrain"],
   Business: ["Financial", "General Business", "Public Relations"],
 } as const;
@@ -35,7 +36,6 @@ export const data: Member[] = [
     hazing: "Completed",
     dues: "Unpaid",
     shirtSize: "XXL",
-    other: "No other data"
   },
   {
     id: "3u1reuv4",
@@ -55,9 +55,9 @@ export const data: Member[] = [
     year: "Junior",
     name: "Ricky Liang",
     grad: "2026",
-    system: ["Powertrain"],
+    system: ["Software"],
     email: "Monserrat44@example.com",
-    subsystem: ["Controls"],
+    subsystem: ["Daq"],
     joinDate: "2023-09-01",
     hazing: "Completed",
     dues: "Paid",
@@ -81,9 +81,9 @@ export const data: Member[] = [
     year: "Senior+",
     name: "Harry Potter",
     grad: "2030+",
-    system: ["Business"],
+    system: ["Software"],
     email: "carmella@example.com",
-    subsystem: ["General Business"],
+    subsystem: ["Embedded"],
     joinDate: "2023-09-01",
     hazing: "Completed",
     dues: "Paid",
@@ -133,9 +133,9 @@ export const data: Member[] = [
     year: "Freshman",
     grad: "2027",
     name: "Rachael Bergeron",
-    system: ["Powertrain"],
+    system: ["Software"],
     email: "carmella@example.com",
-    subsystem: ["Controls"],
+    subsystem: ["App Dev"],
     joinDate: "2023-09-01",
     hazing: "Completed",
     dues: "Paid",

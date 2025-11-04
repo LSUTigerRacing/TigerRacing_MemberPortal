@@ -41,7 +41,7 @@ const UserMenu = ({
     <DropdownMenuTrigger asChild>
       <Button
         variant="ghost"
-        className="group p-0 rounded-full hover:bg-transparent text-foreground focus:ring-2 focus:ring-primary focus:ring-offset-2"
+        className="group p-0 rounded-full hover:bg-transparent text-foreground"
         aria-label="User menu"
       >
         <Avatar className="h-10 w-10 flex items-center justify-center rounded-full overflow-hidden bg-primary group-hover:bg-primary/80">

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Circle } from "lucide-react";
 
 import { data, subsystemCategories } from "@/components/dummyData/members";
@@ -6,20 +6,33 @@ import type { System, Subsystem, Member } from "@/components/dummyData/members";
 
 interface FilterDropdownProps {
   onFiltersChange: (filteredMembers: Member[]) => void;
+  filters: {
+    selectedSystems: System[];
+    selectedSubsystems: Subsystem[];
+    selectedYears: Member["grad"][];
+  };
+  setFilters: React.Dispatch<
+    React.SetStateAction<{
+      selectedSystems: System[];
+      selectedSubsystems: Subsystem[];
+      selectedYears: Member["grad"][];
+    }>
+  >;
+  filteredCount: number;
+  setFilteredCount: React.Dispatch<React.SetStateAction<number>>;
+  sortOrder: "asc" | "desc";
+  setSortOrder: React.Dispatch<React.SetStateAction<"asc" | "desc">>;
 }
 
-const FilterDropdown = ({ onFiltersChange }: FilterDropdownProps) => {
-
-  // States and Constants
-  
-  const [filteredCount, setFilteredCount] = useState(0);
-  const [filters, setFilters] = useState({
-    selectedSystems: [] as System[],
-    selectedSubsystems: [] as Subsystem[],
-    selectedYears: [] as Member["grad"][],
-  });
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
-
+const FilterDropdown = ({
+  onFiltersChange,
+  filters,
+  setFilters,
+  filteredCount,
+  setFilteredCount,
+  sortOrder,
+  setSortOrder,
+}: FilterDropdownProps) => {
   // Derived Data (Filtered Members)
 
   const filteredMembers = data.filter((member) => {
