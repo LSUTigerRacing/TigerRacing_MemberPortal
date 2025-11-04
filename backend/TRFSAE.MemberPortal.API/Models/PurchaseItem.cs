@@ -1,6 +1,7 @@
 using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
 
+
 namespace TRFSAE.MemberPortal.API.Models
 {
     [Table("purchase_item")]
@@ -10,7 +11,7 @@ namespace TRFSAE.MemberPortal.API.Models
         public Guid Id { get; set; }
 
         [Column("requester")]
-        public Guid Requester { get; set; }
+        public Guid? Requester { get; set; }
 
         [Column("part_url")]
         public string PartUrl { get; set; } = string.Empty;
@@ -56,9 +57,6 @@ namespace TRFSAE.MemberPortal.API.Models
 
         [Column("request_id")]
         public Guid? RequestId { get; set; }
-
-        [Column("subtotal")]
-        public decimal? Subtotal { get; set; }
 
         [Column("approvals")]
         public bool[]? Approvals { get; set; }
