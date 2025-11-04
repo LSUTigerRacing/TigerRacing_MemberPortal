@@ -14,7 +14,7 @@ namespace TRFSAE.MemberPortal.API.Services
         {
             _supabaseClient = supabaseClient;
         }
-        public async Task<List<PurchaseItemResponseDto>> GetAllPurchaseItemsAsync(PurchaseItemSearchDto dto)
+        public async Task<List<PurchaseItemResponseDto>> GetAllPurchaseItemsAsync(PurchaseItemSearchDto searchDto)
         {
             var response = await _supabaseClient
         .From<PurchaseItemModel>()
@@ -37,11 +37,35 @@ namespace TRFSAE.MemberPortal.API.Services
             return MapToDto(response);
         }
 
-        public async Task<PurchaseItemResponseDto> CreatePurchaseItemAsync(PurchaseItemCreateDto dto)
+        public async Task<PurchaseItemResponseDto> CreatePurchaseItemAsync(PurchaseItemCreateDto createDto)
         {
-            var newModel = MapToModel(dto);
-            if (newModel.Id == Guid.Empty) newModel.Id = Guid.NewGuid();
-            if (newModel.CreatedAt == default) newModel.CreatedAt = DateTime.UtcNow;
+
+            var newModel = MapToModel(createDto);
+            
+            if(string.IsNullOrWhiteSpace(newModel.PartUrl))
+            {
+                newModel.PartUrl = "https://example.com";
+            }
+
+            if(string.IsNullOrWhiteSpace(newModel.PartName))
+            {
+                newModel.PartName = "Unamed Part";
+            }
+
+            if(newModel.Id == Guid.Empty)
+            {
+                newModel.Id = Guid.NewGuid();
+            }
+
+            if (newModel.CreatedAt == default) 
+            {
+                newModel.CreatedAt = DateTime.UtcNow;
+            }
+
+            if(newModel.OrderDate == null)
+            {
+                newModel.OrderDate = DateTime.UtcNow;
+            }
 
             var insert = await _supabaseClient
                 .From<PurchaseItemModel>()
@@ -52,28 +76,29 @@ namespace TRFSAE.MemberPortal.API.Services
 
             return MapToDto(insert.Models.First());
         }
-        public async Task<PurchaseItemResponseDto> UpdatePurchaseItemByIDAsync(Guid id, PurchaseItemUpdateDto dto)
+
+        public async Task<PurchaseItemResponseDto> UpdatePurchaseItemByIDAsync(Guid id, PurchaseItemUpdateDto updateDto)
         {
             var updates = new Dictionary<string, object?>();
 
             updates["id"] = id;
-            if (dto.Requester != Guid.Empty) updates["requester"] = dto.Requester;
-            if (!string.IsNullOrWhiteSpace(dto.PartUrl)) updates["part_url"] = dto.PartUrl;
-            if (!string.IsNullOrWhiteSpace(dto.PartName)) updates["part_name"] = dto.PartName;
-            if (dto.ManufacturerPtNo != 0) updates["manufacturer_pt_no"] = dto.ManufacturerPtNo;
-            if (dto.UnitPrice > 0) updates["unit_price"] = dto.UnitPrice;
-            if (dto.Quantity > 0) updates["quantity"] = dto.Quantity;
-            if (!string.IsNullOrWhiteSpace(dto.Supplier)) updates["supplier"] = dto.Supplier;
-            if (!string.IsNullOrWhiteSpace(dto.Status)) updates["status"] = dto.Status;
-            if (dto.Notes != null) updates["notes"] = dto.Notes;
-            if (dto.NeededBy != null) updates["needed_by"] = dto.NeededBy;
-            if (!string.IsNullOrWhiteSpace(dto.PoNumber)) updates["po_no"] = dto.PoNumber;
-            if (dto.OrderDate != null) updates["order_date"] = dto.OrderDate;
-            if (dto.OrderReceivedDate != null) updates["order_received_date"] = dto.OrderReceivedDate;
-            if (!string.IsNullOrWhiteSpace(dto.OrderActiveStatus)) updates["order_active_status"] = dto.OrderActiveStatus;
-            if (dto.RequestId != null) updates["request_id"] = dto.RequestId;
-            if (dto.Subtotal != null) updates["subtotal"] = dto.Subtotal;
-            if (dto.Approvals != null) updates["approvals"] = dto.Approvals;
+            if (updateDto.Requester != Guid.Empty) updates["requester"] = updateDto.Requester;
+            if (!string.IsNullOrWhiteSpace(updateDto.PartUrl)) updates["part_url"] = updateDto.PartUrl;
+            if (!string.IsNullOrWhiteSpace(updateDto.PartName)) updates["part_name"] = updateDto.PartName;
+            if (updateDto.ManufacturerPtNo != 0) updates["manufacturer_pt_no"] = updateDto.ManufacturerPtNo;
+            if (updateDto.UnitPrice > 0) updates["unit_price"] = updateDto.UnitPrice;
+            if (updateDto.Quantity > 0) updates["quantity"] = updateDto.Quantity;
+            if (!string.IsNullOrWhiteSpace(updateDto.Supplier)) updates["supplier"] = updateDto.Supplier;
+            if (!string.IsNullOrWhiteSpace(updateDto.Status)) updates["status"] = updateDto.Status;
+            if (updateDto.Notes != null) updates["notes"] = updateDto.Notes;
+            if (updateDto.NeededBy != null) updates["needed_by"] = updateDto.NeededBy;
+            if (!string.IsNullOrWhiteSpace(updateDto.PoNumber)) updates["po_no"] = updateDto.PoNumber;
+            if (updateDto.OrderDate != null) updates["order_date"] = updateDto.OrderDate;
+            if (updateDto.OrderReceivedDate != null) updates["order_received_date"] = updateDto.OrderReceivedDate;
+            if (!string.IsNullOrWhiteSpace(updateDto.OrderActiveStatus)) updates["order_active_status"] = updateDto.OrderActiveStatus;
+            if (updateDto.RequestId != null) updates["request_id"] = updateDto.RequestId;
+            if (updateDto.Subtotal != null) updates["subtotal"] = updateDto.Subtotal;
+            if (updateDto.Approvals != null) updates["approvals"] = updateDto.Approvals;
             updates["updated_at"] = DateTime.UtcNow;
 
             var rpc = await _supabaseClient
@@ -111,7 +136,7 @@ namespace TRFSAE.MemberPortal.API.Services
             return new PurchaseItemResponseDto
             {
                 Id = m.Id,
-                Requester = m.Requester,
+                Requester = m.Requester ?? Guid.Empty,
                 PartUrl = m.PartUrl,
                 PartName = m.PartName,
                 ManufacturerPtNo = m.ManufacturerPtNo,
@@ -127,29 +152,28 @@ namespace TRFSAE.MemberPortal.API.Services
                 OrderReceivedDate = m.OrderReceivedDate,
                 OrderActiveStatus = m.OrderActiveStatus,
                 RequestId = m.RequestId,
-                Subtotal = m.Subtotal,
                 Approvals = m.Approvals
             };
         }
 
-        private static PurchaseItemModel MapToModel(PurchaseItemCreateDto d)
+        private static PurchaseItemModel MapToModel(PurchaseItemCreateDto createDto)
         {
             return new PurchaseItemModel
             {
-                Requester = d.Requester,
-                PartUrl = d.PartUrl,
-                PartName = d.PartName,
-                ManufacturerPtNo = d.ManufacturerPtNo,
-                UnitPrice = d.UnitPrice,
-                Quantity = d.Quantity,
-                Supplier = d.Supplier,
-                Status = d.Status,
-                Notes = d.Notes,
-                NeededBy = d.NeededBy,
-                OrderActiveStatus = d.OrderActiveStatus,
-                RequestId = d.RequestId,
-                Subtotal = d.Subtotal,
-                Approvals = d.Approvals
+                Requester = createDto.Requester ?? Guid.Empty,
+                PartUrl = createDto.PartUrl,
+                PartName = createDto.PartName,
+                ManufacturerPtNo = createDto.ManufacturerPtNo,
+                UnitPrice = createDto.UnitPrice,
+                Quantity = createDto.Quantity,
+                Supplier = createDto.Supplier,
+                Status = createDto.Status,
+                Notes = createDto.Notes,
+                PoNo = createDto.PoNo,
+                NeededBy = createDto.NeededBy,
+                OrderActiveStatus = createDto.OrderActiveStatus,
+                RequestId = createDto.RequestId ?? Guid.Empty,
+                Approvals = createDto.Approvals
             };
         }
     }
