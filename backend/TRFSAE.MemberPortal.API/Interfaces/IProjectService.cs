@@ -8,6 +8,6 @@ public interface IProjectService
     // Task<ProjectResponseDto> UpdateUserProjectAsync(Guid userId, Guid projectId);
     // Task<List<ProjectResponseDto>> GetAllAssignedProjectsAsync(Guid id);
     Task<bool> CreateNewProjectAsync(CreateProjectDto createDto);
-
+    Task<bool> AssignProjectAsync(Guid userId, Guid projectId);
 
 }
