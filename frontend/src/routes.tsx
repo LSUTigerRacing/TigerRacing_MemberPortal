@@ -3,8 +3,8 @@ import { Routes, Route, Navigate } from "react-router-dom"
 
 // Public pages
 const Home = lazy(() => import('./pages/Home.tsx').then(module => ({ default: module.Home })))
-const Pages = lazy(() =>
-  import('@/pages/adminPortal/Pages.tsx').then(module => ({ default: module.PagesView }))
+const Members = lazy(() =>
+  import('@/pages/adminPortal/adPortalView.tsx').then(module => ({ default: module.PagesView }))
 );
 
 export const AppRoutes = () => {    
@@ -14,7 +14,7 @@ export const AppRoutes = () => {
             <Routes>
                 {/* public pages */}
                 <Route path="/" element={<Home />} />
-                <Route path="/pages" element={<Pages />} />
+                <Route path="/members" element={<Members />} />
 
                 {/* if they try to go elsewhere */}
                 <Route path="*" element={<Navigate to="/" replace/>}/>

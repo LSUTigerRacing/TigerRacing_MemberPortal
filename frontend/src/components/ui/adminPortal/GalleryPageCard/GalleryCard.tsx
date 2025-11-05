@@ -38,13 +38,13 @@ export default function CarouselDemo({
     );
 
     if (selectedIndex !== -1) {
-      carouselApi.scrollTo(selectedIndex);
+      carouselApi.scrollTo(selectedIndex, true);
     }
   }, [carouselApi, selectedMemberId, members]);
 
   return (
     <Carousel
-      className="max-h-screen max-w-3xl mx-auto flex flex-column justify-self-center-safe"
+      className="max-h-screen max-w-3xl mx-auto flex flex-column justify-self-center-safe mt-6"
       setApi={setCarouselApi}
     >
       <CarouselContent>
@@ -122,23 +122,32 @@ export default function CarouselDemo({
 
                     {/* Tasks Section */}
                     <div className="flex flex-col flex-1">
+                      {/* Tasks Header */}
                       <div className="border-b border-black inline-block pt-4 font-manrope text-center font-semibold text-2xl text-foreground p-2">
                         Tasks
                       </div>
+
+                      {/* Tasks Information */}
                       <div className="flex p-2 max-w-full gap-4">
-                        
-                        {/* Tasks Info */}
-                        <ListTodoIcon className="w-5 h-5" />
+                        <div className="w-4 h-4">
+                          <ListTodoIcon className="w-5 h-5" />
+                        </div>
                         <div className="text-sora text-sm">
                           Create ToDo List on Saturday, October 32nd
                         </div>
                       </div>
+
                       <div className="flex p-2 max-w-full gap-4">
-                        <ListTodoIcon className="w-5 h-5" />
+                        <div className="w-4 h-4">
+                          <ListTodoIcon className="w-5 h-5" />
+                        </div>
                         <div className="text-sora text-sm">Create member portal</div>
                       </div>
+
                       <div className="flex p-2 max-w-full gap-4">
-                        <ListTodoIcon className="w-5 h-5" />
+                        <div className="w-4 h-4">
+                          <ListTodoIcon className="w-5 h-5" />
+                        </div>
                         <div className="text-sora text-sm">Create thingy</div>
                       </div>
                     </div>

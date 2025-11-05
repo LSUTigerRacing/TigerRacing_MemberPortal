@@ -154,7 +154,7 @@ export default function MemberTable({
       </div>
 
       {/* Navigation of Pages Buttons */}
-      <div className="mt-4 px-4 flex justify-center text-xl space-x-2">
+      <div className="mt-4 px-4 flex justify-center text-xl space-x-2 fixed bottom-7 left-1/2 transform -translate-x-1/2">
         <div className="flex justify-between gap-2">
           <button
             className="border rounded p-1 hover:bg-accent hover:text-accent-foreground"
@@ -172,7 +172,7 @@ export default function MemberTable({
           </button>
         </div>
 
-        <div className="flex gap-4 items-center">
+        <div className="flex gap-4 items-center relative">
           <div className="flex gap-2 items-center">
             <span className="flex gap-1">
               <div className="font-sora text-sm">Page</div>

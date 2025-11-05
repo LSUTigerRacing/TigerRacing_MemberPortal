@@ -62,7 +62,7 @@ export const Navbar14 = React.forwardRef<HTMLElement, Navbar14Props>(
       if (value.length > 0) setIsDropdownOpen(true);
     };
 
-    // Close dropdown when clicking outside
+    // Use effects for clicking outside
     useEffect(() => {
       function handleClickOutside(event: MouseEvent) {
         if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -87,7 +87,7 @@ export const Navbar14 = React.forwardRef<HTMLElement, Navbar14Props>(
         {...props}
       >
         <div className="flex h-16 items-center justify-between gap-4 pt-2">
-          {/* Left side: Filter button + search input */}
+          {/* Left side: Filter button + input */}
           <div className="flex items-center gap-2 flex-1 z-10">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -114,7 +114,7 @@ export const Navbar14 = React.forwardRef<HTMLElement, Navbar14Props>(
               </DropdownMenuContent>
             </DropdownMenu>
 
-            {/* Search Input */}
+            {/* Input and Search */}
             <div className="relative flex-1 max-w-lg" ref={dropdownRef}>
               <Input
                 id={`input-${id}`}
@@ -152,13 +152,13 @@ export const Navbar14 = React.forwardRef<HTMLElement, Navbar14Props>(
             </div>
           </div>
 
-          {/* Right side: View toggle button */}
+          {/* Right side: Layout button */}
           <Button
             size="icon"
             variant="ghost"
             className="text-muted-foreground w-10 h-10 rounded-full shadow-none"
-            aria-label="Toggle view"
-            onClick={() => setView(view === "column" ? "gallery" : "column")}
+            aria-label="Open layout view"
+            onClick={() => view === "column" ? setView("gallery") : setView("column")}
           >
             {view === "column" ? (
               <GalleryHorizontalIcon className="scale-115" aria-hidden />
