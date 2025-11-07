@@ -38,7 +38,7 @@ export default function CarouselDemo({
     );
 
     if (selectedIndex !== -1) {
-      carouselApi.scrollTo(selectedIndex, true);
+      carouselApi.scrollTo(selectedIndex, true); // true stopped it from doing the crazy scroll thing
     }
   }, [carouselApi, selectedMemberId, members]);
 
