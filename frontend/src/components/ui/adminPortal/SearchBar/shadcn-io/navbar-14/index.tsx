@@ -27,6 +27,7 @@ export interface Navbar14Props extends React.HTMLAttributes<HTMLElement> {
   setSortOrder: React.Dispatch<React.SetStateAction<"asc" | "desc">>;
   onFiltersChange: (filteredMembers: Member[]) => void;
   onSearchChange?: (value: string) => void;
+  onDropdownSelect: (memberId: string) => void; 
 }
 
 export const Navbar14 = React.forwardRef<HTMLElement, Navbar14Props>(
@@ -39,6 +40,7 @@ export const Navbar14 = React.forwardRef<HTMLElement, Navbar14Props>(
       sortOrder,
       setSortOrder,
       onFiltersChange,
+      onDropdownSelect,
       ...props
     },
     ref
@@ -87,6 +89,7 @@ export const Navbar14 = React.forwardRef<HTMLElement, Navbar14Props>(
         {...props}
       >
         <div className="flex h-16 items-center justify-between gap-4 pt-2">
+
           {/* Left side: Filter button + input */}
           <div className="flex items-center gap-2 flex-1 z-10">
             <DropdownMenu>
@@ -124,18 +127,23 @@ export const Navbar14 = React.forwardRef<HTMLElement, Navbar14Props>(
                 value={searchValue}
                 onChange={handleSearch}
                 onFocus={() => searchValue && setIsDropdownOpen(true)}
+                autoComplete='off'
               />
               <div className="absolute inset-y-0 left-0 flex items-center pl-2 text-muted-foreground/80">
                 <SearchIcon size={16} />
               </div>
 
               {isDropdownOpen && searchValue && (
-                <div className="absolute mt-1 top-full bg-white">
+                <div className="absolute mt-1 top-full w-full shadow bg-white">
                   {filteredItems.length > 0 ? (
                     filteredItems.map((member) => (
                       <div
                         key={member.id}
-                        className="px-4 py-2 hover:bg-accent cursor-pointer"
+                        className="px-4 py-2 border-b border-muted-foreground/30 rounded hover:bg-accent cursor-pointer"
+                        onClick={() => {
+                          onDropdownSelect(member.id);
+                          setIsDropdownOpen(false);
+                        }}
                       >
                         <ul>
                           <li>{member.name}</li>

@@ -24,6 +24,11 @@ export const PagesView = () => {
     setSelectedMemberId(rowId);
   };
 
+  const dropdownSelect = (memberId: string) => {
+    setView("gallery");
+    setSelectedMemberId(memberId);
+  }
+
   return (
     <>
       <Navbar06 />
@@ -33,6 +38,8 @@ export const PagesView = () => {
         sortOrder={sortOrder}
         setSortOrder={setSortOrder}
         onFiltersChange={setFilteredMembers}
+        onDropdownSelect={dropdownSelect}
+
       />
 
       {view === "column" ? (
