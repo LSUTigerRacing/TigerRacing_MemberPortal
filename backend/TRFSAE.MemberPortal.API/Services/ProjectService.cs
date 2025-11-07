@@ -112,6 +112,7 @@ public class ProjectService : IProjectService
 
     public async Task<bool> AssignProjectAsync(Guid userId, Guid projectId)
     {
+        
         var response = await _supabaseClient
             .From<UserProjectModel>()
             .Where(x => x.UserId == userId && x.ProjectId == projectId)
@@ -137,22 +138,20 @@ public class ProjectService : IProjectService
 
         };
 
-
-         try
+        try
         {
             await _supabaseClient
                 .From<UserProjectModel>()
-                .Insert(newUserProject);
+                .Insert(new[] { newUserProject });
 
             return true;
-
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Error creating user project: {ex.Message}");
             return false;
         }
-        
+
         
     }
     
