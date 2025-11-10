@@ -7,7 +7,6 @@ import jsxA11y from "eslint-plugin-jsx-a11y";
 import react from "eslint-plugin-react";
 import stylistic from "@stylistic/eslint-plugin";
 import reactHooks from "eslint-plugin-react-hooks";
-import reactRefresh from "eslint-plugin-react-refresh";
 
 import globals from "globals";
 
@@ -16,7 +15,6 @@ export default defineConfig(
     js.configs.recommended,
     ...tseslint.configs.recommended,
     ...tseslint.configs.stylistic,
-    reactRefresh.configs.vite,
     reactHooks.configs.flat.recommended,
     stylistic.configs.customize({
         indent: 4,
