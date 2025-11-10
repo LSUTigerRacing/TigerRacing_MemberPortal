@@ -30,15 +30,7 @@ import {
     CardHeader,
     CardTitle
 } from "@/components/ui/card";
-import {
-    Dialog,
-    DialogClose,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle
-} from "@/components/ui/dialog";
+import { Dialog } from "@/components/ui/dialog";
 import {
     Empty,
     EmptyHeader,
@@ -97,48 +89,6 @@ import {
     TooltipTrigger
 } from "@/components/ui/tooltip";
 
-enum OrderStatus {
-    Pending,
-    Denied,
-    Approved,
-    Completed
-}
-
-interface Order {
-    id: string
-    requester: string
-    partName: string
-    partNumber: string
-    url: string
-    status: OrderStatus
-    approvals: [boolean | null, boolean | null, boolean | null]
-}
-
-interface OrderDetails extends Order {
-    subsystem: string
-    supplier: string
-    quantity: number
-    unitPrice: number
-    deadline: string
-    notes: string
-}
-
-/**
- * Circle colors.
- */
-enum Colors {
-    RED = "oklch(63.7% 0.237 25.331)", // text-red-500
-    GREEN = "oklch(72.3% 0.219 149.579)", // text-green-500
-    GRAY = "oklch(55.1% 0.027 264.364)" // text-gray-500
-}
-
-enum OrderAction {
-    View,
-    Edit,
-    Approve,
-    Deny
-}
-
 const TABS: Array<{ name: string, value: "self" | "others" }> = [
     {
         name: "My Orders",
@@ -150,99 +100,11 @@ const TABS: Array<{ name: string, value: "self" | "others" }> = [
     }
 ];
 
-/**
- * @todo Export to common file.
- */
-const SYSTEMS: Record<string, string[]> = {
-    Chassis: [
-        "Frame",
-        "Aerodynamics",
-        "Ergonomics",
-        "Brakes",
-        "Suspension"
-    ],
-    Powertrain: [
-        "Battery",
-        "Electronics",
-        "Low Voltage",
-        "Controls",
-        "Tractive System"
-    ],
-    Business: ["Public Relations"]
-};
-
-/**
- * Fetch simple details of all orders.
- */
-async function getOrders<T = { admin: boolean, selfOrders: Order[], otherOrders: Order[] }> (): Promise<T | undefined> {
-    return {
-        admin: true,
-        selfOrders: [
-            {
-                id: "TR26-001",
-                requester: "Damien Vesper",
-                partName: "ESP32",
-                partNumber: "8261853",
-                url: "https://www.amazon.com/ESP-WROOM-32-Development-Microcontroller-Integrated-Compatible/dp/B08D5ZD528",
-                status: OrderStatus.Denied,
-                approvals: [true, false, null]
-            },
-            {
-                id: "TR26-002",
-                requester: "Ricky Liang",
-                partName: "Teensy",
-                partNumber: "435397",
-                status: OrderStatus.Pending,
-                approvals: [true, null, null]
-            }
-        ],
-        otherOrders: [
-            {
-                id: "TR26-003",
-                requester: "Alex Bui",
-                partName: "Raspberry Pi 3B+",
-                partNumber: "9308564",
-                status: OrderStatus.Approved,
-                approvals: [true, true, true]
-            },
-            {
-                id: "TR26-004",
-                requester: "Cardin Tran",
-                partName: "RFID Scanner",
-                partNumber: "045927",
-                status: OrderStatus.Completed,
-                approvals: [true, true, true]
-            }
-        ]
-    } as T;
-
-    // const res = await axios.get<T>("/api/orders/list", { withCredentials: true }).catch(err => console.error(err));
-    // return res?.data ?? undefined;
-}
-
 // TEMP
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function getOrderDetails (id: Order["id"]): Promise<OrderDetails | undefined> {
     const res = await axios.get<OrderDetails>(`/api/orders/info?id=${id}`, { withCredentials: true }).catch(err => console.error(err));
     return res?.data ?? undefined;
-}
-
-function OrderBadge (props: { order: Order | undefined }): ReactElement<{ order: Order }> {
-    if (!props.order) return (<></>);
-    return (
-        <Badge className={`uppercase ms-2 ${props.order.status === OrderStatus.Approved || props.order.status === OrderStatus.Completed ? "bg-green-500" : props.order.status === OrderStatus.Denied ? "bg-red-500" : "bg-gray-500"}`}>
-            {
-                // In the name of reducing payload size...
-                props.order.status === OrderStatus.Completed
-                    ? "Completed"
-                    : props.order.status === OrderStatus.Approved
-                        ? "Approved"
-                        : props.order.status === OrderStatus.Denied
-                            ? "Denied"
-                            : "Pending"
-            }
-        </Badge>
-    );
 }
 
 /**
@@ -682,137 +544,6 @@ export default function Orders (): ReactElement {
                     }
                 </SheetContent>
             </Sheet>
-            <form>
-                <DialogContent className="xl:max-w-4xl">
-                    <DialogHeader>
-                        <DialogTitle>Create Order Request</DialogTitle>
-                        <DialogDescription>
-                            Request a part for your subsystem.
-                        </DialogDescription>
-                    </DialogHeader>
-                    <div className="flex flex-col xl:grid xl:grid-cols-2 gap-6">
-                        <div className="grid gap-6">
-                            <div className="grid grid-cols-3 gap-3">
-                                <div className="grid col-span-2 gap-3">
-                                    <Label htmlFor="order-part-name">Part Name</Label>
-                                    <Input id="order-part-name" placeholder="ESP32" required />
-                                </div>
-                                <div className="grid gap-3">
-                                    <Label htmlFor="order-part-number">Part Number</Label>
-                                    <Input id="order-part-number" placeholder="435397" required />
-                                </div>
-                            </div>
-                            <div className="grid gap-3">
-                                <Label htmlFor="order-requester">Requester</Label>
-                                <Input id="order-requester" placeholder="Enter your name" required />
-                            </div>
-                            <div className="grid gap-3">
-                                <Label htmlFor="order-subsystem">Subsystem</Label>
-                                <Select required>
-                                    <SelectTrigger className="w-full">
-                                        <SelectValue id="order-subsystem" placeholder="Select a subsystem" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectGroup>
-                                            {Object.entries(SYSTEMS).map(([system, subsystems], i) => (
-                                                <>
-                                                    <SelectLabel key={i}>{system}</SelectLabel>
-                                                    {subsystems.map((x, i) => <SelectItem key={i} value={x.toLowerCase()}>{x}</SelectItem>)}
-                                                </>
-                                            ))}
-                                        </SelectGroup>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                        </div>
-                        <div className="grid gap-6">
-                            <div className="grid grid-cols-3 gap-3 col-span-3">
-                                <div className="grid gap-3 col-span-2">
-                                    <Label htmlFor="order-supplier">Supplier</Label>
-                                    <Input id="order-supplier" placeholder="Amazon" required />
-                                </div>
-                                <div className="grid gap-3">
-                                    <Label htmlFor="order-deadline">Needed By</Label>
-                                    <Popover open={deadlineOpen} onOpenChange={setDeadlineOpen}>
-                                        <PopoverTrigger asChild>
-                                            <Button
-                                                variant="outline"
-                                                id="date"
-                                                className="justify-between font-normal"
-                                            >
-                                                {deadlineDate?.toLocaleDateString() ?? "Select date"}
-                                                <ChevronDownIcon />
-                                            </Button>
-                                        </PopoverTrigger>
-                                        <PopoverContent className="overflow-hidden p-0 w-full" align="start">
-                                            <Calendar
-                                                id="order-deadline"
-                                                mode="single"
-                                                selected={deadlineDate}
-                                                captionLayout="dropdown"
-                                                onSelect={date => {
-                                                    setDeadlineDate(date);
-                                                    setDeadlineOpen(false);
-                                                }}
-                                                required
-                                            />
-                                        </PopoverContent>
-                                    </Popover>
-                                </div>
-                            </div>
-                            <div className="grid gap-3 col-span-3">
-                                <Label htmlFor="order-supplier">Product URL</Label>
-                                <Input id="order-supplier" type="url" placeholder="https://www.amazon.com/ESP-WROOM-32-Development-Microcontroller-Integrated-Compatible/dp/B08D5ZD528" required />
-                            </div>
-                            <div className="grid grid-cols-3 gap-3 col-span-3">
-                                <div className="grid gap-3">
-                                    <Label htmlFor="order-supplier">Quantity</Label>
-                                    <ButtonGroup>
-                                        <ButtonGroupText asChild>
-                                            <Label htmlFor="order-quantity">#</Label>
-                                        </ButtonGroupText>
-                                        <InputGroup>
-                                            <InputGroupInput id="order-quantity" type="number" placeholder="1" min={1} required />
-                                        </InputGroup>
-                                    </ButtonGroup>
-                                </div>
-                                <div className="grid gap-3">
-                                    <Label htmlFor="order-supplier">Unit Price</Label>
-                                    <ButtonGroup>
-                                        <ButtonGroupText asChild>
-                                            <Label htmlFor="order-unit-price">$</Label>
-                                        </ButtonGroupText>
-                                        <InputGroup>
-                                            <InputGroupInput id="order-unit-price" type="number" placeholder="0.01" min={0.01} required />
-                                        </InputGroup>
-                                    </ButtonGroup>
-                                </div>
-                                <div className="grid gap-3">
-                                    <Label htmlFor="order-supplier">Subtotal</Label>
-                                    <ButtonGroup>
-                                        <ButtonGroupText asChild>
-                                            <Label htmlFor="order-unit-price">$</Label>
-                                        </ButtonGroupText>
-                                        <InputGroup>
-                                            <InputGroupInput id="order-unit-price" type="number" placeholder="0.01" min={0.01} disabled />
-                                        </InputGroup>
-                                    </ButtonGroup>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="grid gap-3 col-span-2">
-                            <Label htmlFor="order-notes">Notes</Label>
-                            <Textarea id="order-notes" className="resize-none" placeholder="Enter any additional notes here" />
-                        </div>
-                    </div>
-                    <DialogFooter>
-                        <DialogClose asChild>
-                            <Button variant="outline">Cancel</Button>
-                        </DialogClose>
-                        <Button type="submit">Create Request</Button>
-                    </DialogFooter>
-                </DialogContent>
-            </form>
         </Dialog>
     );
 }

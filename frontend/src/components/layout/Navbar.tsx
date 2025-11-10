@@ -22,6 +22,7 @@ import {
     type HTMLAttributes,
     type ImgHTMLAttributes,
     type ReactElement,
+    type SVGAttributes,
     useCallback,
     type ReactNode
 } from "react";
@@ -87,7 +88,7 @@ const Logo = (props: ImgHTMLAttributes<HTMLImageElement>) => {
     );
 };
 
-const HamburgerIcon = ({ className, ...props }: React.SVGAttributes<SVGElement>) => (
+const HamburgerIcon = ({ className, ...props }: SVGAttributes<SVGElement>) => (
     <svg
         className={cn("pointer-events-none", className)}
         width={16}
@@ -145,7 +146,7 @@ const NotificationMenu = ({
                 </div>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => onItemClick?.("dashboard")}>
+            <DropdownMenuItem onClick={() => onItemClick?.("/dashboard")}>
                 View all notifications
             </DropdownMenuItem>
         </DropdownMenuContent>
