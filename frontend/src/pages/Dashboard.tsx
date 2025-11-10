@@ -137,14 +137,14 @@ export function Dashboard (): ReactElement {
                     <div className="flex flex-col gap-2 h-full">
                         <SidebarButton title="Training Resources" url="/resources" icon={GraduationCap} />
                         <SidebarButton title="Documentation" url="/docs" icon={FileText} />
-                        <div className="flex-grow"></div>
+                        <div className="grow"></div>
                         <SidebarButton title="Admin" url="/admin" icon={UserCog} />
                     </div>
                 </CardContent>
             </Card>
 
             {/* Main Dashboard */}
-            <div className="sm:px-4 xl:p-8 flex-grow mt-16 overflow-auto">
+            <div className="sm:px-4 xl:p-8 grow mt-16 overflow-auto">
                 <div className="flex flex-col lg:flex-row gap-4">
                     <Card className="bg-primary border-primary text-background rounded-sm lg:max-w-xs px-4 pt-8">
                         <CardContent className="flex flex-col items-center">
@@ -157,7 +157,7 @@ export function Dashboard (): ReactElement {
                             <span className="mt-4 text-2xl">Hi, {data?.displayName ?? "Car McCarface"}!</span>
                         </CardContent>
                     </Card>
-                    <Card className="bg-primary border-primary text-background rounded-sm flex-grow">
+                    <Card className="bg-primary border-primary text-background rounded-sm grow">
                         <CardHeader className="flex flex-col items-center">
                             <h2 className="flex items-center">
                                 <ClipboardList className="me-2" />
@@ -186,7 +186,7 @@ export function Dashboard (): ReactElement {
                     </Card>
                 </div>
                 <div className="flex flex-col lg:flex-row gap-4 my-4">
-                    <Card className="bg-background text-foreground rounded-sm flex-grow">
+                    <Card className="bg-background text-foreground rounded-sm grow">
                         <CardHeader className="flex flex-col items-center">
                             <h2 className="flex items-center">
                                 <Megaphone className="me-2" />
@@ -211,7 +211,7 @@ export function Dashboard (): ReactElement {
                             }
                         </CardContent>
                     </Card>
-                    <Card className="bg-background text-foreground rounded-sm flex-grow">
+                    <Card className="bg-background text-foreground rounded-sm grow">
                         <CardHeader className="flex flex-col items-center">
                             <h2 className="flex items-center">
                                 <CalendarClock className="me-2" />
@@ -236,7 +236,7 @@ export function Dashboard (): ReactElement {
                             }
                         </CardContent>
                     </Card>
-                    <Card className="bg-background text-foreground rounded-sm flex-grow">
+                    <Card className="bg-background text-foreground rounded-sm grow">
                         <CardHeader className="flex flex-col items-center">
                             <h2 className="flex items-center">
                                 <CalendarDays className="me-2" />
