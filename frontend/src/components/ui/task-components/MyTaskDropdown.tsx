@@ -1,11 +1,7 @@
-import { useState } from "react";
-
 import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
     DropdownMenuContent,
-    DropdownMenuGroup,
-    DropdownMenuItem,
     DropdownMenuLabel,
     DropdownMenuTrigger,
     DropdownMenuRadioGroup,
@@ -13,26 +9,29 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { LucideChevronDown } from "lucide-react";
 
-export function FilterDropDown () {
-    const [selection, setSelection] = useState("Status");
+interface FilterDropDownProps {
+    onValueChange: (value: string) => void
+    selectedValue: string | null
+}
 
+export function FilterDropDown ({ onValueChange, selectedValue }: FilterDropDownProps) {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild className="">
-                <Button variant="ghost">
-                    {selection}
+                <Button variant="ghost" className="">
+                    {selectedValue}
                     <LucideChevronDown />
                 </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-45" align="start">
+            <DropdownMenuContent className="w-45 bg-white" align="start">
                 <DropdownMenuLabel>Slice by</DropdownMenuLabel>
-                <DropdownMenuRadioGroup value={selection} onValueChange={setSelection}>
+                <DropdownMenuRadioGroup value={selectedValue || ""} onValueChange={onValueChange}>
                     <DropdownMenuRadioItem value="Overall">Overall</DropdownMenuRadioItem>
                     <DropdownMenuRadioItem value="Assignee">Assignee</DropdownMenuRadioItem>
                     <DropdownMenuRadioItem value="Status">Status</DropdownMenuRadioItem>
                     <DropdownMenuRadioItem value="Priority">Priority</DropdownMenuRadioItem>
-                    <DropdownMenuRadioItem value="StartDate">Start Date</DropdownMenuRadioItem>
-                    <DropdownMenuRadioItem value="EndDate">End Date</DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="Start Date">Start Date</DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="End Date">End Date</DropdownMenuRadioItem>
                 </DropdownMenuRadioGroup>
             </DropdownMenuContent>
         </DropdownMenu>
