@@ -17,9 +17,9 @@ namespace TRFSAE.MemberPortal.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllPurchaseItemsAsync([FromQuery] PurchaseItemSearchDto? dto)
+        public async Task<IActionResult> GetAllPurchaseItemsAsync(PurchaseItemSearchDto? searchDto)
         {
-            var result = await _purchaseItemService.GetAllPurchaseItemsAsync(dto ?? new PurchaseItemSearchDto());
+            var result = await _purchaseItemService.GetAllPurchaseItemsAsync(searchDto ?? new PurchaseItemSearchDto());
             return Ok(result);
         }
 
@@ -31,16 +31,17 @@ namespace TRFSAE.MemberPortal.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreatePurchaseItemAsync(PurchaseItemCreateDto dto)
+        public async Task<IActionResult> CreatePurchaseItemAsync([FromBody] PurchaseItemCreateDto createDto)
         {
-            var created = await _purchaseItemService.CreatePurchaseItemAsync(dto);
-            return CreatedAtAction(nameof(GetPurchaseItemByIDAsync), new { id = created.Id }, created);
+            var created = await _purchaseItemService.CreatePurchaseItemAsync(createDto);
+            return Ok(created);
+
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdatePurchaseItemByIDAsync(Guid id, PurchaseItemUpdateDto dto)
+        public async Task<IActionResult> UpdatePurchaseItemByIDAsync(Guid id, PurchaseItemUpdateDto updateDto)
         {
-            var updated = await _purchaseItemService.UpdatePurchaseItemByIDAsync(id, dto);
+            var updated = await _purchaseItemService.UpdatePurchaseItemByIDAsync(id, updateDto);
             return updated is null ? NotFound() : Ok(updated);
         }
 
