@@ -82,7 +82,7 @@ const UserMenu = ({
 );
 
 // Props interface
-export interface Navbar06Props extends React.HTMLAttributes<HTMLElement> {
+export interface NavbarProps extends React.HTMLAttributes<HTMLElement> {
     logo?: React.ReactNode
     userName?: string
     userEmail?: string
@@ -90,7 +90,7 @@ export interface Navbar06Props extends React.HTMLAttributes<HTMLElement> {
     onMenuClick?: () => void
 }
 
-export const Navbar06 = React.forwardRef<HTMLElement, Navbar06Props>(
+export const Navbar = React.forwardRef<HTMLElement, NavbarProps>(
     (
         {
             className,
@@ -147,6 +147,6 @@ export const Navbar06 = React.forwardRef<HTMLElement, Navbar06Props>(
     }
 );
 
-Navbar06.displayName = "Navbar06";
+Navbar.displayName = "Navbar";
 
 export { Logo, UserMenu };

@@ -1,7 +1,7 @@
 import type { Member } from "@/components/dummyData/members";
 import * as React from "react";
 import { useEffect } from "react";
-import { ListTodoIcon } from "lucide-react";
+import { ListTodoIcon, ArrowLeftFromLine } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
@@ -21,12 +21,16 @@ interface FilterMemberCarouselProps {
     members: Member[]
     onDeleteMember: (memberId: string) => void
     selectedMemberId: string | null
+    view: "column" | "gallery"
+    setView: React.Dispatch<React.SetStateAction<"column" | "gallery">>
 }
 
 export default function CarouselDemo ({
     members,
     onDeleteMember,
-    selectedMemberId
+    selectedMemberId,
+    view,
+    setView
 }: FilterMemberCarouselProps) {
     const [carouselApi, setCarouselApi] = React.useState<CarouselApi>();
 
@@ -44,9 +48,19 @@ export default function CarouselDemo ({
 
     return (
         <Carousel
-            className="max-h-screen max-w-3xl mx-auto flex flex-column justify-self-center-safe mt-6"
+            className="max-h-screen max-w-3xl mx-auto flex flex-column justify-self-center-safe mt-6 p-0"
             setApi={setCarouselApi}
         >
+            <Button
+                size="icon"
+                variant="ghost"
+                className="text-muted-foreground w-10 h-10 rounded-full shadow-none"
+                aria-label="Back to column view"
+                onClick={() =>
+                    view === "gallery" ? setView("column") : setView("gallery")}
+            >
+                <ArrowLeftFromLine className="scale-115 text-red-500" aria-hidden />
+            </Button>
             <CarouselContent>
                 {members.map(member => (
                     <CarouselItem key={member.id}>
@@ -102,7 +116,7 @@ export default function CarouselDemo ({
                                                 Info
                                             </div>
                                             <div className="p-3 space-y-2 flex flex-wrap justify-center">
-                                                <Button className="px-3 py-2 w-[200px] h-fit font-sora rounded-full bg-primary text-white whitespace-break-spaces break-words">
+                                                <Button className="px-3 py-2 w-[200px] h-fit font-sora rounded-full bg-primary text-white whitespace-break-spaces wrap-break-word">
                                                     Subsystem: {member.subsystem}
                                                 </Button>
                                                 <Button className="px-3 w-[200px] py-2 font-sora rounded-full bg-primary text-white">
@@ -141,7 +155,9 @@ export default function CarouselDemo ({
                                                 <div className="w-4 h-4">
                                                     <ListTodoIcon className="w-5 h-5" />
                                                 </div>
-                                                <div className="text-sora text-sm">Create member portal</div>
+                                                <div className="text-sora text-sm">
+                                                    Create member portal
+                                                </div>
                                             </div>
 
                                             <div className="flex p-2 max-w-full gap-4">
@@ -165,7 +181,6 @@ export default function CarouselDemo ({
                     </CarouselItem>
                 ))}
             </CarouselContent>
-
             <CarouselPrevious />
             <CarouselNext />
         </Carousel>
