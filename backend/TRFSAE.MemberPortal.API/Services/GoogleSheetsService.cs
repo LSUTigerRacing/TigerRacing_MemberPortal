@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
 using Google.Apis.Sheets.v4;
@@ -76,7 +72,7 @@ namespace TRFSAE.MemberPortal.API.Services
         public async Task<List<SheetsResponseDTO>> GetSupabase()
         {
             var result = await _supabaseClient
-                .From<purchase_item>()
+                .From<PurchaseItemModel>()
                 .Select("*")
                 .Order("created_at", Supabase.Postgrest.Constants.Ordering.Descending)
                 .Limit(1)
@@ -89,7 +85,7 @@ namespace TRFSAE.MemberPortal.API.Services
         public async Task ListenToSupabaseChangesAsync()
         {
             var channel = await _supabaseClient
-                .From<purchase_item>()
+                .From<PurchaseItemModel>()
                 .On(Supabase.Realtime.PostgresChanges.PostgresChangesOptions.ListenType.Inserts, async (sender, change) =>
                 {
                     var items = await GetSupabase();
