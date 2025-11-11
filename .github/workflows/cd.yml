@@ -1,0 +1,30 @@
+name: CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  supabase:
+    name: Supabase
+    runs-on: ubuntu-latest
+    concurrency: cd-supabase-${{ github.ref }}
+
+    env:
+      SUPABASE_ACCESS_TOKEN: '${{ secrets.SUPABASE_ACCESS_TOKEN }}'
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v5
+
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Link Supabase Project
+        run: supabase link --workdir ./database --project-ref ${{ secrets.SUPABASE_PROJECT_REF }}
+
+      - name: Run Migrations
+        run: supabase db push --workdir ./database
