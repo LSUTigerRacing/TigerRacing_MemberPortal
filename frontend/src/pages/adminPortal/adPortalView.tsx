@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { data, type Member } from "@/components/dummyData/members";
 
-import { Navbar06 } from "@/components/ui/NavBar/shadcn-io/navbar-06";
-import { Navbar14 } from "@/components/ui/adminPortal/SearchBar/shadcn-io/navbar-14";
+import { Navbar } from "@/components/ui/NavBar/shadcn-io/navbar-06";
+import { SearchBar } from "@/components/ui/adminPortal/SearchBar/shadcn-io/SearchBar/index";
 import MemberTable from "@/components/ui/adminPortal/MemberTable/MemberTable";
 import GalleryCard from "@/components/ui/adminPortal/GalleryPageCard/GalleryCard";
 
@@ -31,8 +31,8 @@ export const PagesView = () => {
 
   return (
     <>
-      <Navbar06 />
-      <Navbar14
+      <Navbar />
+      <SearchBar
         view={view}
         setView={setView}
         sortOrder={sortOrder}
@@ -51,6 +51,8 @@ export const PagesView = () => {
       ) : (
         <GalleryCard
           members={filteredMembers}
+          view={view}
+          setView={setView}
           onDeleteMember={handleDelete}
           selectedMemberId={selectedMemberId}
         />

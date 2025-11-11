@@ -18,7 +18,7 @@ import {
 
 import FilterDropdown from "@/components/ui/adminPortal/SearchBar/FilterDropdown";
 
-export interface Navbar14Props extends React.HTMLAttributes<HTMLElement> {
+export interface SearchBarProps extends React.HTMLAttributes<HTMLElement> {
   searchPlaceholder?: string;
   searchValue?: string;
   view: "column" | "gallery";
@@ -30,7 +30,7 @@ export interface Navbar14Props extends React.HTMLAttributes<HTMLElement> {
   onDropdownSelect: (memberId: string) => void; 
 }
 
-export const Navbar14 = React.forwardRef<HTMLElement, Navbar14Props>(
+export const SearchBar = React.forwardRef<HTMLElement, SearchBarProps>(
   (
     {
       className,
@@ -89,7 +89,6 @@ export const Navbar14 = React.forwardRef<HTMLElement, Navbar14Props>(
         {...props}
       >
         <div className="flex h-16 items-center justify-between gap-4 pt-2">
-
           {/* Left side: Filter button + input */}
           <div className="flex items-center gap-2 flex-1 z-10">
             <DropdownMenu>
@@ -180,4 +179,4 @@ export const Navbar14 = React.forwardRef<HTMLElement, Navbar14Props>(
   }
 );
 
-Navbar14.displayName = 'Navbar14';
+SearchBar.displayName = 'SearchBar';
