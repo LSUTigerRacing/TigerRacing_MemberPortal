@@ -1,5 +1,5 @@
-import type { Task, Id } from "./KanbanBoard";
-import { Ellipsis, Trash } from "lucide-react";
+import type { Task, Id, Column } from "./KanbanBoard";
+import { Ellipsis, Trash, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/shadcn-components/button";
 import { Card } from "@/components/ui/shadcn-components/card";
 import { useState, useEffect } from "react";
@@ -21,14 +21,17 @@ import {
 } from "@/components/ui/shadcn-components/sheet"
 import { Separator } from "@/components/ui/shadcn-components/separator";
 import { useSortable } from "@dnd-kit/sortable";
-import{ CSS } from "@dnd-kit/utilities"
+import { CSS } from "@dnd-kit/utilities"
+import { Label } from "@/components/ui/shadcn-components/label";
 
 interface Props {
+  column: Column;
   task: Task;
   deleteTask: (id: Id) => void;
+  setEditingTask: (task: Task | null) => void;
 }
 
-export function TaskCard({ task, deleteTask }: Props) {
+export function TaskCard({ column, task, deleteTask, setEditingTask }: Props) {
   const [mouseIsOver, setMouseIsOver] = useState(false);
 
   const { 
@@ -72,7 +75,7 @@ export function TaskCard({ task, deleteTask }: Props) {
 
   return (
   <Card 
-    className=""
+    className="h-[7vh] justify-center pl-2"
     ref={setNodeRef}
     style={style}
     {...attributes}
@@ -94,7 +97,7 @@ export function TaskCard({ task, deleteTask }: Props) {
               <p className="font-semibold text-black whitespace-normal break-words hover:text-blue-700 hover:underline">{task.content}</p>
             </span>
           </SheetTrigger>
-            <SheetContent className="min-w-[80vw] top-16 h-[calc(100vh-4rem)] rounded-l-3xl border-1">
+            <SheetContent className="min-w-[67vw] top-16 h-[calc(100vh-4rem)] rounded-l-3xl border-1">
               <SheetHeader className="">
                 <SheetTitle className="">
                   <p className="font-semibold text-black whitespace-normal break-words">{task.content}</p>
@@ -102,14 +105,41 @@ export function TaskCard({ task, deleteTask }: Props) {
               </SheetHeader>
               <Separator className="-mt-4"/>
               <div className="flex min-h-0 flex-grow gap-4 overflow-y-auto">
-                <div className="flex-grow flex flex-col pl-3">
+                <div className="flex-grow flex flex-col pt-2 pl-3 border-1 ml-3 ">
                   <SheetDescription className="flex-grow">
                     <p className="text-sm text-gray-600 mt-1 whitespace-normal break-words">{task.taskDescription}</p>
                   </SheetDescription>
                   <div className="">footer</div>
                 </div>
-                <div className="min-w-[20vw]">
-                  Side Column Area
+                <div className="min-w-[18vw] pl-5 flex flex-col gap-5">
+                  <div>
+                    <Label className="text-sm font-semibold">Status</Label>
+                    {column.title}
+                  </div>
+                  <div className="">
+                    <Label className="text-sm font-semibold">Start Date</Label>
+                    {task.startDate ? (
+                      <div>
+                        <p className="text-sm">
+                          {new Date(task.startDate).toLocaleDateString()}
+                        </p>
+                      </div>
+                    ) : (
+                      <p className="text-sm">To Be Determined</p>
+                    )}
+                  </div>
+                  <div>
+                    <Label className="text-sm font-semibold">End Date</Label>
+                    {task.endDate ? (
+                      <div>
+                        <p className="text-sm">
+                          {new Date(task.endDate).toLocaleDateString()}
+                        </p>
+                      </div>
+                    ) : (
+                        <p className="text-sm">To Be Determined</p>
+                      )}
+                  </div>
                 </div>
               </div>
             </SheetContent>
@@ -127,6 +157,10 @@ export function TaskCard({ task, deleteTask }: Props) {
           <DropdownMenuContent className="bg-white" align="start">
             <DropdownMenuLabel>Task</DropdownMenuLabel>
             <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => setEditingTask(task)}>
+              <Pencil />
+              Edit
+            </DropdownMenuItem>
             <DropdownMenuItem onClick={() => {
                 deleteTask(task.id);
               }}>

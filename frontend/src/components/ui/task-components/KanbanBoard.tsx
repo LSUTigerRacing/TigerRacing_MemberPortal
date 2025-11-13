@@ -65,6 +65,8 @@ export type Task = {
     columnId: Id,
     content: string;
     taskDescription: string;
+    startDate?: Date;
+    endDate?: Date;
 };
 
 interface KanbanBoardProps {
@@ -85,6 +87,10 @@ export function KanbanBoard({ columns, setColumns, tasks, setTasks }: KanbanBoar
     const [activeColumn, setActiveColumn] = useState<Column | null>(null);
     const [activeTask, setActiveTask] = useState<Task | null> (null);
 
+    const [editingTask, setEditingTask] = useState<Task | null>(null);
+    const [editingColumn, setEditingColumn] = useState<Column | null>(null);
+    const [columnDialogOpen, setColumnDialogOpen] = useState(false);
+
     const sensors = useSensors(
         useSensor(PointerSensor, {
             activationConstraint: {
@@ -93,10 +99,20 @@ export function KanbanBoard({ columns, setColumns, tasks, setTasks }: KanbanBoar
         })
     )
 
+    useEffect(() => {
+        if (editingColumn) {
+            setUserTitle(editingColumn.title);
+            setUserDescription(editingColumn.description);
+            setColumnColor(editingColumn.color);
+            setIsSelected(editingColumn.colorIndex);
+            setColumnDialogOpen(true);
+        }
+    }, [editingColumn]);
+
     return (
         <DndContext sensors={sensors} onDragStart={onDragStart} onDragEnd={onDragEnd} onDragOver={onDragOver}>
             <div className="m-auto flex mt-2 h-full overflow-x-auto">
-                <Dialog>
+                <Dialog open={columnDialogOpen} onOpenChange={setColumnDialogOpen}>
                     <div className="flex gap-4 h-full overflor-x-auto">
                         <SortableContext items={columnsId}>
                             {columns.map((col) => (
@@ -106,6 +122,10 @@ export function KanbanBoard({ columns, setColumns, tasks, setTasks }: KanbanBoar
                                 deleteColumn={deleteColumn} 
                                 createTask={createTask}
                                 deleteTask={deleteTask}
+                                updateTask={updateTask}
+                                editingTask={editingTask}
+                                setEditingTask={setEditingTask}
+                                setEditingColumn={setEditingColumn}
                                 tasks={tasks.filter(
                                     (task) => task.columnId === col.id)}
                                 />
@@ -116,7 +136,7 @@ export function KanbanBoard({ columns, setColumns, tasks, setTasks }: KanbanBoar
                     <DialogTrigger asChild>
                     {columns.length === 0 ? (
                     // Initial button
-                    <Button variant="outline" className="h-full w-70 p-4">
+                    <Button variant="outline" className="h-full w-[18vw] p-4">
                         <Plus />
                         Create Column
                     </Button>
@@ -130,7 +150,9 @@ export function KanbanBoard({ columns, setColumns, tasks, setTasks }: KanbanBoar
                     </div>
                 <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>Create new column</DialogTitle>
+                    <DialogTitle>
+                        {editingColumn ? 'Edit column' : 'Create new column'}
+                    </DialogTitle>
                     <div className="pt-2">
                         <Separator />
                     </div>
@@ -163,10 +185,21 @@ export function KanbanBoard({ columns, setColumns, tasks, setTasks }: KanbanBoar
                 </div>
                 <DialogFooter>
                     <DialogClose asChild>
-                        <Button variant="outline">Cancel</Button>
+                        <Button variant="outline"
+                            onClick={() => {
+                                setEditingColumn(null);
+                                setUserTitle('');
+                                setUserDescription('');
+                                setIsSelected(0);
+                                setColumnColor(buttonColors[0]);
+                            }}>
+                        Cancel
+                        </Button>
                     </DialogClose>
                     <DialogClose asChild>
-                        <Button variant="outline" onClick={createNewColumn}>Create</Button>
+                        <Button variant="outline" onClick={handleColumnSubmit}>
+                            {editingColumn ? 'Save' : 'Create'}
+                        </Button>
                     </DialogClose>
                 </DialogFooter>
               </DialogContent>
@@ -181,14 +214,20 @@ export function KanbanBoard({ columns, setColumns, tasks, setTasks }: KanbanBoar
                             deleteColumn={deleteColumn} 
                             createTask={createTask}
                             deleteTask={deleteTask}
+                            updateTask={updateTask}
+                            editingTask={editingTask}
+                            setEditingTask={setEditingTask}
+                            setEditingColumn={setEditingColumn}
                             tasks={tasks.filter(
                                 (task) => task.columnId === activeColumn.id)}
                              />
                     )}
-                    {activeTask && (
+                    {activeTask && activeColumn && (
                         <TaskCard 
+                            column={activeColumn}
                             task={activeTask} 
                             deleteTask={deleteTask}
+                            setEditingTask={setEditingTask}
                         />
                     )}
                 </DragOverlay>, 
@@ -197,14 +236,15 @@ export function KanbanBoard({ columns, setColumns, tasks, setTasks }: KanbanBoar
         </DndContext>
     );
 
-    function createTask(columnId: Id, title: string, description: string) {
+    function createTask(columnId: Id, title: string, description: string, startDate?: Date, endDate?: Date) {
         const newTask: Task = {
             id: generatedId(),
             columnId,
             content: title,
             taskDescription: description,
+            startDate,
+            endDate,
         };
-        console.log('Creating task:', newTask);
         setTasks([...tasks, newTask]);
     }
 
@@ -226,6 +266,21 @@ export function KanbanBoard({ columns, setColumns, tasks, setTasks }: KanbanBoar
         setColumns([...columns, columnToAdd]);
         setUserTitle('');
         setUserDescription('');
+    }
+
+    function handleColumnSubmit() {
+        if (editingColumn) {
+            updateColumn(editingColumn.id, userTitle, userDescription, columnColor, isSelected);
+            setEditingColumn(null);
+        } else {
+            createNewColumn();
+        }
+        // Reset form
+        setUserTitle('');
+        setUserDescription('');
+        setIsSelected(0);
+        setColumnColor(buttonColors[0]);
+        setColumnDialogOpen(false);
     }
 
     function deleteColumn(id: Id) {
@@ -313,6 +368,22 @@ export function KanbanBoard({ columns, setColumns, tasks, setTasks }: KanbanBoar
     function selectedButton(color: string, index: number) {
         setIsSelected(index);
         setColumnColor(color);
+    }
+
+    function updateTask(taskId: Id, title: string, description: string, startDate?: Date, endDate?: Date) {
+        setTasks(tasks.map(task => 
+            task.id === taskId 
+            ? { ...task, content: title, taskDescription: description, startDate, endDate }
+            : task
+        ));
+    }
+
+    function updateColumn(columnId: Id, title: string, description: string, color: string, colorIndex: number) {
+        setColumns(columns.map(col => 
+            col.id === columnId 
+            ? { ...col, title, description, color, colorIndex }
+            : col
+        ));
     }
 }
 
