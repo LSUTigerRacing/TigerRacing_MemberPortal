@@ -5,7 +5,7 @@ import {
     TabsTrigger
 } from "@/components/ui/tabs";
 import { FilterSelection } from "@/components/ui/task-components/Filter";
-import { Navbar06 } from "@/components/ui/NavBar/shadcn-io/navbar-06";
+import { Navbar } from "@/components/ui/NavBar/shadcn-io/navbar-06";
 import { LearnMore } from "@/components/ui/task-components/LearnMore";
 import { MyTask } from "@/components/ui/task-components/MyTaskContent";
 import { KanbanBoard } from "@/components/ui/task-components/KanbanBoard";
@@ -35,7 +35,7 @@ export function MemberTabs () {
         <>
             <div className="h-screen flex flex-col">
                 <div className="flex-shrink-0">
-                    <Navbar06 />
+                    <Navbar />
                 </div>
                 <div className="w-full">
                     <div className="flex bg-gray-100 px-4 pt-3 pb-1">

@@ -21,7 +21,7 @@ export function MyTask (props: Props) {
     };
 
     return (
-        <div className="w-64 h-full shrink-0 border-r bg-background pl-1 flex flex-col items-start">
+        <div className="w-[20vw] h-full shrink-0 border-r bg-background pl-1 flex flex-col items-start">
             <FilterDropDown
                 onValueChange={handleFilterChange}
                 selectedValue={selectedFilter}

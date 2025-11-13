@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -9,7 +9,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
-import { Plus, Ellipsis, Trash, Circle } from "lucide-react";
+import { Plus, Ellipsis, Trash, Circle, ChevronDownIcon, Pencil } from "lucide-react";
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import type { Column, Id, Task } from "./KanbanBoard";
@@ -27,6 +27,12 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { TaskCard } from "./TaskCard";
+import { Calendar } from "@/components/ui/calendar";
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger
+} from "@/components/ui/popover";
 
 const strokeColors = [
     "stroke-[#25292E]",
@@ -42,22 +48,45 @@ const strokeColors = [
 interface Props {
     column: Column
     deleteColumn: (id: Id) => void
-    createTask: (columnId: Id, title: string, description: string) => void
+    createTask: (columnId: Id, title: string, description: string, startDate?: Date, endDate?: Date) => void
     deleteTask: (id: Id) => void
     tasks: Task[]
+    updateTask: (taskId: Id, title: string, description: string, startDate?: Date, endDate?: Date) => void
+    editingTask: Task | null
+    setEditingTask: (task: Task | null) => void
+    setEditingColumn: (column: Column | null) => void
 }
 
 export function ColumnContainer (props: Props) {
     const [taskTitle, setTaskTitle] = useState("");
     const [taskDescription, setTaskDescription] = useState("");
+    const [startOpen, setStartOpen] = useState(false);
+    const [endOpen, setEndOpen] = useState(false);
+    const [startDate, setStartDate] = useState<Date | undefined>(undefined);
+    const [endDate, setEndDate] = useState<Date | undefined>(undefined);
+    const [isOpen, setIsOpen] = useState(false);
 
     const {
         column,
         deleteColumn,
         createTask,
         deleteTask,
-        tasks
+        tasks,
+        updateTask,
+        editingTask,
+        setEditingTask,
+        setEditingColumn
     } = props;
+
+    useEffect(() => {
+        if (editingTask && editingTask.columnId === column.id) {
+            setTaskTitle(editingTask.content);
+            setTaskDescription(editingTask.taskDescription);
+            setStartDate(editingTask.startDate);
+            setEndDate(editingTask.endDate);
+            setIsOpen(true);
+        }
+    }, [editingTask, column.id]);
 
     const tasksIds = useMemo(() => {
         return tasks.map(task => task.id);
@@ -95,11 +124,26 @@ export function ColumnContainer (props: Props) {
         );
     }
 
+    const handleSubmit = () => {
+        if (editingTask) {
+            updateTask(editingTask.id, taskTitle, taskDescription, startDate, endDate);
+            setEditingTask(null);
+        } else {
+            createTask(column.id, taskTitle, taskDescription, startDate, endDate);
+        }
+        // Reset form
+        setTaskTitle("");
+        setTaskDescription("");
+        setStartDate(undefined);
+        setEndDate(undefined);
+        setIsOpen(false);
+    };
+
     return (
         <Card
             ref={setNodeRef}
             style={style}
-            className="flex flex-col w-70 p-4 h-full"
+            className="flex flex-col w-[18vw] p-4 h-full"
         >
             <div
                 {...attributes}
@@ -124,6 +168,10 @@ export function ColumnContainer (props: Props) {
                     <DropdownMenuContent className="bg-white" align="start">
                         <DropdownMenuLabel>Column</DropdownMenuLabel>
                         <DropdownMenuSeparator />
+                        <DropdownMenuItem onClick={() => setEditingColumn(column)}>
+                            <Pencil />
+                            Edit
+                        </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => {
                             deleteColumn(column.id);
                         }}
@@ -138,13 +186,13 @@ export function ColumnContainer (props: Props) {
                 <div className="flex flex-col gap-4 py-2">
                     <SortableContext items={tasksIds}>
                         {tasks.map(task => (
-                            <TaskCard key={task.id} task={task} deleteTask={deleteTask} />
+                            <TaskCard key={task.id} column={column} task={task} deleteTask={deleteTask} setEditingTask={setEditingTask} />
                         ))}
                     </SortableContext>
                 </div>
             </div>
             <div className="">
-                <Dialog>
+                <Dialog open={isOpen} onOpenChange={setIsOpen}>
                     <div className="flex mt-4 gap-2">
                         <div className="">
                             <DialogTrigger asChild>
@@ -155,9 +203,11 @@ export function ColumnContainer (props: Props) {
                             </DialogTrigger>
                         </div>
                     </div>
-                    <DialogContent className="sm:max-w-[425px]">
+                    <DialogContent className="sm:max-w-[30vw] border-5">
                         <DialogHeader>
-                            <DialogTitle>Create new task</DialogTitle>
+                            <DialogTitle>
+                                {editingTask ? "Edit task" : "Create new task"}
+                            </DialogTitle>
                             <div className="pt-2">
                                 <Separator />
                             </div>
@@ -180,21 +230,83 @@ export function ColumnContainer (props: Props) {
                                     onChange={e => setTaskDescription(e.target.value)}
                                 />
                             </div>
+                            <div className="flex gap-4">
+                                <div className="flex flex-col gap-3">
+                                    <Label htmlFor="date" className="px-1">
+                                        Start Date
+                                    </Label>
+                                    <Popover open={startOpen} onOpenChange={setStartOpen}>
+                                        <PopoverTrigger asChild>
+                                            <Button
+                                                variant="outline"
+                                                id="date"
+                                                className="w-48 justify-between font-normal"
+                                            >
+                                                {startDate ? startDate.toLocaleDateString() : "Select date"}
+                                                <ChevronDownIcon />
+                                            </Button>
+                                        </PopoverTrigger>
+                                        <PopoverContent className="w-auto overflow-hidden p-0 bg-white" align="start">
+                                            <Calendar
+                                                mode="single"
+                                                selected={startDate}
+                                                captionLayout="dropdown"
+                                                onSelect={date => {
+                                                    setStartDate(date);
+                                                    setStartOpen(false);
+                                                }}
+                                            />
+                                        </PopoverContent>
+                                    </Popover>
+                                </div>
+                                <div className="flex flex-col gap-3">
+                                    <Label htmlFor="date" className="px-1">
+                                        End Date
+                                    </Label>
+                                    <Popover open={endOpen} onOpenChange={setEndOpen}>
+                                        <PopoverTrigger asChild>
+                                            <Button
+                                                variant="outline"
+                                                id="date"
+                                                className="w-48 justify-between font-normal"
+                                            >
+                                                {endDate ? endDate.toLocaleDateString() : "Select date"}
+                                                <ChevronDownIcon />
+                                            </Button>
+                                        </PopoverTrigger>
+                                        <PopoverContent className="w-auto overflow-hidden p-0 bg-white" align="start">
+                                            <Calendar
+                                                mode="single"
+                                                selected={endDate}
+                                                captionLayout="dropdown"
+                                                onSelect={date => {
+                                                    setEndDate(date);
+                                                    setEndOpen(false);
+                                                }}
+                                            />
+                                        </PopoverContent>
+                                    </Popover>
+                                </div>
+                            </div>
                         </div>
                         <DialogFooter>
                             <DialogClose asChild>
-                                <Button variant="outline">Cancel</Button>
-                            </DialogClose>
-                            <DialogClose>
                                 <Button
                                     variant="outline"
                                     onClick={() => {
-                                        createTask(column.id, taskTitle, taskDescription);
+                                        setEditingTask(null);
                                         setTaskTitle("");
                                         setTaskDescription("");
+                                        setStartDate(undefined);
+                                        setEndDate(undefined);
                                     }}
                                 >
-                                    Create
+                                    Cancel
+                                </Button>
+                            </DialogClose>
+                            <DialogClose>
+                                <Button variant="outline" onClick={handleSubmit}>
+                                    {editingTask ? "Save" : "Create"}
                                 </Button>
                             </DialogClose>
                         </DialogFooter>
