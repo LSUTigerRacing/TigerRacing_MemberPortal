@@ -109,10 +109,8 @@ public class ProjectService : IProjectService
 
     }
 
-
     public async Task<bool> AssignProjectAsync(Guid userId, Guid projectId)
     {
-        
         var response = await _supabaseClient
             .From<UserProjectModel>()
             .Where(x => x.UserId == userId && x.ProjectId == projectId)
@@ -152,14 +150,6 @@ public class ProjectService : IProjectService
             return false;
         }
 
-        
     }
-    
-
-
-    
-
-
-    
 
 }

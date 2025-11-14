@@ -49,7 +49,7 @@ public class ProjectController : ControllerBase
         return Ok(project);
     }
 
-    [HttpPost("{projectId}/assign/{userId}")]
+    [HttpPost("{projectId}/users/{userId}")]
     public async Task<IActionResult> AssignProject(Guid userId, Guid projectId)
     {
         var assign = await _ProjectService.AssignProjectAsync(userId, projectId);
