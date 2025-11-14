@@ -100,17 +100,56 @@ public class ProjectService : IProjectService
             .Insert(newProject);
 
             return true;
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
             Console.WriteLine($"Error creating project: {ex.Message}");
             return false;
         }
-        
+
     }
 
-    
+    public async Task<bool> AssignProjectAsync(Guid userId, Guid projectId)
+    {
+        var response = await _supabaseClient
+            .From<UserProjectModel>()
+            .Where(x => x.UserId == userId && x.ProjectId == projectId)
+            .Get();
 
+        var exist = response.Models.FirstOrDefault();
 
-    
+        if (exist != null)
+        {
+            await _supabaseClient
+                .From<UserProjectModel>()
+                .Where(x => x.UserId == userId && x.ProjectId == projectId)
+                .Delete();
+
+            return true;
+
+        }
+
+        var newUserProject = new UserProjectModel
+        {
+            UserId = userId,
+            ProjectId = projectId
+
+        };
+
+        try
+        {
+            await _supabaseClient
+                .From<UserProjectModel>()
+                .Insert(new[] { newUserProject });
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error creating user project: {ex.Message}");
+            return false;
+        }
+
+    }
 
 }
