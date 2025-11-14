@@ -7,7 +7,7 @@ namespace TRFSAE.MemberPortal.API.Interfaces
   public interface IUserService
   {
     Task<UserResponseDto> GetUserByIDAsync(Guid userID);
-    Task<List<UserResponseDto>> GetAllUsersAsync(UserSearchDto searchDto); 
+    Task<List<UserResponseDto>> GetUsersAsync(UserSearchDto searchDto); 
     Task<UserResponseDto> UpdateUserByIdAsync(Guid userID, UserUpdateDto updateDto);
     Task<bool> DeleteUserAsync(Guid currentUserId, string confirmationString);
 

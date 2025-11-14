@@ -16,9 +16,9 @@ namespace TRFSAE.MemberPortal.API.Controllers
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllUsers(UserSearchDto searchDto)
+    public async Task<IActionResult> GetUsers(UserSearchDto searchDto)
     {
-      var users = await _userService.GetAllUsersAsync(searchDto);
+      var users = await _userService.GetUsersAsync(searchDto);
       return Ok(users);
     }
 
