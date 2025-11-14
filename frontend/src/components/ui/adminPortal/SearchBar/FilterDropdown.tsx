@@ -242,7 +242,7 @@ const FilterDropdown = ({
                         {getActiveFilters().map((filter, index) => (
                             <span
                                 key={index}
-                                className="font-sora px-3 py-1 bg-primary-background dark:bg-primary-foreground text-foreground dark:text-blue-200 rounded-full text-sm shrink-0 max-w-full wrap-break-word"
+                                className="font-sora px-3 py-1 bg-background dark:bg-foreground text-foreground dark:text-blue-200 rounded-full text-sm shrink-0 max-w-full wrap-break-word"
                             >
                                 {filter}
                             </span>

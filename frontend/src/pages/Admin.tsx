@@ -29,7 +29,7 @@ export default function Admin () {
     };
 
     return (
-        <>
+        <div className="xl:mt-16.75">
             <SearchBar
                 view={view}
                 setView={setView}
@@ -57,6 +57,6 @@ export default function Admin () {
                         selectedMemberId={selectedMemberId}
                     />
                 )}
-        </>
+        </div>
     );
 };

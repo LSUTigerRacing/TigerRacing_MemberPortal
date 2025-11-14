@@ -65,7 +65,7 @@ export default function CarouselDemo ({
                 {members.map(member => (
                     <CarouselItem key={member.id}>
                         <div className="flex justify-between p-1 max-w-full gap-2">
-                            <Card className="w-full h-full bg-primary-background rounded-2xl">
+                            <Card className="w-full h-full bg-background rounded-2xl">
                                 <CardContent className="flex flex-col w-full p-5">
                                     {/* Avatar and Member Info Section */}
                                     <div className="flex mb-4">
