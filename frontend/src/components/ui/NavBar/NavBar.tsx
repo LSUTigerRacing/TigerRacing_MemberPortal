@@ -1,7 +1,7 @@
-import { Navbar06 } from "@/components/ui/NavBar/shadcn-io/navbar-06";
+import { Navbar } from "@/components/ui/NavBar/shadcn-io/navbar-06";
 const Example = () => (
     <div className="relative w-full">
-        <Navbar06 />
+        <Navbar />
     </div>
 );
 export default Example;
