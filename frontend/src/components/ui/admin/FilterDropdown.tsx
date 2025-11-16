@@ -1,28 +1,37 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect } from "react";
+import {
+    useEffect,
+    type Dispatch,
+    type SetStateAction
+} from "react";
 import { Circle } from "lucide-react";
 
-import { data, subsystemCategories } from "@/components/dummyData/members";
-import type { System, Subsystem, Member } from "@/components/dummyData/members";
+import {
+    data,
+    subsystemCategories,
+    type System,
+    type Subsystem,
+    type Member
+} from "@/lib/dummyData/members";
 
 interface FilterDropdownProps {
     onFiltersChange: (filteredMembers: Member[]) => void
     filters: {
-        selectedSystems: System[]
-        selectedSubsystems: Subsystem[]
-        selectedYears: Member["grad"][]
+        systems: System[]
+        subsystems: Subsystem[]
+        years: Member["grad"][]
     }
-    setFilters: React.Dispatch<
-        React.SetStateAction<{
-            selectedSystems: System[]
-            selectedSubsystems: Subsystem[]
-            selectedYears: Member["grad"][]
+    setFilters: Dispatch<
+        SetStateAction<{
+            systems: System[]
+            subsystems: Subsystem[]
+            years: Member["grad"][]
         }>
     >
     filteredCount: number
-    setFilteredCount: React.Dispatch<React.SetStateAction<number>>
+    setFilteredCount: Dispatch<SetStateAction<number>>
     sortOrder: "asc" | "desc"
-    setSortOrder: React.Dispatch<React.SetStateAction<"asc" | "desc">>
+    setSortOrder: Dispatch<SetStateAction<"asc" | "desc">>
 }
 
 const FilterDropdown = ({
@@ -38,25 +47,25 @@ const FilterDropdown = ({
 
     const filteredMembers = data.filter(member => {
         if (
-            filters.selectedSystems.length === 0
-            && filters.selectedSubsystems.length === 0
-            && filters.selectedYears.length === 0
+            filters.systems.length === 0
+            && filters.subsystems.length === 0
+            && filters.years.length === 0
         ) {
             return true;
         }
 
         const systemMatch
-            = filters.selectedSystems.length === 0
-                || member.system.some(s => filters.selectedSystems.includes(s));
+            = filters.systems.length === 0
+                || member.system.some(s => filters.systems.includes(s));
 
         const subsystemMatch
-            = filters.selectedSubsystems.length === 0
+            = filters.subsystems.length === 0
                 || (member.subsystem
-                    && member.subsystem.some(ss => filters.selectedSubsystems.includes(ss)));
+                    && member.subsystem.some(ss => filters.subsystems.includes(ss)));
 
         const yearMatch
-            = filters.selectedYears.length === 0
-                || filters.selectedYears.includes(member.grad);
+            = filters.years.length === 0
+                || filters.years.includes(member.grad);
 
         return systemMatch && subsystemMatch && yearMatch;
     });
@@ -74,27 +83,27 @@ const FilterDropdown = ({
     const handleSystemToggle = (system: System) => {
         setFilters(prev => ({
             ...prev,
-            selectedSystems: prev.selectedSystems.includes(system)
-                ? prev.selectedSystems.filter(s => s !== system)
-                : [...prev.selectedSystems, system]
+            systems: prev.systems.includes(system)
+                ? prev.systems.filter(s => s !== system)
+                : [...prev.systems, system]
         }));
     };
 
     const handleSubsystemToggle = (subsystem: Subsystem) => {
         setFilters(prev => ({
             ...prev,
-            selectedSubsystems: prev.selectedSubsystems.includes(subsystem)
-                ? prev.selectedSubsystems.filter(s => s !== subsystem)
-                : [...prev.selectedSubsystems, subsystem]
+            subsystems: prev.subsystems.includes(subsystem)
+                ? prev.subsystems.filter(s => s !== subsystem)
+                : [...prev.subsystems, subsystem]
         }));
     };
 
     const handleYearToggle = (gradYear: Member["grad"]) => {
         setFilters(prev => ({
             ...prev,
-            selectedYears: prev.selectedYears.includes(gradYear)
-                ? prev.selectedYears.filter(g => g !== gradYear)
-                : [...prev.selectedYears, gradYear]
+            years: prev.years.includes(gradYear)
+                ? prev.years.filter(g => g !== gradYear)
+                : [...prev.years, gradYear]
         }));
     };
 
@@ -102,9 +111,9 @@ const FilterDropdown = ({
 
     const handleReset = () => {
         setFilters({
-            selectedSystems: [],
-            selectedSubsystems: [],
-            selectedYears: []
+            systems: [],
+            subsystems: [],
+            years: []
         });
     };
 
@@ -112,12 +121,12 @@ const FilterDropdown = ({
 
     const getActiveFilters = () => {
         const active = [];
-        if (filters.selectedSystems.length > 0)
-            active.push(`Systems: ${filters.selectedSystems.join(", ")}`);
-        if (filters.selectedSubsystems.length > 0)
-            active.push(`Subsystem: ${filters.selectedSubsystems.join(", ")}`);
-        if (filters.selectedYears.length > 0)
-            active.push(`Graduation Years: ${filters.selectedYears.join(", ")}`);
+        if (filters.systems.length > 0)
+            active.push(`Systems: ${filters.systems.join(", ")}`);
+        if (filters.subsystems.length > 0)
+            active.push(`Subsystem: ${filters.subsystems.join(", ")}`);
+        if (filters.years.length > 0)
+            active.push(`Graduation Years: ${filters.years.join(", ")}`);
         return active;
     };
 
@@ -150,7 +159,7 @@ const FilterDropdown = ({
                                         key={gradYear}
                                         onClick={() => handleYearToggle(gradYear)}
                                         className={`font-sora inline-block not-first:items-center gap-2 p-2 rounded-lg transition-colors ${
-                                            filters.selectedYears.includes(gradYear)
+                                            filters.years.includes(gradYear)
                                                 ? "bg-primary/60 text-background"
                                                 : "bg-gray-100 dark:bg-gray-700"
                                         }`}
@@ -173,7 +182,7 @@ const FilterDropdown = ({
                                         <button
                                             onClick={() => handleSystemToggle(system)}
                                             className={`flex text-2xl items-center gap-2 p-2 rounded-xl max-h-fit transition-colors ${
-                                                filters.selectedSystems.includes(system)
+                                                filters.systems.includes(system)
                                                     ? "bg-primary/60 text-foreground"
                                                     : "bg-primary text-background dark:bg-gray-700"
                                             }`}
@@ -189,7 +198,7 @@ const FilterDropdown = ({
                                                     key={subsystem}
                                                     onClick={() => handleSubsystemToggle(subsystem)}
                                                     className={`flex items-center gap-2 p-2 max-h-fit rounded-lg transition-colors ${
-                                                        filters.selectedSubsystems.includes(subsystem)
+                                                        filters.subsystems.includes(subsystem)
                                                             ? "bg-primary/25 text-foreground"
                                                             : "bg-background dark:bg-gray-700"
                                                     }`}

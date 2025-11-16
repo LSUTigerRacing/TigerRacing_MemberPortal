@@ -1,10 +1,16 @@
-import type { Member } from "@/components/dummyData/members";
-import * as React from "react";
-import { useEffect } from "react";
+import {
+    useEffect,
+    useState,
+    type Dispatch,
+    type SetStateAction
+} from "react";
 import { ListTodoIcon, ArrowLeftFromLine } from "lucide-react";
-import { Button } from "@/components/ui/button";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+
+import type { Member } from "@/lib/dummyData/members";
 
 import {
     Carousel,
@@ -15,14 +21,14 @@ import {
     type CarouselApi
 } from "@/components/ui/carousel";
 
-import DropdownMenuDemo from "@/components/ui/adminPortal/dropdownMenu/dropdownMenu";
+import DropdownMenuDemo from "@/components/ui/admin/MemberDropdown";
 
 interface FilterMemberCarouselProps {
     members: Member[]
     onDeleteMember: (memberId: string) => void
     selectedMemberId: string | null
     view: "column" | "gallery"
-    setView: React.Dispatch<React.SetStateAction<"column" | "gallery">>
+    setView: Dispatch<SetStateAction<"column" | "gallery">>
 }
 
 export default function CarouselDemo ({
@@ -32,7 +38,7 @@ export default function CarouselDemo ({
     view,
     setView
 }: FilterMemberCarouselProps) {
-    const [carouselApi, setCarouselApi] = React.useState<CarouselApi>();
+    const [carouselApi, setCarouselApi] = useState<CarouselApi>();
 
     useEffect(() => {
         if (!carouselApi || !selectedMemberId) return;

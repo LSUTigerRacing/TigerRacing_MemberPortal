@@ -1,13 +1,5 @@
-import React, { useState } from "react";
-
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuLabel,
-    DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu";
+import { useState, type ReactElement } from "react";
+import { MoreHorizontal } from "lucide-react";
 
 import {
     AlertDialog,
@@ -19,25 +11,31 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@/components/ui/alert-dialog";
-
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal } from "lucide-react";
-import type { Member } from "@/components/dummyData/members";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuLabel,
+    DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
 
-interface DropdownMenuProps {
+import type { Member } from "@/lib/dummyData/members";
+
+interface MemberDropdownProps {
     member: Member
     onDeleteMember: (memberId: string) => void
 }
 
-export default function DropdownMenuDemo ({ member, onDeleteMember }: DropdownMenuProps) {
+export default function MemberDropdown ({ member, onDeleteMember }: MemberDropdownProps): ReactElement {
     const [open, setOpen] = useState(false);
 
     return (
         <>
-            {/* Dropdown for Ellipses */}
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="h-8 w-8 p-0">
+                    <Button variant="outline" className="h-8 w-8 p-0 hover:bg-primary hover:text-white hover:border-primary">
                         <span className="sr-only">Open menu</span>
                         <MoreHorizontal />
                     </Button>
@@ -48,12 +46,11 @@ export default function DropdownMenuDemo ({ member, onDeleteMember }: DropdownMe
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={() => setOpen(true)}>
-                        Kick/Ban
+                        Kick / Ban
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
 
-            {/* Dialog For Kicking Member */}
             <AlertDialog open={open} onOpenChange={setOpen}>
                 <AlertDialogContent>
                     <AlertDialogHeader>

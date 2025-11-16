@@ -1,20 +1,39 @@
 "use client";
 
-import * as React from "react";
+import { useState } from "react";
 import {
-    type ColumnDef,
-    type ColumnFiltersState,
-    type PaginationState,
+    ChevronFirstIcon,
+    ChevronLastIcon,
+    ChevronLeftIcon,
+    ChevronRightIcon
+} from "lucide-react";
+import {
     flexRender,
     getCoreRowModel,
     getFilteredRowModel,
     getPaginationRowModel,
     getSortedRowModel,
-    useReactTable
+    useReactTable,
+    type ColumnDef,
+    type ColumnFiltersState,
+    type PaginationState,
+    type SortingState,
+    type VisibilityState
 } from "@tanstack/react-table";
-import type { SortingState, VisibilityState } from "@tanstack/react-table";
 
-import DropdownMenuDemo from "@/components/ui/adminPortal/dropdownMenu/dropdownMenu";
+import {
+    Pagination,
+    PaginationContent,
+    PaginationItem,
+    PaginationLink
+} from "@/components/ui/pagination";
+import {
+    Select,
+    SelectTrigger,
+    SelectValue,
+    SelectContent,
+    SelectItem
+} from "@/components/ui/select";
 import {
     Table,
     TableBody,
@@ -23,7 +42,15 @@ import {
     TableHeader,
     TableRow
 } from "@/components/ui/table";
-import type { Member } from "@/components/dummyData/members";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger
+} from "@/components/ui/tooltip";
+
+import MemberDropdown from "@/components/ui/admin/MemberDropdown";
+
+import type { Member } from "@/lib/dummyData/members";
 
 interface FilterMemberTableProps {
     members: Member[]
@@ -36,11 +63,11 @@ export default function MemberTable ({
     onDeleteMember,
     onRowClick
 }: FilterMemberTableProps) {
-    const [sorting, setSorting] = React.useState<SortingState>([]);
-    const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
-    const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
-    const [rowSelection, setRowSelection] = React.useState({});
-    const [pagination, setPagination] = React.useState<PaginationState>({
+    const [sorting, setSorting] = useState<SortingState>([]);
+    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+    const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+    const [rowSelection, setRowSelection] = useState({});
+    const [pagination, setPagination] = useState<PaginationState>({
         pageIndex: 0,
         pageSize: 8
     });
@@ -75,12 +102,11 @@ export default function MemberTable ({
             id: "actions",
             enableHiding: false,
             header: () => null,
-            cell: ({ row }) => (
-                <DropdownMenuDemo member={row.original} onDeleteMember={onDeleteMember} />
-            )
+            cell: ({ row }) => <MemberDropdown member={row.original} onDeleteMember={onDeleteMember} />
         }
     ];
 
+    // eslint-disable-next-line react-hooks/incompatible-library
     const table = useReactTable({
         data: members,
         columns,
@@ -98,12 +124,12 @@ export default function MemberTable ({
     });
 
     return (
-        <div className="w-full py-4">
+        <div className="bg-background w-full my-4 py-4 rounded-xl">
             <div className="overflow-hidden">
                 <Table>
                     <TableHeader>
                         {table.getHeaderGroups().map(headerGroup => (
-                            <TableRow key={headerGroup.id}>
+                            <TableRow key={headerGroup.id} className="hover:bg-transparent!">
                                 {headerGroup.headers.map(header => {
                                     const headerContent = flexRender(
                                         header.column.columnDef.header,
@@ -158,72 +184,65 @@ export default function MemberTable ({
             </div>
 
             {/* Navigation of Pages Buttons */}
-            <div className="mt-4 px-4 flex justify-center text-xl space-x-2 fixed bottom-7 left-1/2 transform -translate-x-1/2">
-                <div className="flex justify-between gap-2">
-                    <button
-                        className="border rounded p-1 hover:bg-accent hover:text-accent-foreground"
-                        onClick={() => table.firstPage()}
-                        disabled={!table.getCanPreviousPage()}
-                    >
-                        {"<<"}
-                    </button>
-                    <button
-                        className="border rounded p-1 hover:bg-accent hover:text-accent-foreground"
-                        onClick={() => table.previousPage()}
-                        disabled={!table.getCanPreviousPage()}
-                    >
-                        {"<"}
-                    </button>
-                </div>
-
-                <div className="flex gap-4 items-center relative">
-                    <div className="flex gap-2 items-center">
-                        <span className="flex gap-1">
-                            <div className="font-sora text-sm">Page</div>
-                            <strong className="font-sora text-sm">
-                                {table.getState().pagination.pageIndex + 1} of{" "}
-                                {table.getPageCount().toLocaleString()}
-                            </strong>
-                        </span>
-                        <span className="flex items-center font-sora text-sm gap-1">
-                            | Go to page:
-                            <input
-                                type="number"
-                                min={1}
-                                max={table.getPageCount()}
-                                defaultValue={table.getState().pagination.pageIndex + 1}
-                                onChange={e => {
-                                    const page = e.target.value ? Number(e.target.value) - 1 : 0;
-                                    table.setPageIndex(page);
-                                }}
-                                className="border p-1 rounded w-10"
-                            />
-                        </span>
-                    </div>
-
-                    <div className="text-gray-400 font-sora text-sm">
-                        Showing {table.getRowModel().rows.length.toLocaleString()} of{" "}
-                        {table.getRowCount().toLocaleString()} Rows
-                    </div>
-                </div>
-
-                <div className="flex justify-end gap-2">
-                    <button
-                        className="border rounded p-1 hover:bg-accent hover:text-accent-foreground"
-                        onClick={() => table.nextPage()}
-                        disabled={!table.getCanNextPage()}
-                    >
-                        {">"}
-                    </button>
-                    <button
-                        className="border rounded p-1 hover:bg-accent hover:text-accent-foreground"
-                        onClick={() => table.lastPage()}
-                        disabled={!table.getCanNextPage()}
-                    >
-                        {">>"}
-                    </button>
-                </div>
-            </div>
+            <hr className="mb-4" />
+            <Pagination>
+                <PaginationContent>
+                    <PaginationItem>
+                        <Tooltip>
+                            <TooltipTrigger>
+                                <PaginationLink onClick={() => table.firstPage()} className={!table.getCanPreviousPage() ? "pointer-events-none text-muted-foreground" : ""}>
+                                    <ChevronFirstIcon className="w-4 h-4" />
+                                </PaginationLink>
+                            </TooltipTrigger>
+                            <TooltipContent className={!table.getCanPreviousPage() ? "hidden" : ""}>First</TooltipContent>
+                        </Tooltip>
+                    </PaginationItem>
+                    <PaginationItem>
+                        <Tooltip>
+                            <TooltipTrigger>
+                                <PaginationLink onClick={() => table.previousPage()} className={!table.getCanPreviousPage() ? "pointer-events-none text-muted-foreground" : ""}>
+                                    <ChevronLeftIcon className="w-4 h-4" />
+                                </PaginationLink>
+                            </TooltipTrigger>
+                            <TooltipContent className={!table.getCanPreviousPage() ? "hidden" : ""}>Previous</TooltipContent>
+                        </Tooltip>
+                    </PaginationItem>
+                    <PaginationItem>
+                        <Select defaultValue={String(0)} aria-label="Select page" value={table.getState().pagination.pageIndex.toString()} onValueChange={i => table.setPageIndex(parseInt(i))}>
+                            <SelectTrigger id="select-page" className="w-fit whitespace-nowrap cursor-pointer" aria-label="Select page">
+                                <SelectValue placeholder="Select page" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {Array.from({ length: table.getPageCount() }).map((_, i) => (
+                                    <SelectItem key={i} value={i.toString()}>
+                                        Page {i + 1}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </PaginationItem>
+                    <PaginationItem>
+                        <Tooltip>
+                            <TooltipTrigger>
+                                <PaginationLink onClick={() => table.nextPage()} className={!table.getCanNextPage() ? "pointer-events-none text-muted-foreground" : ""}>
+                                    <ChevronRightIcon className="w-4 h-4" />
+                                </PaginationLink>
+                            </TooltipTrigger>
+                            <TooltipContent className={!table.getCanNextPage() ? "hidden" : ""}>Next</TooltipContent>
+                        </Tooltip>
+                    </PaginationItem>
+                    <PaginationItem>
+                        <Tooltip>
+                            <TooltipTrigger>
+                                <PaginationLink onClick={() => table.lastPage()} className={!table.getCanNextPage() ? "pointer-events-none text-muted-foreground" : ""}>
+                                    <ChevronLastIcon className="w-4 h-4" />
+                                </PaginationLink>
+                            </TooltipTrigger>
+                            <TooltipContent className={!table.getCanNextPage() ? "hidden" : ""}>Last</TooltipContent>
+                        </Tooltip>
+                    </PaginationItem>
+                </PaginationContent>
+            </Pagination>
         </div>
     );
 }
