@@ -30,7 +30,17 @@ export default defineConfig(({ mode }) => {
 
     return {
         build: {
-            cssMinify: "lightningcss"
+            cssMinify: "lightningcss",
+            rollupOptions: {
+                onwarn: (warning, defaultHandler) => {
+                    /**
+                     * Vite 5+ throws a warning whenever a file invokes a module level directive.
+                     * As "use client" is specifically supported in React, we are free to suppress these warnings to improve DX.
+                     */
+                    if (warning.code === "SOURCEMAP_ERROR" && warning.message.includes("sourcemap")) return;
+                    defaultHandler(warning);
+                }
+            }
         },
 
         server: serverOptions,
