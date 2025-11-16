@@ -41,11 +41,18 @@ public class ProjectController : ControllerBase
     //     var projects = await _ProjectService.GetAllAssignedProjectsAsync(id);
     //     return Ok(projects);
     // }
-    
+
     [HttpPost]
     public async Task<IActionResult> CreateNewProject(CreateProjectDto createDto)
     {
         var project = await _ProjectService.CreateNewProjectAsync(createDto);
         return Ok(project);
+    }
+
+    [HttpPost("{projectId}/users/{userId}")]
+    public async Task<IActionResult> AssignProject(Guid userId, Guid projectId)
+    {
+        var assign = await _ProjectService.AssignProjectAsync(userId, projectId);
+        return Ok(assign);
     }
 }
