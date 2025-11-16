@@ -186,45 +186,45 @@ const UserMenu = ({
                 </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => onItemClick?.("dashboard")}>
+            <DropdownMenuItem onClick={() => onItemClick?.("/dashboard")}>
                 <Gauge />
                 Dashboard
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onItemClick?.("profile")}>
+            <DropdownMenuItem onClick={() => onItemClick?.("/profile")}>
                 <User />
                 Profile
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onItemClick?.("inbox")}>
+            <DropdownMenuItem onClick={() => onItemClick?.("/mail")}>
                 <Mail />
                 Inbox
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onItemClick?.("projects")}>
+            <DropdownMenuItem onClick={() => onItemClick?.("/projects")}>
                 <Folder />
                 Projects
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onItemClick?.("orders")}>
+            <DropdownMenuItem onClick={() => onItemClick?.("/orders")}>
                 <ShoppingCart />
                 Orders
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onItemClick?.("admin")}>
+            <DropdownMenuItem onClick={() => onItemClick?.("/admin")}>
                 <UserCog />
                 Admin
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onItemClick?.("settings")}>
+            <DropdownMenuItem onClick={() => onItemClick?.("/settings")}>
                 <Settings />
                 Settings
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => onItemClick?.("training")}>
+            <DropdownMenuItem onClick={() => onItemClick?.("/wiki")}>
                 <GraduationCap />
-                Training
+                Wiki
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onItemClick?.("documentation")}>
+            <DropdownMenuItem onClick={() => onItemClick?.("/docs")}>
                 <FileText />
                 Documentation
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => onItemClick?.("logout")}>
+            <DropdownMenuItem onClick={() => onItemClick?.("/logout")}>
                 <LogOut />
                 Sign out
             </DropdownMenuItem>

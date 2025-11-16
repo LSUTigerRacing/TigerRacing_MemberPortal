@@ -135,7 +135,7 @@ export default function Dashboard (): ReactElement {
                 </CardHeader>
                 <CardContent className="h-full">
                     <div className="flex flex-col gap-2 h-full">
-                        <SidebarButton title="Training Resources" url="/resources" icon={GraduationCap} />
+                        <SidebarButton title="Wiki" url="/wiki" icon={GraduationCap} />
                         <SidebarButton title="Documentation" url="/docs" icon={FileText} />
                         <div className="grow"></div>
                         <SidebarButton title="Admin" url="/admin" icon={UserCog} />
