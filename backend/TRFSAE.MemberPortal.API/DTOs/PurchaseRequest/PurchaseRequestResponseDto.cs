@@ -11,7 +11,7 @@ namespace TRFSAE.MemberPortal.API.DTOs
         public string Status { get; set; } = string.Empty;
 
         [JsonPropertyName("requester")]
-        public Guid Requester { get; set; }
+        public Guid? Requester { get; set; }
 
         [JsonPropertyName("created_at")]
         public DateTimeOffset CreatedAt { get; set; }

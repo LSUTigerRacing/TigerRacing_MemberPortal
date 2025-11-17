@@ -23,7 +23,7 @@ namespace TRFSAE.MemberPortal.API.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:guid}", Name = "GetPurchaseRequestById")]
         public async Task<IActionResult> GetPurchaseRequestByIDAsync(Guid id)
         {
             var item = await _purchaseRequestService.GetPurchaseRequestByIDAsync(id);
@@ -34,17 +34,17 @@ namespace TRFSAE.MemberPortal.API.Controllers
         public async Task<IActionResult> CreatePurchaseRequestAsync(PurchaseRequestCreateDto dto)
         {
             var created = await _purchaseRequestService.CreatePurchaseRequestAsync(dto);
-            return CreatedAtAction(nameof(GetPurchaseRequestByIDAsync), new { id = created.Id }, created);
+            return CreatedAtRoute("GetPurchaseRequestById", new { id = created.Id }, created);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id:guid}")]
         public async Task<IActionResult> UpdatePurchaseRequestByIDAsync(Guid id, PurchaseRequestUpdateDto dto)
         {
             var updated = await _purchaseRequestService.UpdatePurchaseRequestByIDAsync(id, dto);
             return updated is null ? NotFound() : Ok(updated);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeletePurchaseRequestAsync(Guid id, string confirmationString)
         {
             var deleted = await _purchaseRequestService.DeletePurchaseRequestAsync(id, confirmationString);

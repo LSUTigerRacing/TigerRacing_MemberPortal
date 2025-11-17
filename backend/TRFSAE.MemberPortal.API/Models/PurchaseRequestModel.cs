@@ -6,15 +6,19 @@ namespace TRFSAE.MemberPortal.API.Models
     [Table("purchase_request")]
     public class PurchaseRequestModel: BaseModel
     {
-    [PrimaryKey("id", false)]
-    public Guid Id { get; set; }
+        [PrimaryKey("id", false)]
+        public Guid Id { get; set; }
 
-    public string Status { get; set; } = string.Empty;
+        [Column("status")]
+        public string Status { get; set; } = string.Empty;
 
-    public Guid Requester { get; set; }
+        [Column("requester")]
+        public Guid Requester { get; set; }
 
-    public DateTimeOffset CreatedAt { get; set; }
+        [Column("created_at")]
+        public DateTimeOffset CreatedAt { get; set; }
 
-    public DateTime UpdatedAt { get; set; }
+        [Column("updated_at")]
+        public DateTime UpdatedAt { get; set; }
     }
 }
