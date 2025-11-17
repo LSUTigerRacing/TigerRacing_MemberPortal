@@ -205,6 +205,7 @@ https://tweakcn.com/editor/theme
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    font-synthesis: none !important;
   }
   body {
     /* NOT PART OF SHADCN */
