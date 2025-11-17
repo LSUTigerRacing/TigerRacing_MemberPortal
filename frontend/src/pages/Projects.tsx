@@ -9,7 +9,7 @@ import {
     SelectValue
 } from "@/components/ui/select";
 
-import { ProjectCard, type Project } from "@/components/projects/ProjectCard";
+import { ProjectCard, type Project } from "@/components/pages/projects/ProjectCard";
 import { Input } from "@/components/ui/input";
 
 export default function Projects () {
@@ -231,7 +231,7 @@ export default function Projects () {
                     <div className="bg-white rounded-3xl shadow-2xl w-full max-w-3xl my-8 flex flex-col overflow-hidden" style={{ maxHeight: "calc(100vh - 4rem)" }}>
 
                         {/* Modal Header */}
-                        <div className="flex items-center justify-between px-8 py-5 border-b border-slate-200 flex-shrink-0">
+                        <div className="flex items-center justify-between px-8 py-5 border-b border-slate-200 shrink-0">
                             <div>
                                 <h2 className="text-2xl font-extrabold text-slate-900">Create New Project</h2>
                                 <p className="text-xs text-slate-500 mt-1">Fill in the details to get started</p>
@@ -446,7 +446,7 @@ export default function Projects () {
                         </div>
 
                         {/* Modal Footer - Action buttons */}
-                        <div className="flex justify-between items-center px-8 py-5 border-t border-slate-200 flex-shrink-0 bg-slate-50">
+                        <div className="flex justify-between items-center px-8 py-5 border-t border-slate-200 shrink-0 bg-slate-50">
                             {/* Required fields note */}
                             <p className="text-xs text-slate-500">
                                 <span className="text-red-500">*</span> Required fields

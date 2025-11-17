@@ -21,7 +21,7 @@ import {
     type CarouselApi
 } from "@/components/ui/carousel";
 
-import DropdownMenuDemo from "@/components/ui/admin/MemberDropdown";
+import DropdownMenuDemo from "@/components/pages/admin/MemberDropdown";
 
 interface FilterMemberCarouselProps {
     members: Member[]

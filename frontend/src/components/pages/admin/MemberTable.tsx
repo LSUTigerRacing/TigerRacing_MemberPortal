@@ -48,7 +48,7 @@ import {
     TooltipTrigger
 } from "@/components/ui/tooltip";
 
-import MemberDropdown from "@/components/ui/admin/MemberDropdown";
+import MemberDropdown from "@/components/pages/admin/MemberDropdown";
 
 import type { Member } from "@/lib/dummyData/members";
 

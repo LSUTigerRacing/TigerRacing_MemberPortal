@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { data, type Member } from "@/lib/dummyData/members";
 
-import SearchBar from "@/components/ui/admin/SearchBar";
-import MemberTable from "@/components/ui/admin/MemberTable";
-import GalleryCard from "@/components/ui/admin/GalleryCard";
+import SearchBar from "@/components/pages/admin/SearchBar";
+import MemberTable from "@/components/pages/admin/MemberTable";
+import GalleryCard from "@/components/pages/admin/GalleryCard";
 
 export default function Admin () {
     const [view, setView] = useState<"column" | "gallery">("column");

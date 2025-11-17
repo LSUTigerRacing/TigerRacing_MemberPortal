@@ -83,7 +83,7 @@ export default function SearchBar (props: SearchBarProps): ReactElement<SearchBa
     });
 
     return (
-        <div className="bg-background rounded-xl border-b px-4 md:px-6 [&_*]:no-underline">
+        <div className="bg-background rounded-xl border-b px-4 md:px-6 **:no-underline">
             <div className="flex h-16 items-center justify-between gap-4">
                 {/* Left side */}
                 <div className="flex flex-1 items-center gap-2">
