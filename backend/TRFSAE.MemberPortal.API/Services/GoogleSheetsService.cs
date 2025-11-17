@@ -84,22 +84,30 @@ namespace TRFSAE.MemberPortal.API.Services
 
         public async Task ListenToSupabaseChangesAsync()
         {
-            var channel = await _supabaseClient
-                .From<PurchaseItemModel>()
-                .On(Supabase.Realtime.PostgresChanges.PostgresChangesOptions.ListenType.Inserts, async (sender, change) =>
-                {
-                    var items = await GetSupabase();
-                    if (items != null && items.Count > 0)
+            try
+            {
+                var channel = await _supabaseClient
+                    .From<PurchaseItemModel>()
+                    .On(Supabase.Realtime.PostgresChanges.PostgresChangesOptions.ListenType.Inserts, async (sender, change) =>
                     {
-                        CreateEntry(items);
-                    }
-                   else
-                    {
-                        Console.WriteLine(" No item found to write to Google Sheets");
-                    } 
-                });
+                        var items = await GetSupabase();
+                        if (items != null && items.Count > 0)
+                        {
+                            CreateEntry(items);
+                        }
+                        else
+                        {
+                            Console.WriteLine("No item found to write to Google Sheets");
+                        }
+                    });
 
-            await channel.Subscribe();
+                await channel.Subscribe();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in ListenToSupabaseChangesAsync: {ex.Message}");
+                throw;
+            }
         }
 
     }
