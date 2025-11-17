@@ -1,6 +1,11 @@
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { Input } from "@/components/ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
     Select,
     SelectContent,
@@ -10,7 +15,6 @@ import {
 } from "@/components/ui/select";
 
 import { ProjectCard, type Project } from "@/components/pages/projects/ProjectCard";
-import { Input } from "@/components/ui/input";
 
 export default function Projects () {
     // Projects Data
@@ -56,8 +60,8 @@ export default function Projects () {
     const [teamLead, setTeamLead] = useState("");
     const [memberInput, setMemberInput] = useState("");
     const [teamMembers, setTeamMembers] = useState<string[]>([]);
-    const [startDate, setStartDate] = useState("");
-    const [dueDate, setDueDate] = useState("");
+    const [startDate, setStartDate] = useState<Date | undefined>(undefined);
+    const [dueDate, setDueDate] = useState<Date | undefined>(undefined);
 
     // Opens the create project modal
     const handleOpenModal = () => {
@@ -75,8 +79,8 @@ export default function Projects () {
         setTeamLead("");
         setMemberInput("");
         setTeamMembers([]);
-        setStartDate("");
-        setDueDate("");
+        setStartDate(undefined);
+        setDueDate(undefined);
     };
 
     // Adds a team member to the list
@@ -117,7 +121,7 @@ export default function Projects () {
             id: projects.length + 1,
             title: projectName,
             status: projectStatus.charAt(0).toUpperCase() + projectStatus.slice(1),
-            dueDate: dueDate || "TBD",
+            dueDate: dueDate.toLocaleDateString() || "TBD",
             teamSize: teamMembers.length + 1,
             progress: 0,
             priority: selectedPriority.toUpperCase(),
@@ -152,7 +156,7 @@ export default function Projects () {
         <div className="xl:mt-16.75">
 
             {/* Main content */}
-            <div className="px-8 py-6 max-w-[1600px] mx-auto xl:mt-16.75">
+            <div className="px-8 py-6 max-w-[1600px] mx-auto">
 
                 {/* Page header with filters */}
                 <div className="mb-6 flex justify-between items-center">
@@ -227,8 +231,9 @@ export default function Projects () {
 
             {/* CREATE PROJECT MODAL */}
             {showModal && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto">
-                    <div className="bg-white rounded-3xl shadow-2xl w-full max-w-3xl my-8 flex flex-col overflow-hidden" style={{ maxHeight: "calc(100vh - 4rem)" }}>
+                <div className="fixed inset-0 z-50 flex items-center justify-center">
+                    <div className="fixed inset-0 bg-black/50" onClick={() => setShowModal(false)} />
+                    <div className="relative bg-white rounded-3xl shadow-2xl w-full max-w-3xl mx-4 flex flex-col max-h-[90vh] overflow-hidden">
 
                         {/* Modal Header */}
                         <div className="flex items-center justify-between px-8 py-5 border-b border-slate-200 shrink-0">
@@ -297,7 +302,7 @@ export default function Projects () {
                                                     <SelectTrigger id="category" className="rounded-xl bg-white w-full">
                                                         <SelectValue placeholder="Select" />
                                                     </SelectTrigger>
-                                                    <SelectContent className="bg-white">
+                                                    <SelectContent className="bg-white" position="popper" sideOffset={5}>
                                                         <SelectItem value="engine">Engine</SelectItem>
                                                         <SelectItem value="chassis">Chassis</SelectItem>
                                                         <SelectItem value="electronics">Electronics</SelectItem>
@@ -313,7 +318,7 @@ export default function Projects () {
                                                     <SelectTrigger id="project-status" className="rounded-xl bg-white w-full">
                                                         <SelectValue placeholder="Select" />
                                                     </SelectTrigger>
-                                                    <SelectContent className="bg-white">
+                                                    <SelectContent className="bg-white" position="popper" sideOffset={5}>
                                                         <SelectItem value="active">Active</SelectItem>
                                                         <SelectItem value="planning">Planning</SelectItem>
                                                         <SelectItem value="completed">Completed</SelectItem>
@@ -417,27 +422,49 @@ export default function Projects () {
                                         <div className="grid grid-cols-2 gap-3">
                                             {/* Start Date */}
                                             <div>
-                                                <label htmlFor="start-date" className="block text-xs font-semibold mb-1.5 text-slate-700">Start Date</label>
-                                                <input
-                                                    id="start-date"
-                                                    type="date"
-                                                    value={startDate}
-                                                    onChange={e => setStartDate(e.target.value)}
-                                                    className="w-full px-3 py-2.5 text-sm border-2 border-slate-200 rounded-xl focus:outline-none focus:border-[#510087] transition-all"
-                                                />
+                                                <div className="block text-xs font-semibold mb-1.5 text-slate-700">Start Date</div>
+                                                <Popover>
+                                                    <PopoverTrigger asChild>
+                                                        <Button
+                                                            variant="outline"
+                                                            className="w-full justify-start text-left font-normal px-3 py-2.5 h-auto border-2 border-slate-200 rounded-xl hover:border-[#510087] focus:border-[#510087] focus:ring-4 focus:ring-[#510087]/10 transition-all"
+                                                        >
+                                                            <CalendarIcon className="mr-2 h-4 w-4" />
+                                                            {startDate ? format(startDate, "MMM d, yyyy") : <span className="text-slate-500">Pick a date</span>}
+                                                        </Button>
+                                                    </PopoverTrigger>
+                                                    <PopoverContent className="w-auto p-0 bg-white" align="start">
+                                                        <Calendar
+                                                            mode="single"
+                                                            selected={startDate}
+                                                            onSelect={setStartDate}
+                                                        />
+                                                    </PopoverContent>
+                                                </Popover>
                                             </div>
                                             {/* Due Date - Required field */}
                                             <div>
-                                                <label htmlFor="due-date" className="block text-xs font-semibold mb-1.5 text-slate-700">
+                                                <div className="block text-xs font-semibold mb-1.5 text-slate-700">
                                                     Due Date <span className="text-red-500">*</span>
-                                                </label>
-                                                <input
-                                                    id="due-date"
-                                                    type="date"
-                                                    value={dueDate}
-                                                    onChange={e => setDueDate(e.target.value)}
-                                                    className="w-full px-3 py-2.5 text-sm border-2 border-slate-200 rounded-xl focus:outline-none focus:border-[#510087] transition-all"
-                                                />
+                                                </div>
+                                                <Popover>
+                                                    <PopoverTrigger asChild>
+                                                        <Button
+                                                            variant="outline"
+                                                            className="w-full justify-start text-left font-normal px-3 py-2.5 h-auto border-2 border-slate-200 rounded-xl hover:border-[#510087] focus:border-[#510087] focus:ring-4 focus:ring-[#510087]/10 transition-all"
+                                                        >
+                                                            <CalendarIcon className="mr-2 h-4 w-4" />
+                                                            {dueDate ? format(dueDate, "MMM d, yyyy") : <span className="text-slate-500">Pick a date</span>}
+                                                        </Button>
+                                                    </PopoverTrigger>
+                                                    <PopoverContent className="w-auto p-0 bg-white" align="start">
+                                                        <Calendar
+                                                            mode="single"
+                                                            selected={dueDate}
+                                                            onSelect={setDueDate}
+                                                        />
+                                                    </PopoverContent>
+                                                </Popover>
                                             </div>
                                         </div>
                                     </div>
@@ -479,5 +506,6 @@ export default function Projects () {
                 </div>
             )}
         </div>
+
     );
 };
