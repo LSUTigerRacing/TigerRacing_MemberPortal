@@ -64,7 +64,7 @@ namespace TRFSAE.MemberPortal.API.Services
             if (dto.UnitPrice > 0) updates["unit_price"] = dto.UnitPrice;
             if (dto.Quantity > 0) updates["quantity"] = dto.Quantity;
             if (!string.IsNullOrWhiteSpace(dto.Supplier)) updates["supplier"] = dto.Supplier;
-            if (!string.IsNullOrWhiteSpace(dto.Status)) updates["status"] = dto.Status;
+            if (dto.PurchaseStatus != default) updates["purchase_status"] = dto.PurchaseStatus.ToString();
             if (dto.Notes != null) updates["notes"] = dto.Notes;
             if (dto.NeededBy != null) updates["needed_by"] = dto.NeededBy;
             if (!string.IsNullOrWhiteSpace(dto.PoNumber)) updates["po_no"] = dto.PoNumber;
@@ -72,7 +72,6 @@ namespace TRFSAE.MemberPortal.API.Services
             if (dto.OrderReceivedDate != null) updates["order_received_date"] = dto.OrderReceivedDate;
             if (!string.IsNullOrWhiteSpace(dto.OrderActiveStatus)) updates["order_active_status"] = dto.OrderActiveStatus;
             if (dto.RequestId != null) updates["request_id"] = dto.RequestId;
-            if (dto.Subtotal != null) updates["subtotal"] = dto.Subtotal;
             if (dto.Approvals != null) updates["approvals"] = dto.Approvals;
             updates["updated_at"] = DateTime.UtcNow;
 
@@ -118,7 +117,7 @@ namespace TRFSAE.MemberPortal.API.Services
                 UnitPrice = m.UnitPrice,
                 Quantity = m.Quantity,
                 Supplier = m.Supplier,
-                Status = m.Status,
+                PurchaseStatus = m.PurchaseStatus,
                 Notes = m.Notes,
                 CreatedAt = m.CreatedAt,
                 NeededBy = m.NeededBy,
@@ -127,7 +126,6 @@ namespace TRFSAE.MemberPortal.API.Services
                 OrderReceivedDate = m.OrderReceivedDate,
                 OrderActiveStatus = m.OrderActiveStatus,
                 RequestId = m.RequestId,
-                Subtotal = m.Subtotal,
                 Approvals = m.Approvals
             };
         }
@@ -143,13 +141,13 @@ namespace TRFSAE.MemberPortal.API.Services
                 UnitPrice = d.UnitPrice,
                 Quantity = d.Quantity,
                 Supplier = d.Supplier,
-                Status = d.Status,
+                PurchaseStatus = d.PurchaseStatus,
                 Notes = d.Notes,
                 NeededBy = d.NeededBy,
                 OrderActiveStatus = d.OrderActiveStatus,
                 RequestId = d.RequestId,
-                Subtotal = d.Subtotal,
-                Approvals = d.Approvals
+                Approvals = d.Approvals,
+                OrderDate = DateTime.Today
             };
         }
     }

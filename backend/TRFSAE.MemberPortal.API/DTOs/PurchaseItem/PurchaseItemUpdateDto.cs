@@ -1,3 +1,5 @@
+using TRFSAE.MemberPortal.API.Models;
+using System.Text.Json.Serialization;
 namespace TRFSAE.MemberPortal.API.DTOs
 {
     public class PurchaseItemUpdateDto
@@ -9,7 +11,10 @@ namespace TRFSAE.MemberPortal.API.DTOs
         public decimal UnitPrice { get; set; }
         public int Quantity { get; set; }
         public string Supplier { get; set; } = string.Empty;
-        public string Status { get; set; } = string.Empty;
+
+        [JsonConverter(typeof(JsonStringEnumConverter))]
+        public PurchaseStatus PurchaseStatus { get; set; }
+
         public string Notes { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; }
         public DateTime? NeededBy { get; set; }
@@ -18,7 +23,6 @@ namespace TRFSAE.MemberPortal.API.DTOs
         public DateTime? OrderReceivedDate { get; set; }
         public string OrderActiveStatus { get; set; } = string.Empty;
         public Guid? RequestId { get; set; }
-        public decimal? Subtotal { get; set; }
         public bool[]? Approvals { get; set; }
     }
 }

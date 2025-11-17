@@ -31,11 +31,12 @@ namespace TRFSAE.MemberPortal.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreatePurchaseItemAsync(PurchaseItemCreateDto dto)
+        public async Task<IActionResult> CreatePurchaseItemAsync([FromBody] PurchaseItemCreateDto dto)
         {
             var created = await _purchaseItemService.CreatePurchaseItemAsync(dto);
-            return CreatedAtAction(nameof(GetPurchaseItemByIDAsync), new { id = created.Id }, created);
+            return Created($"/api/purchase-item/{created.Id}", created);
         }
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdatePurchaseItemByIDAsync(Guid id, PurchaseItemUpdateDto dto)
