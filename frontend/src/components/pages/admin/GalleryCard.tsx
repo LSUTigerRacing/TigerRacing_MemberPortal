@@ -9,9 +9,6 @@ import { ListTodoIcon, ArrowLeftFromLine } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-
-import type { Member } from "@/lib/dummyData/members";
-
 import {
     Carousel,
     CarouselContent,
@@ -21,10 +18,12 @@ import {
     type CarouselApi
 } from "@/components/ui/carousel";
 
-import DropdownMenuDemo from "@/components/pages/admin/MemberDropdown";
+import MemberDropdown from "@/components/pages/admin/MemberDropdown";
+
+import type { User } from "@/lib/member-data-format/user";
 
 interface FilterMemberCarouselProps {
-    members: Member[]
+    users: User[]
     onDeleteMember: (memberId: string) => void
     selectedMemberId: string | null
     view: "column" | "gallery"
@@ -32,7 +31,7 @@ interface FilterMemberCarouselProps {
 }
 
 export default function CarouselDemo ({
-    members,
+    users,
     onDeleteMember,
     selectedMemberId,
     view,
@@ -43,14 +42,14 @@ export default function CarouselDemo ({
     useEffect(() => {
         if (!carouselApi || !selectedMemberId) return;
 
-        const selectedIndex = members.findIndex(
-            member => member.id === selectedMemberId
+        const selectedIndex = users.findIndex(
+            user => user.UserId === selectedMemberId
         );
 
         if (selectedIndex !== -1) {
             carouselApi.scrollTo(selectedIndex, true); // true stopped it from doing the crazy scroll thing
         }
-    }, [carouselApi, selectedMemberId, members]);
+    }, [carouselApi, selectedMemberId, users]);
 
     return (
         <Carousel
@@ -68,8 +67,8 @@ export default function CarouselDemo ({
                 <ArrowLeftFromLine className="scale-115 text-red-500" aria-hidden />
             </Button>
             <CarouselContent>
-                {members.map(member => (
-                    <CarouselItem key={member.id}>
+                {users.map(user => (
+                    <CarouselItem key={user.UserId}>
                         <div className="flex justify-between p-1 max-w-full gap-2">
                             <Card className="w-full h-full bg-background rounded-2xl">
                                 <CardContent className="flex flex-col w-full p-5">
@@ -91,24 +90,21 @@ export default function CarouselDemo ({
                                             {/* Container for Name and More Icon */}
                                             <div className="flex flex-row gap-3">
                                                 <div className="ml-4 font-manrope font-semibold text-2xl text-foreground pb-2">
-                                                    {member.name}
+                                                    {user.Name}
                                                 </div>
-                                                <DropdownMenuDemo
-                                                    member={member}
-                                                    onDeleteMember={onDeleteMember}
-                                                />
+                                                <MemberDropdown user={user} onDeleteMember={onDeleteMember} />
                                             </div>
 
                                             {/* Details Section */}
                                             <div className="flex gap-20">
                                                 <div className="ml-4 font-sora text-gray-600">
-                                                    {member.year}
+                                                    {user.LSUEmail}
                                                 </div>
                                                 <div className="ml-4 font-sora text-gray-600">
-                                                    {member.system}
+                                                    {user.System}
                                                 </div>
                                                 <div className="ml-4 font-sora text-gray-600">
-                                                    {member.grad}
+                                                    {user.GradDate}
                                                 </div>
                                             </div>
                                         </div>
@@ -123,19 +119,28 @@ export default function CarouselDemo ({
                                             </div>
                                             <div className="p-3 space-y-2 flex flex-wrap justify-center">
                                                 <Button className="px-3 py-2 w-[200px] h-fit font-sora rounded-full bg-primary text-white whitespace-break-spaces wrap-break-word">
-                                                    Subsystem: {member.subsystem}
+                                                    Subsystem: {user.Subsystem}
+                                                </Button>
+                                                <Button className="px-3 py-2 w-[200px] h-fit font-sora rounded-full bg-primary text-white whitespace-break-spaces wrap-break-word">
+                                                    Personal Email: {user.PersonalEmail}
                                                 </Button>
                                                 <Button className="px-3 w-[200px] py-2 font-sora rounded-full bg-primary text-white">
-                                                    Join Date: {member.joinDate}
+                                                    Eight Nine Number: {user.EightNine}
                                                 </Button>
                                                 <Button className="px-3 w-[200px] py-2 font-sora rounded-full bg-primary text-white">
-                                                    Hazing: {member.hazing}
+                                                    Hazing: {user.HazingStatus}
                                                 </Button>
                                                 <Button className="px-3 w-[200px] py-2 font-sora rounded-full bg-primary text-white">
-                                                    Fees: {member.dues}
+                                                    Fees: {user.FeeStatus}
                                                 </Button>
                                                 <Button className="px-3 w-[200px] py-2 font-sora rounded-full bg-primary text-white">
-                                                    T-Shirt Size: {member.shirtSize}
+                                                    T-Shirt Size: {user.ShirtSize}
+                                                </Button>
+                                                <Button className="px-3 w-[200px] py-2 font-sora rounded-full bg-primary text-white">
+                                                    Account Created: {user.AccountCreationDate}
+                                                </Button>
+                                                <Button className="px-3 w-[200px] py-2 font-sora rounded-full bg-primary text-white">
+                                                    Account Last Updated: {user.AccountLastUpdatedDate}
                                                 </Button>
                                             </div>
                                         </div>
