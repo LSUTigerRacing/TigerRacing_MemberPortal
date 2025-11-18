@@ -29,19 +29,18 @@ import { Input } from "@/components/ui/input";
 import FilterDropdown from "./FilterDropdown";
 
 import {
-    data,
-    type Member,
+    type User,
     type Subsystem,
     type System
-} from "@/lib/dummyData/members";
+} from "@/lib/dummyData/user";
 
 export interface SearchBarProps extends HTMLAttributes<HTMLElement> {
     view: "column" | "gallery"
     sortOrder: "asc" | "desc"
     setView: Dispatch<SetStateAction<SearchBarProps["view"]>>
     setSortOrder: Dispatch<SetStateAction<SearchBarProps["sortOrder"]>>
-    onFilterChange: (filteredMembers: Member[]) => void
-    onSearchChange: (filteredMembers: Member[]) => void
+    onFilterChange: (filteredMembers: User[]) => void
+    onSearchChange: (filteredMembers: User[]) => void
     onDropdownSelect: (memberId: string) => void
 }
 
@@ -49,14 +48,17 @@ export default function SearchBar (props: SearchBarProps): ReactElement<SearchBa
     const id = useId();
 
     const [searchValue, setSearchValue] = useState("");
+    const [users, setUsers] = useState<User[]>([]);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
     const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
         const value = event.target.value;
-        setSearchValue(value);
 
-        const filtered = data.filter(member => member.name.toLowerCase().includes(value.toLowerCase()));
+        setSearchValue(value);
+        setUsers(users);
+
+        const filtered = users.filter(user => user.Name.toLowerCase().includes(value.toLowerCase()));
         props.onSearchChange(filtered);
 
         if (value.length > 0) setIsDropdownOpen(true);
@@ -76,7 +78,7 @@ export default function SearchBar (props: SearchBarProps): ReactElement<SearchBa
     }, [isDropdownOpen]);
 
     const [filteredCount, setFilteredCount] = useState(0);
-    const [filters, setFilters] = useState<{ systems: System[], subsystems: Subsystem[], years: Array<Member["grad"]> }>({
+    const [filters, setFilters] = useState<{ systems: System[], subsystems: Subsystem[], years: string[] }>({
         systems: [],
         subsystems: [],
         years: []
@@ -107,7 +109,7 @@ export default function SearchBar (props: SearchBarProps): ReactElement<SearchBa
                                 setFilteredCount={setFilteredCount}
                                 sortOrder={props.sortOrder}
                                 setSortOrder={props.setSortOrder}
-                                onFiltersChange={props.onFilterChange}
+                                onFilterChange={props.onFilterChange}
                             />
                         </DropdownMenuContent>
                     </DropdownMenu>
