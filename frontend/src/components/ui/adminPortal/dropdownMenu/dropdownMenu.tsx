@@ -22,14 +22,14 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
-import type { Member } from "@/components/dummyData/members";
+import type { User } from "@/components/dummyData/user";
 
 interface DropdownMenuProps {
-    member: Member
-    onDeleteMember: (memberId: string) => void
+    user: User
+    onDeleteMember: (userId: string) => void
 }
 
-export default function DropdownMenuDemo ({ member, onDeleteMember }: DropdownMenuProps) {
+export default function DropdownMenuDemo ({ user, onDeleteMember }: DropdownMenuProps) {
     const [open, setOpen] = useState(false);
 
     return (
@@ -58,16 +58,16 @@ export default function DropdownMenuDemo ({ member, onDeleteMember }: DropdownMe
                 <AlertDialogContent>
                     <AlertDialogHeader>
                         <AlertDialogTitle className="font-manrope h1 text-center">
-                            Are you absolutely sure you want to delete {member.name}?
+                            Are you absolutely sure you want to delete {user.Name}?
                         </AlertDialogTitle>
                         <AlertDialogDescription className="font-sora text-gray-600 text-center">
-                            This action cannot be undone. This will permanently delete {member.name}'s
+                            This action cannot be undone. This will permanently delete {user.Name}'s
                             account and remove their data from the servers.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter className="items-center font-sora">
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction onClick={() => onDeleteMember(member.id)}>
+                        <AlertDialogAction onClick={() => onDeleteMember(user.UserId)}>
                             Continue
                         </AlertDialogAction>
                     </AlertDialogFooter>

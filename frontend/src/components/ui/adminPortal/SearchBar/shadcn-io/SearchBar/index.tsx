@@ -3,12 +3,11 @@
 import * as React from "react";
 import { useId, useState, useRef, useEffect } from "react";
 
-import { data, type Member } from "@/components/dummyData/members";
+import type { User, System, Subsystem } from "@/components/dummyData/user";
 import { TableProperties, FunnelIcon, SearchIcon, GalleryHorizontalIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import type { System, Subsystem } from "@/components/dummyData/members";
 
 import {
     DropdownMenu,
@@ -25,7 +24,7 @@ export interface SearchBarProps extends React.HTMLAttributes<HTMLElement> {
     setView: React.Dispatch<React.SetStateAction<"column" | "gallery">>
     sortOrder: "asc" | "desc"
     setSortOrder: React.Dispatch<React.SetStateAction<"asc" | "desc">>
-    onFiltersChange: (filteredMembers: Member[]) => void
+    onFiltersChange: (filteredMembers: User[]) => void
     onSearchChange?: (value: string) => void
     onDropdownSelect: (memberId: string) => void
 }
@@ -49,7 +48,8 @@ export const SearchBar = React.forwardRef<HTMLElement, SearchBarProps>(
 
         // Search and filtering state
         const [searchValue, setSearchValue] = useState("");
-        const [filteredItems, setFilteredItems] = useState<Member[]>([]);
+        const [users, setUsers] = useState<User[]>([]);
+        const [filteredItems, setFilteredItems] = useState<User[]>([]);
         const [isDropdownOpen, setIsDropdownOpen] = useState(false);
         const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -57,8 +57,9 @@ export const SearchBar = React.forwardRef<HTMLElement, SearchBarProps>(
             const value = event.target.value;
             setSearchValue(value);
 
-            const filtered = data.filter(member =>
-                member.name.toLowerCase().includes(value.toLowerCase())
+            setUsers(users);
+            const filtered = users.filter(User =>
+                User.Name.toLowerCase().includes(value.toLowerCase())
             );
             setFilteredItems(filtered);
             if (value.length > 0) setIsDropdownOpen(true);
@@ -79,7 +80,7 @@ export const SearchBar = React.forwardRef<HTMLElement, SearchBarProps>(
         const [filters, setFilters] = useState({
             selectedSystems: [] as System[],
             selectedSubsystems: [] as Subsystem[],
-            selectedYears: [] as Member["grad"][]
+            selectedYears: [] as string[]
         });
 
         return (
@@ -136,17 +137,17 @@ export const SearchBar = React.forwardRef<HTMLElement, SearchBarProps>(
                                 <div className="absolute mt-1 top-full w-full shadow bg-white">
                                     {filteredItems.length > 0
                                         ? (
-                                            filteredItems.map(member => (
+                                            filteredItems.map(User => (
                                                 <div
-                                                    key={member.id}
+                                                    key={User.UserId}
                                                     className="px-4 py-2 border-b border-muted-foreground/30 rounded hover:bg-accent cursor-pointer"
                                                     onClick={() => {
-                                                        onDropdownSelect(member.id);
+                                                        onDropdownSelect(User.UserId);
                                                         setIsDropdownOpen(false);
                                                     }}
                                                 >
                                                     <ul>
-                                                        <li>{member.name}</li>
+                                                        <li>{User.Name}</li>
                                                     </ul>
                                                 </div>
                                             ))

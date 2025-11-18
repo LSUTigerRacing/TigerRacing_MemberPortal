@@ -23,16 +23,16 @@ import {
     TableHeader,
     TableRow
 } from "@/components/ui/table";
-import type { Member } from "@/components/dummyData/members";
+import type { User } from "@/components/dummyData/user";
 
 interface FilterMemberTableProps {
-    members: Member[]
-    onDeleteMember: (memberId: string) => void
+    users: User[]
+    onDeleteMember: (userId: string) => void
     onRowClick?: (rowId: string) => void
 }
 
 export default function MemberTable ({
-    members,
+    users,
     onDeleteMember,
     onRowClick
 }: FilterMemberTableProps) {
@@ -45,7 +45,7 @@ export default function MemberTable ({
         pageSize: 8
     });
 
-    const columns: ColumnDef<Member>[] = [
+    const columns: ColumnDef<User>[] = [
         {
             accessorKey: "name",
             header: () => <div className="text-center text-xl">Name</div>,
@@ -76,13 +76,13 @@ export default function MemberTable ({
             enableHiding: false,
             header: () => null,
             cell: ({ row }) => (
-                <DropdownMenuDemo member={row.original} onDeleteMember={onDeleteMember} />
+                <DropdownMenuDemo user={row.original} onDeleteMember={onDeleteMember} />
             )
         }
     ];
 
     const table = useReactTable({
-        data: members,
+        data: users,
         columns,
         state: { sorting, columnFilters, columnVisibility, rowSelection, pagination },
         onSortingChange: setSorting,
