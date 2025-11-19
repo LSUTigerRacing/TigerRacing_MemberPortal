@@ -1,14 +1,8 @@
-import axios from "axios";
 import Fuse from "fuse.js";
 import {
-    Check,
-    ChevronDownIcon,
-    CircleSmall,
     Ellipsis,
     Filter,
-    Link,
-    Pencil,
-    X
+    Pencil
 } from "lucide-react";
 import { motion } from "motion/react";
 import {
@@ -21,15 +15,7 @@ import {
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ButtonGroup, ButtonGroupText } from "@/components/ui/button-group";
-import { Calendar } from "@/components/ui/calendar";
-import {
-    Card,
-    CardContent,
-    CardFooter,
-    CardHeader,
-    CardTitle
-} from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Dialog } from "@/components/ui/dialog";
 import {
     Empty,
@@ -37,13 +23,11 @@ import {
     EmptyMedia,
     EmptyTitle
 } from "@/components/ui/empty";
-import { Input } from "@/components/ui/input";
 import {
     InputGroup,
     InputGroupAddon,
     InputGroupInput
 } from "@/components/ui/input-group";
-import { Label } from "@/components/ui/label";
 import {
     Pagination,
     PaginationContent,
@@ -52,42 +36,18 @@ import {
     PaginationNext,
     PaginationPrevious
 } from "@/components/ui/pagination";
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger
-} from "@/components/ui/popover";
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue
-} from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
-import {
-    Sheet,
-    SheetClose,
-    SheetContent,
-    SheetDescription,
-    SheetFooter,
-    SheetHeader,
-    SheetTitle
-} from "@/components/ui/sheet";
+import { Sheet } from "@/components/ui/sheet";
 import { Spinner } from "@/components/ui/spinner";
 import {
     Tabs,
     TabsList,
     TabsTrigger
 } from "@/components/ui/tabs";
-import { Textarea } from "@/components/ui/textarea";
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipTrigger
-} from "@/components/ui/tooltip";
+
+import OrderCard from "@/components/pages/orders/OrderCard";
+import OrderForm from "@/components/pages/orders/OrderForm";
+import OrderDetails from "@/components/pages/orders/OrderDetails";
+import { type DetailedOrder, getAllOrders, getOrder, type Order, OrderAction } from "@/components/pages/orders/orders";
 
 const TABS: Array<{ name: string, value: "self" | "others" }> = [
     {
@@ -100,65 +60,7 @@ const TABS: Array<{ name: string, value: "self" | "others" }> = [
     }
 ];
 
-// TEMP
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-async function getOrderDetails (id: Order["id"]): Promise<OrderDetails | undefined> {
-    const res = await axios.get<OrderDetails>(`/api/orders/info?id=${id}`, { withCredentials: true }).catch(err => console.error(err));
-    return res?.data ?? undefined;
-}
-
-/**
- * Fetch specific details of a given order
- * @param id The order ID.
- */
-// async function getOrderDetails (): OrderDetails {};
-
-function OrderEntry (props: { order: Order, isAdmin: boolean, orderTask: (order: Order, action: OrderAction) => void }): ReactElement<{ order: Order, isAdmin: boolean, orderTask: (order: Order, action: OrderAction) => void }> {
-    const viewDetails = useRef<HTMLButtonElement>(null);
-    return (
-        <Card className="gap-0 cursor-pointer transition-shadow hover:shadow-2xl" onClick={() => viewDetails.current?.click()}>
-            <CardHeader>
-                <div className="flex">
-                    <CardTitle className="leading-[1.5rem]">{props.order.id}</CardTitle>
-                    <OrderBadge order={props.order} />
-                    <div className="flex flex-row ms-auto">
-                        {props.order.approvals.map((x, i) => <CircleSmall key={i} fill={x ? Colors.GREEN : x === false ? Colors.RED : Colors.GRAY} className={`${x ? "text-green-500" : x === false ? "text-red-500" : "text-gray-500"}`} />)}
-                    </div>
-                </div>
-            </CardHeader>
-            <CardContent className="relative">
-                <p className="text-sm">{props.order.partName} ({props.order.partNumber})</p>
-                <p className="text-xs">{props.order.requester}</p>
-            </CardContent>
-            <CardFooter className="mt-2 gap-1">
-                <Tooltip>
-                    <TooltipTrigger asChild>
-                        <Button ref={viewDetails} variant="default" size="icon-sm" className="hover:bg-black" onClick={e => (e.stopPropagation(), props.orderTask(props.order, OrderAction.View))}><Ellipsis /></Button>
-                    </TooltipTrigger>
-                    <TooltipContent side="bottom">View Details</TooltipContent>
-                </Tooltip>
-                <Tooltip>
-                    <TooltipTrigger asChild><Button variant="default" size="icon-sm" className="bg-gray-500 hover:bg-black hover:text-white" onClick={e => (e.stopPropagation(), window.open(props.order.url, "_blank"))}><Link /></Button></TooltipTrigger>
-                    <TooltipContent side="bottom">Store Page</TooltipContent>
-                </Tooltip>
-                {props.isAdmin && (
-                    <>
-                        <Tooltip>
-                            <TooltipTrigger asChild><Button variant="default" size="icon-sm" className="bg-green-500 hover:bg-black hover:text-white" onClick={e => (e.stopPropagation(), props.orderTask(props.order, OrderAction.Approve))} disabled={props.order.status !== OrderStatus.Pending}><Check /></Button></TooltipTrigger>
-                            <TooltipContent side="bottom">Approve</TooltipContent>
-                        </Tooltip>
-                        <Tooltip>
-                            <TooltipTrigger asChild><Button variant="default" size="icon-sm" className="bg-red-500 hover:bg-black hover:text-white" onClick={e => (e.stopPropagation(), props.orderTask(props.order, OrderAction.Deny))} disabled={props.order.status !== OrderStatus.Pending}><X /></Button></TooltipTrigger>
-                            <TooltipContent side="bottom">Deny</TooltipContent>
-                        </Tooltip>
-                    </>
-                )}
-            </CardFooter>
-        </Card>
-    );
-}
-
-export default function Orders (): ReactElement {
+export default function Orders (): ReactElement | null {
     // Tabs
     const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
 
@@ -166,15 +68,14 @@ export default function Orders (): ReactElement {
     const [underlineStyle, setUnderlineStyle] = useState({ left: 0, width: 0 });
 
     // Dialog & Sheet
-    const [requestFormOpen, setRequestFormOpen] = useState<boolean>(false);
+    const [orderFormOpen, setOrderFormOpen] = useState<boolean>(false);
     const [orderDetailsOpen, setOrderDetailsOpen] = useState<boolean>(false);
 
     // Date Picker (Deadline)
     const [deadlineOpen, setDeadlineOpen] = useState(false);
     const [deadlineDate, setDeadlineDate] = useState<Date | undefined>(undefined);
 
-    const [currentOrder, setCurrentOrder] = useState<OrderDetails | undefined>(undefined);
-    const [editingOrder, setEditingOrder] = useState(false);
+    const [currentOrder, setCurrentOrder] = useState<DetailedOrder | undefined>(undefined);
 
     const [orderFilter, setOrderFilter] = useState("");
     const [page, setPage] = useState(0);
@@ -201,29 +102,32 @@ export default function Orders (): ReactElement {
     function orderTask<T extends Order> (order: T, action: OrderAction) {
         switch (action) {
             case OrderAction.View:
-                setCurrentOrder(Object.assign({
-                    supplier: "Amazon",
-                    subsystem: "Controls",
-                    quantity: 2,
-                    unitPrice: 15.99,
-                    deadline: new Date().toLocaleDateString(),
-                    notes: ""
-                }, order));
+                if (currentOrder?.id === order.id) {
+                    setOrderDetailsOpen(true);
+                    setOrderFormOpen(false);
+                } else {
+                    void getOrder(order.id).then(res => {
+                        if (res === undefined) return;
+                        setCurrentOrder(res);
 
-                setDeadlineDate(new Date());
-
-                setOrderDetailsOpen(true);
-                setEditingOrder(false);
-
-                // void getOrderDetails(order.id).then(res => {
-                //     if (res === undefined) return;
-                //     setCurrentOrder(res);
-
-                //     setOrderDetailsOpen(true);
-                //     setEditingOrder(false);
-                // });
+                        setOrderDetailsOpen(true);
+                        setOrderFormOpen(false);
+                    });
+                }
                 break;
             case OrderAction.Edit:
+                if (currentOrder?.id === order.id) {
+                    setOrderDetailsOpen(true);
+                    setOrderFormOpen(true);
+                } else {
+                    void getOrder(order.id).then(res => {
+                        if (res === undefined) return;
+                        setCurrentOrder(res);
+
+                        setOrderDetailsOpen(false);
+                        setOrderFormOpen(true);
+                    });
+                }
                 break;
             case OrderAction.Approve:
                 break;
@@ -234,13 +138,13 @@ export default function Orders (): ReactElement {
 
     useEffect(() => {
         (async function () {
-            const res = await getOrders();
+            const res = await getAllOrders();
             if (!res) return;
 
             setIsAdmin(res.admin);
             setOrders({
-                self: res.selfOrders,
-                others: res.otherOrders
+                self: res.self,
+                others: res.others
             });
         })();
     }, []);
@@ -272,8 +176,17 @@ export default function Orders (): ReactElement {
     }, [activeTab]);
 
     return (
-        <Dialog open={requestFormOpen} onOpenChange={setRequestFormOpen}>
+        <Dialog open={orderFormOpen} onOpenChange={setOrderFormOpen}>
             <Sheet open={orderDetailsOpen} onOpenChange={setOrderDetailsOpen}>
+                <OrderForm
+                    deadlineDate={deadlineDate}
+                    deadlineOpen={deadlineOpen}
+                    setDeadlineDate={setDeadlineDate}
+                    setDeadlineOpen={setDeadlineOpen}
+                />
+
+                <OrderDetails order={currentOrder} />
+
                 <div className="xl:mt-16.75 p-8">
                     <h1 className="font-manrope font-semibold text-4xl text-center mb-10">Orders</h1>
                     <div>
@@ -319,7 +232,7 @@ export default function Orders (): ReactElement {
                                             </div>
                                         </InputGroupAddon>
                                     </InputGroup>
-                                    <Button onClick={() => setRequestFormOpen(true)}>
+                                    <Button onClick={() => setOrderFormOpen(true)}>
                                         Create
                                         <Pencil />
                                     </Button>
@@ -330,7 +243,7 @@ export default function Orders (): ReactElement {
                                         ? (filteredOrders.length > 40
                                             ? filteredOrders.slice(page * 40, Math.min(filteredOrders.length, 40 + page * 40))
                                             : filteredOrders
-                                        ).map((x, i) => <OrderEntry key={i} order={x} isAdmin={isAdmin} orderTask={orderTask} />)
+                                        ).map((x, i) => <OrderCard key={i} order={x} admin={isAdmin} orderTask={orderTask} />)
                                         : (
                                             <Empty className="bg-primary">
                                                 <EmptyHeader>
@@ -364,185 +277,6 @@ export default function Orders (): ReactElement {
                         </Tabs>
                     </div>
                 </div>
-                <SheetContent className="overflow-auto">
-                    <SheetHeader>
-                        <SheetTitle className="flex">
-                            <span>{currentOrder?.id}</span>
-                            <OrderBadge order={currentOrder!} />
-                        </SheetTitle>
-                        <SheetDescription className="mt-2">
-                            <span>
-                                {editingOrder
-                                    ? "You are currently editing this order."
-                                    : "Press \"Edit\" to modify this order."
-                                }
-                            </span>
-                        </SheetDescription>
-                    </SheetHeader>
-                    {editingOrder
-                        ? (
-                            <>
-                                <form id="order-edit-form">
-                                    <div className="grid flex-1 auto-rows-min gap-6 px-4">
-                                        <div className="grid grid-cols-3 w-full max-w-sm gap-4">
-                                            <div className="grid col-span-2 gap-3">
-                                                <Label htmlFor="order-part-name">Part Name</Label>
-                                                <Input id="order-part-name" placeholder="ESP32" defaultValue={currentOrder?.partName} required />
-                                            </div>
-                                            <div className="grid gap-3">
-                                                <Label htmlFor="order-part-number">Part Number</Label>
-                                                <Input id="order-part-number" placeholder="435397" defaultValue={currentOrder?.partNumber} required />
-                                            </div>
-                                        </div>
-                                        <div className="grid gap-3">
-                                            <Label htmlFor="order-requester">Requester</Label>
-                                            <Input id="order-requester" placeholder="Enter someone's name" defaultValue={currentOrder?.requester} required />
-                                        </div>
-                                        <div className="grid gap-3">
-                                            <Label htmlFor="order-subsystem">Subsystem</Label>
-                                            <Select required>
-                                                <SelectTrigger className="w-full">
-                                                    <SelectValue id="order-subsystem" placeholder="Select a subsystem" defaultValue={currentOrder?.subsystem} />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    <SelectGroup>
-                                                        {Object.entries(SYSTEMS).map(([system, subsystems], i) => (
-                                                            <>
-                                                                <SelectLabel key={i}>{system}</SelectLabel>
-                                                                {subsystems.map((x, i) => <SelectItem key={i} value={x.toLowerCase()}>{x}</SelectItem>)}
-                                                            </>
-                                                        ))}
-                                                    </SelectGroup>
-                                                </SelectContent>
-                                            </Select>
-                                        </div>
-                                        <div className="grid gap-3">
-                                            <Label htmlFor="order-deadline">Needed By</Label>
-                                            <Popover open={deadlineOpen} onOpenChange={setDeadlineOpen}>
-                                                <PopoverTrigger asChild>
-                                                    <Button
-                                                        variant="outline"
-                                                        id="date"
-                                                        className="w-48 justify-between font-normal"
-                                                    >
-                                                        {deadlineDate?.toLocaleDateString() ?? "Select date"}
-                                                        <ChevronDownIcon />
-                                                    </Button>
-                                                </PopoverTrigger>
-                                                <PopoverContent className="w-auto overflow-hidden p-0" align="start">
-                                                    <Calendar
-                                                        id="order-deadline"
-                                                        mode="single"
-                                                        selected={deadlineDate}
-                                                        captionLayout="dropdown"
-                                                        onSelect={date => {
-                                                            setDeadlineDate(date);
-                                                            setDeadlineOpen(false);
-                                                        }}
-                                                        required
-                                                    />
-                                                </PopoverContent>
-                                            </Popover>
-                                        </div>
-                                        <div className="grid gap-3">
-                                            <Label htmlFor="order-supplier">Supplier</Label>
-                                            <Input id="order-supplier" placeholder="Amazon" defaultValue={currentOrder?.supplier} required />
-                                        </div>
-                                        <div className="grid gap-3">
-                                            <Label htmlFor="order-supplier">Product URL</Label>
-                                            <Input id="order-supplier" type="url" placeholder="https://www.amazon.com/ESP-WROOM-32-Development-Microcontroller-Integrated-Compatible/dp/B08D5ZD528" defaultValue={currentOrder?.url} required />
-                                        </div>
-                                        <div className="grid grid-cols-2 w-full max-w-sm gap-4">
-                                            <ButtonGroup>
-                                                <ButtonGroupText asChild>
-                                                    <Label htmlFor="order-quantity">Quantity</Label>
-                                                </ButtonGroupText>
-                                                <InputGroup>
-                                                    <InputGroupInput id="order-quantity" type="number" placeholder="1" min={1} defaultValue={currentOrder?.quantity} required />
-                                                </InputGroup>
-                                            </ButtonGroup>
-                                            <ButtonGroup>
-                                                <ButtonGroupText asChild>
-                                                    <Label htmlFor="order-unit-price">$</Label>
-                                                </ButtonGroupText>
-                                                <InputGroup>
-                                                    <InputGroupInput id="order-unit-price" type="number" placeholder="0.01" min={0.01} defaultValue={currentOrder?.unitPrice} required />
-                                                </InputGroup>
-                                            </ButtonGroup>
-                                        </div>
-                                        <div className="grid gap-3">
-                                            <Label htmlFor="order-notes">Notes</Label>
-                                            <Textarea id="order-notes" className="resize-none" placeholder="Enter any additional notes here" />
-                                        </div>
-                                    </div>
-                                </form>
-                                <SheetFooter>
-                                    <Button type="submit" form="order-edit-form">Save</Button>
-                                    <Button variant="outline" onClick={() => setEditingOrder(false)}>Cancel</Button>
-                                </SheetFooter>
-                            </>
-                        )
-                        : (
-                            <>
-                                <div className="px-4">
-                                    <div className="flex items-center text-lg mb-2">
-                                        <span>Approvals</span>
-                                        {isAdmin && (
-                                            <div className="flex ms-auto gap-1">
-                                                <Tooltip>
-                                                    <TooltipTrigger asChild><Button variant="default" size="icon-sm" className="bg-green-500 hover:bg-black hover:text-white" onClick={() => orderTask(currentOrder!, OrderAction.Approve)} disabled={currentOrder?.status !== OrderStatus.Pending}><Check /></Button></TooltipTrigger>
-                                                    <TooltipContent side="bottom">Approve</TooltipContent>
-                                                </Tooltip>
-                                                <Tooltip>
-                                                    <TooltipTrigger asChild><Button variant="default" size="icon-sm" className="bg-red-500 hover:bg-black hover:text-white" onClick={() => orderTask(currentOrder!, OrderAction.Deny)} disabled={currentOrder?.status !== OrderStatus.Pending}><X /></Button></TooltipTrigger>
-                                                    <TooltipContent side="bottom">Deny</TooltipContent>
-                                                </Tooltip>
-                                            </div>
-                                        )}
-                                    </div>
-                                    <Separator className="px-4 mb-2" />
-                                    <div className="flex flex-row">
-                                        {currentOrder?.approvals.map((x, i) => <CircleSmall key={i} fill={x ? Colors.GREEN : x === false ? Colors.RED : Colors.GRAY} className={`${x ? "text-green-500" : x === false ? "text-red-500" : "text-gray-500"}`} />)}
-                                    </div>
-
-                                    <p className="text-lg mt-4 mb-2">Requester</p>
-                                    <Separator className="px-4 mb-2" />
-                                    <p className="text-sm">Name: {currentOrder?.requester}</p>
-                                    <p className="text-sm">Subsystem: {currentOrder?.subsystem}</p>
-                                    <p className="text-sm">Needed By: {new Date(currentOrder?.deadline ?? 0).toLocaleDateString()}</p>
-
-                                    <div className="flex items-center text-lg mt-8 mb-2">
-                                        <span>Part Details</span>
-                                        <Tooltip>
-                                            <TooltipTrigger asChild className="ms-auto"><Button variant="default" size="icon-sm" className="bg-gray-500 hover:bg-black hover:text-white" onClick={() => window.open(currentOrder?.url, "_blank")}><Link /></Button></TooltipTrigger>
-                                            <TooltipContent side="bottom">Store Page</TooltipContent>
-                                        </Tooltip>
-                                    </div>
-                                    <Separator className="px-4 mb-2" />
-                                    <p className="text-sm">Part Name: {currentOrder?.partName}</p>
-                                    <p className="text-sm">Part #: {currentOrder?.partNumber}</p>
-                                    <p className="text-sm">Supplier: {currentOrder?.supplier}</p>
-                                    <br />
-                                    <p className="text-sm">Quantity: {currentOrder?.quantity}</p>
-                                    <p className="text-sm">Unit Price: ${(currentOrder?.unitPrice ?? 0).toFixed(2)}</p>
-                                    <p className="text-sm">Subtotal: ${((currentOrder?.quantity ?? 0) * (currentOrder?.unitPrice ?? 0)).toFixed(2)}</p>
-
-                                    <p className="text-lg mt-8 mb-2">Notes</p>
-                                    <Separator className="px-4 mb-2" />
-                                    <p className="text-sm">{currentOrder?.notes || "No additional notes."}</p>
-                                </div>
-                                <SheetFooter>
-                                    <Button variant="default" onClick={() => setEditingOrder(true)}>
-                                        Edit
-                                    </Button>
-                                    <SheetClose asChild>
-                                        <Button variant="outline">Close</Button>
-                                    </SheetClose>
-                                </SheetFooter>
-                            </>
-                        )
-                    }
-                </SheetContent>
             </Sheet>
         </Dialog>
     );
