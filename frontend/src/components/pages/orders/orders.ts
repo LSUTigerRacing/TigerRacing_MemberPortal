@@ -42,10 +42,6 @@ export interface Part {
      */
     url: string
     /**
-     * The supplier for the part.
-     */
-    supplier: string
-    /**
      * The quantity of the item.
      */
     quantity: number
@@ -70,10 +66,6 @@ export interface Order {
          */
         displayName: string
         /**
-         * The username of the user who requested the order.
-         */
-        username: string
-        /**
          * The subsystem the requester belongs to.
          */
         subsystem: Subsystem
@@ -97,6 +89,10 @@ export interface Order {
      */
     deadline: string
     /**
+     * The supplier for the order.
+     */
+    supplier: string
+    /**
      * The total value of the order.
      */
     price: number
@@ -107,8 +103,18 @@ export interface Order {
 }
 
 export interface DetailedOrder extends Order {
+    /**
+     * A list of parts in the order.
+     */
     parts: Part[]
+    /**
+     * Optional notes added to the order.
+     */
     notes: string
+    /**
+     * Whether the user viewing the resource has reviewed the order.
+     */
+    reviewed: boolean
 }
 
 /**
@@ -149,23 +155,23 @@ export async function getOrder (id: Order["id"]): Promise<DetailedOrder | undefi
         id: "TR26-001",
         requester: {
             displayName: "Damien Vesper",
-            username: "damienvesper",
             subsystem: Subsystem.Embedded
         },
         length: 1,
         price: 15.99,
         status: OrderStatus.Denied,
+        supplier: "Amazon",
         reviews: [true, false, null],
         deadline: new Date().toISOString(),
         parts: [{
             name: "AITRIP ESP-WROOM-32",
             number: "B08D5ZD528",
             url: "https://www.amazon.com/ESP-WROOM-32-Development-Microcontroller-Integrated-Compatible/dp/B08D5ZD528",
-            supplier: "Amazon",
             quantity: 1,
             price: 15.99
         }],
-        notes: ""
+        notes: "",
+        reviewed: false
     };
 
     return res?.data ?? undefined;

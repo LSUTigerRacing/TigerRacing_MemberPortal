@@ -176,11 +176,12 @@ export default function Orders (): ReactElement | null {
     }, [activeTab]);
 
     return (
-        <Dialog open={orderFormOpen} onOpenChange={setOrderFormOpen}>
-            <Sheet open={orderDetailsOpen} onOpenChange={setOrderDetailsOpen}>
+        <Sheet open={orderDetailsOpen} onOpenChange={setOrderDetailsOpen}>
+            <Dialog open={orderFormOpen} onOpenChange={setOrderFormOpen}>
                 <OrderForm
                     deadlineDate={deadlineDate}
                     deadlineOpen={deadlineOpen}
+                    order={currentOrder}
                     setDeadlineDate={setDeadlineDate}
                     setDeadlineOpen={setDeadlineOpen}
                 />
@@ -277,7 +278,7 @@ export default function Orders (): ReactElement | null {
                         </Tabs>
                     </div>
                 </div>
-            </Sheet>
-        </Dialog>
+            </Dialog>
+        </Sheet>
     );
 }

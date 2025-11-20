@@ -8,12 +8,14 @@ import {
 } from "lucide-react";
 import {
     Fragment,
+    useDeferredValue,
     useState,
     type Dispatch,
     type ReactElement,
     type SetStateAction
 } from "react";
 
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -56,11 +58,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 import { config } from "@/lib/config/config";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import type { Subsystem } from "@/lib/config/systems";
+
+import type { DetailedOrder } from "./orders";
 
 interface OrderFormProps {
     deadlineDate: Date | undefined
     deadlineOpen: boolean
+    order: DetailedOrder | undefined
     setDeadlineDate: Dispatch<SetStateAction<OrderFormProps["deadlineDate"]>>
     setDeadlineOpen: Dispatch<SetStateAction<OrderFormProps["deadlineOpen"]>>
 }
@@ -72,12 +77,29 @@ enum OrderFormState {
 }
 
 export default function OrderForm (props: OrderFormProps): ReactElement<OrderFormProps> | null {
-    const { deadlineDate, deadlineOpen, setDeadlineDate, setDeadlineOpen } = props;
+    const { deadlineDate, deadlineOpen, order, setDeadlineDate, setDeadlineOpen } = props;
 
-    const [requester, setRequester] = useState("");
+    const [requester, setRequester] = useState(order?.requester.displayName ?? "");
+    const [subsystem, setSubsystem] = useState<DetailedOrder["requester"]["subsystem"] | undefined>(order?.requester.subsystem);
+    const [supplier, setSupplier] = useState(order?.supplier ?? "");
+    const [parts, setParts] = useState<DetailedOrder["parts"]>(
+        order?.parts
+            ? Array.from(order.parts)
+            : [{
+                name: "",
+                number: "",
+                url: "",
+                quantity: -1,
+                price: -1
+            }]
+    );
+    const [deadline, setDeadline] = useState<DetailedOrder["deadline"]>(order?.deadline ?? "");
+    const [notes, setNotes] = useState(order?.notes ?? "");
+
     const [tab, setTab] = useState(OrderFormState.BasicInformation);
-
     const [partIndex, setPartIndex] = useState(0);
+
+    const totalPrice = useDeferredValue(parts.length > 0 ? parts.map(x => x.price * x.quantity).reduce((a, b) => a + b) : 0);
 
     return (
         <form>
@@ -110,12 +132,12 @@ export default function OrderForm (props: OrderFormProps): ReactElement<OrderFor
                     <div className="flex flex-col xl:grid xl:grid-cols-6 gap-6">
                         <div className="grid gap-3 col-span-4">
                             <Label htmlFor="order-requester">Requester</Label>
-                            <Input id="order-requester" placeholder="Enter a name" value={requester} onChange={e => setRequester(e.target.value)} required />
+                            <Input id="order-requester" placeholder="Enter the recipient's name" value={requester} onChange={e => setRequester(e.target.value)} required />
                         </div>
                         <div className="grid gap-3 col-span-2">
                             <Label htmlFor="order-subsystem">Subsystem</Label>
-                            <Select required>
-                                <SelectTrigger className="w-full">
+                            <Select value={subsystem} onValueChange={(x => setSubsystem(x as unknown as Subsystem))} required>
+                                <SelectTrigger className="w-full cursor-pointer hover:bg-accent transition-colors">
                                     <SelectValue id="order-subsystem" placeholder="Select a subsystem" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -123,7 +145,7 @@ export default function OrderForm (props: OrderFormProps): ReactElement<OrderFor
                                         {Object.entries(config.systems).map(([system, subsystems], i) => (
                                             <Fragment key={i}>
                                                 <SelectLabel>{system}</SelectLabel>
-                                                {subsystems.map((x, j) => <SelectItem key={j} value={x.toLowerCase()}>{x}</SelectItem>)}
+                                                {subsystems.map((x, j) => <SelectItem key={j} value={x}>{x}</SelectItem>)}
                                             </Fragment>
                                         ))}
                                     </SelectGroup>
@@ -158,11 +180,20 @@ export default function OrderForm (props: OrderFormProps): ReactElement<OrderFor
                                 </PopoverContent>
                             </Popover>
                         </div>
-                        <div className="grid col-span-2">
-                            <div className="grid gap-3 col-span-2">
-                                <Label htmlFor="order-supplier">Supplier</Label>
-                                <Input id="order-supplier" placeholder="Amazon" required />
-                            </div>
+                        <div className="grid gap-3 col-span-2">
+                            <Label htmlFor="order-supplier">Supplier</Label>
+                            <Input id="order-supplier" placeholder="Amazon" value={supplier} onChange={e => setSupplier(e.target.value)} required />
+                        </div>
+                        <div className="grid gap-3 col-span-2">
+                            <Label htmlFor="order-subtotal">Subtotal</Label>
+                            <ButtonGroup>
+                                <ButtonGroupText asChild>
+                                    <Label htmlFor="order-subtotal">$</Label>
+                                </ButtonGroupText>
+                                <InputGroup>
+                                    <InputGroupInput id="order-subtotal" value={totalPrice.toFixed(2)} disabled className="flex-1" />
+                                </InputGroup>
+                            </ButtonGroup>
                         </div>
                     </div>
                 )}
@@ -203,7 +234,7 @@ export default function OrderForm (props: OrderFormProps): ReactElement<OrderFor
                             </ButtonGroup>
                         </div>
                         <div className="grid gap-3 col-span-2">
-                            <Label htmlFor="order-supplier">Subtotal</Label>
+                            <Label htmlFor="order-supplier">Part Subtotal</Label>
                             <ButtonGroup>
                                 <ButtonGroupText asChild>
                                     <Label htmlFor="order-unit-price">$</Label>
@@ -230,30 +261,30 @@ export default function OrderForm (props: OrderFormProps): ReactElement<OrderFor
                                 <PaginationItem>
                                     <Tooltip>
                                         <TooltipTrigger>
-                                            <PaginationLink onClick={() => setPartIndex(0)} className={!table.getCanPreviousPage() ? "pointer-events-none text-muted-foreground" : ""}>
+                                            <PaginationLink onClick={() => setPartIndex(0)} className={partIndex === 0 ? "pointer-events-none text-muted-foreground" : ""}>
                                                 <ChevronFirstIcon className="w-4 h-4" />
                                             </PaginationLink>
                                         </TooltipTrigger>
-                                        <TooltipContent className={!table.getCanPreviousPage() ? "hidden" : ""}>First</TooltipContent>
+                                        <TooltipContent className={partIndex === 0 ? "hidden" : ""}>First</TooltipContent>
                                     </Tooltip>
                                 </PaginationItem>
                                 <PaginationItem>
                                     <Tooltip>
                                         <TooltipTrigger>
-                                            <PaginationLink onClick={() => setPartIndex(partIndex - 1)} className={!table.getCanPreviousPage() ? "pointer-events-none text-muted-foreground" : ""}>
+                                            <PaginationLink onClick={() => setPartIndex(partIndex - 1)} className={partIndex === 0 ? "pointer-events-none text-muted-foreground" : ""}>
                                                 <ChevronLeftIcon className="w-4 h-4" />
                                             </PaginationLink>
                                         </TooltipTrigger>
-                                        <TooltipContent className={!table.getCanPreviousPage() ? "hidden" : ""}>Previous</TooltipContent>
+                                        <TooltipContent className={partIndex === 0 ? "hidden" : ""}>Previous</TooltipContent>
                                     </Tooltip>
                                 </PaginationItem>
                                 <PaginationItem>
-                                    <Select defaultValue={String(0)} aria-label="Select page" value={table.getState().pagination.pageIndex.toString()} onValueChange={i => table.setPageIndex(parseInt(i))}>
+                                    <Select defaultValue={String(0)} aria-label="Select page" value={partIndex.toString()} onValueChange={i => setPartIndex(parseInt(i))}>
                                         <SelectTrigger id="select-page" className="w-fit whitespace-nowrap cursor-pointer" aria-label="Select page">
                                             <SelectValue placeholder="Select page" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            {Array.from({ length: table.getPageCount() }).map((_, i) => (
+                                            {parts.map((_, i) => (
                                                 <SelectItem key={i} value={i.toString()}>
                                                     Page {i + 1}
                                                 </SelectItem>
@@ -264,21 +295,21 @@ export default function OrderForm (props: OrderFormProps): ReactElement<OrderFor
                                 <PaginationItem>
                                     <Tooltip>
                                         <TooltipTrigger>
-                                            <PaginationLink onClick={() => setPartIndex(partIndex + 1)} className={!table.getCanNextPage() ? "pointer-events-none text-muted-foreground" : ""}>
+                                            <PaginationLink onClick={() => setPartIndex(partIndex + 1)} className={partIndex === parts.length - 1 ? "pointer-events-none text-muted-foreground" : ""}>
                                                 <ChevronRightIcon className="w-4 h-4" />
                                             </PaginationLink>
                                         </TooltipTrigger>
-                                        <TooltipContent className={!table.getCanNextPage() ? "hidden" : ""}>Next</TooltipContent>
+                                        <TooltipContent className={partIndex === parts.length - 1 ? "hidden" : ""}>Next</TooltipContent>
                                     </Tooltip>
                                 </PaginationItem>
                                 <PaginationItem>
                                     <Tooltip>
                                         <TooltipTrigger>
-                                            <PaginationLink onClick={() => setPartIndex(partIndex + 1)} className={!table.getCanNextPage() ? "pointer-events-none text-muted-foreground" : ""}>
+                                            <PaginationLink onClick={() => setPartIndex(partIndex + 1)} className={partIndex === parts.length - 1 ? "pointer-events-none text-muted-foreground" : ""}>
                                                 <ChevronLastIcon className="w-4 h-4" />
                                             </PaginationLink>
                                         </TooltipTrigger>
-                                        <TooltipContent className={!table.getCanNextPage() ? "hidden" : ""}>Last</TooltipContent>
+                                        <TooltipContent className={partIndex === parts.length - 1 ? "hidden" : ""}>Last</TooltipContent>
                                     </Tooltip>
                                 </PaginationItem>
                             </PaginationContent>
