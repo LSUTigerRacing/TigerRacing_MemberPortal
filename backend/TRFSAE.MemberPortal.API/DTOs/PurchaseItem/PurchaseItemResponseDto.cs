@@ -1,5 +1,5 @@
 using System.Text.Json.Serialization;
-
+using TRFSAE.MemberPortal.API.Models;
 namespace TRFSAE.MemberPortal.API.DTOs
 {
     public class PurchaseItemResponseDto
@@ -29,7 +29,7 @@ namespace TRFSAE.MemberPortal.API.DTOs
         public string Supplier { get; set; } = string.Empty;
 
         [JsonPropertyName("status")]
-        public string Status { get; set; } = string.Empty;
+        public PurchaseStatus PurchaseStatus { get; set; }
 
         [JsonPropertyName("notes")]
         public string Notes { get; set; } = string.Empty;
@@ -54,9 +54,6 @@ namespace TRFSAE.MemberPortal.API.DTOs
 
         [JsonPropertyName("request_id")]
         public Guid? RequestId { get; set; }
-
-        [JsonPropertyName("subtotal")]
-        public decimal? Subtotal { get; set; }
 
         [JsonPropertyName("approvals")]
         public bool[]? Approvals { get; set; }

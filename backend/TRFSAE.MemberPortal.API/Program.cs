@@ -78,15 +78,15 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
 }
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
-using (var scope = app.Services.CreateScope())
-{
-    var googleSheetsService = scope.ServiceProvider.GetRequiredService<IGoogleSheetsService>();
+// using (var scope = app.Services.CreateScope())
+// {
+//     var googleSheetsService = scope.ServiceProvider.GetRequiredService<IGoogleSheetsService>();
 
-    // Initialize Google Sheets API once
-    await googleSheetsService.ListenToSupabaseChangesAsync();
-}
+//     // Initialize Google Sheets API once
+//     await googleSheetsService.ListenToSupabaseChangesAsync();
+// }
 
 app.Run();

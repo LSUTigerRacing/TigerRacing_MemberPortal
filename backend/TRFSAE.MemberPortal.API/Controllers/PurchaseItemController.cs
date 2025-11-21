@@ -19,7 +19,7 @@ namespace TRFSAE.MemberPortal.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllPurchaseItemsAsync([FromQuery] PurchaseItemSearchDto? dto)
         {
-            var result = await _purchaseItemService.GetAllPurchaseItemsAsync(dto ?? new PurchaseItemSearchDto());
+            var result = await _purchaseItemService.GetAllPurchaseItemsAsync(dto);
             return Ok(result);
         }
 
@@ -34,8 +34,9 @@ namespace TRFSAE.MemberPortal.API.Controllers
         public async Task<IActionResult> CreatePurchaseItemAsync(PurchaseItemCreateDto dto)
         {
             var created = await _purchaseItemService.CreatePurchaseItemAsync(dto);
-            return CreatedAtAction(nameof(GetPurchaseItemByIDAsync), new { id = created.Id }, created);
+            return Created($"/api/purchase-item/{created.Id}", created);
         }
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdatePurchaseItemByIDAsync(Guid id, PurchaseItemUpdateDto dto)
