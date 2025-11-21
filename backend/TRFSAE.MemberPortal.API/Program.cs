@@ -8,7 +8,11 @@ DotEnv.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 {
-    builder.Services.AddScoped<IPurchaseItemService, PurchaseItemService>();
+    builder.Services.AddScoped<IUserService, UserService>();
+    builder.Services.AddScoped<IRoleService, RoleService>();
+    builder.Services.AddScoped<ITaskService, TaskService>();
+    builder.Services.AddScoped<IProjectService, ProjectService>();
+    builder.Services.AddScoped<IGoogleSheetsService, GoogleSheetsService>();
 }
 
 // register Supabase client as scoped for reuse across project
@@ -29,6 +33,20 @@ builder.Services.AddScoped(provider =>
     client.InitializeAsync().GetAwaiter().GetResult();
 
     return client;
+});
+
+// register Supabase client as a singleton for reuse across project
+builder.Services.AddScoped(provider =>
+{
+    var options = new SupabaseOptions
+    {
+        AutoConnectRealtime = true,
+        AutoRefreshToken = true,
+    };
+
+    var url = builder.Configuration["SupabaseUrl"] ?? throw new InvalidOperationException("Supabase URL is not configured.");
+    var key = builder.Configuration["SupabaseKey"] ?? throw new InvalidOperationException("Supabase Key is not configured.");
+    return new Client(url, key, options);
 });
 
 // Add services to the container.
@@ -60,8 +78,15 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
 }
 
-//app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
+// using (var scope = app.Services.CreateScope())
+// {
+//     var googleSheetsService = scope.ServiceProvider.GetRequiredService<IGoogleSheetsService>();
+
+//     // Initialize Google Sheets API once
+//     await googleSheetsService.ListenToSupabaseChangesAsync();
+// }
 
 app.Run();
