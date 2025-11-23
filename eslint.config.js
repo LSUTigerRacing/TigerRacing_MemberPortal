@@ -13,7 +13,8 @@ import globals from "globals";
 export default defineConfig(
     globalIgnores([
         "**/node_modules",
-        "**/dist"
+        "**/dist",
+        "**/drizzle"
     ]),
     js.configs.recommended,
     ...tseslint.configs.recommended,
