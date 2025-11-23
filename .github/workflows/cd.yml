@@ -18,13 +18,22 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v5
 
-      - name: Setup Supabase CLI
-        uses: supabase/setup-cli@v1
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
         with:
-          version: latest
+            bun-version: latest
 
-      - name: Link Supabase Project
-        run: supabase link --workdir ./database --project-ref ${{ secrets.SUPABASE_PROJECT_REF }}
+      - name: Install Packages
+        run: bun install --filter ./database
 
-      - name: Run Migrations
-        run: supabase db push --workdir ./database
+      - name: Build Project
+        run: bun run build
+        working-directory: ./database
+
+      - name: Generate Migrations
+        run: bun db:generate
+        working-directory: ./database
+
+      - name: Deploy Migrations
+        run: bun db:push
+        working-directory: ./database

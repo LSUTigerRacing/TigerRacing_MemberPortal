@@ -5,22 +5,26 @@
     "lib": ["ESNext"],
 
     "moduleResolution": "NodeNext",
-   
+
     "strict": true,
     "strictNullChecks": true,
     "alwaysStrict": true,
     "skipLibCheck": true,
-    "noEmit": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
     "verbatimModuleSyntax": true,
     "useDefineForClassFields": true,
-    "allowJs": true,
-    "checkJs": true,
+    "rewriteRelativeImportExtensions": true,
+    "composite": true,
 
-    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo"
+    "rootDir": "../",
+    "outDir": "dist"
   },
-  "include": ["vite.config.ts"],
+  "include": [
+    "../shared/**/*.ts",
+    "src/**/*.ts",
+    "drizzle.config.ts"
+  ],
   "exclude": ["node_modules"]
 }

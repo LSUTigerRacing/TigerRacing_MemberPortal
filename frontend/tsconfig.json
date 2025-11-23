@@ -1,13 +1,14 @@
 {
-  "files": [],
+  "compilerOptions": {
+    "composite": true,
+    "rootDir": "../",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }
   ],
-
-  "compilerOptions": {
-    "paths": {
-      "@/*": ["./src/*"]
-    }
-  }
+  "files": []
 }
