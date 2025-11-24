@@ -4,12 +4,15 @@ import { relations } from "drizzle-orm";
 import { Order, OrderReview } from "./Order.js";
 import { ProjectTask, ProjectUser } from "./Project.js";
 
-import { shirtSizes, subsystems } from "./enums.js";
+import { roles, shirtSizes, subsystems } from "./enums.js";
+
+import { Role } from "../../../shared/config/enums.js";
 
 export const User = pgTable("user", t => ({
     id: t.uuid().primaryKey().defaultRandom(),
     name: t.text().notNull(),
     email: t.text().unique().notNull(),
+    role: roles().notNull().default(Role.Member),
 
     /**
      * This is the student's 89 number.

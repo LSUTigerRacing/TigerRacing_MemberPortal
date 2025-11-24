@@ -3,6 +3,7 @@ import { pgEnum } from "drizzle-orm/pg-core";
 import {
     OrderStatus,
     ProjectPriority,
+    Role,
     ShirtSize,
     Subsystem,
     System
@@ -10,7 +11,8 @@ import {
 
 export const systems = pgEnum("system", System);
 export const subsystems = pgEnum("subsystems", Subsystem);
-export const shirtSizes = pgEnum("shirt_sizes", ShirtSize)
+export const shirtSizes = pgEnum("shirt_sizes", ShirtSize);
+export const roles = pgEnum("roles", Role);
 
 // Projects
 export const projectPriority = pgEnum("project_priority", ProjectPriority);

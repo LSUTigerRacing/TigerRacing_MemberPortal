@@ -42,6 +42,14 @@ export enum ShirtSize {
     XXL = "Extra Extra Large"
 }
 
+export enum Role {
+    SuperAdmin = "Superadmin",
+    Admin = "Admin",
+    SystemLead = "System Lead",
+    SubsystemLead = "Subsystem Lead",
+    Member = "Member"
+}
+
 export enum ProjectPriority {
     Low = "low",
     Medium = "medium",
