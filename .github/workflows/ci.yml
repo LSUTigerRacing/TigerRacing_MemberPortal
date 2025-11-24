@@ -20,41 +20,61 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v5
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
         with:
-          version: 10
+            bun-version: latest
 
       - name: Install Packages
-        run: pnpm install
-        working-directory: ./frontend
-
-      - name: Lint Client
-        run: pnpm lint:ci
-        working-directory: ./frontend
+        run: bun install --filter ./frontend
 
       - name: Build Client
-        run: pnpm build
+        run: bun run build
         working-directory: ./frontend
-      - name: Setup Supabase CLI
-        uses: supabase/setup-cli@v1
-        with:
-          version: latest
 
-  supabase:
-    name: Supabase
+  database:
+    name: Database
     runs-on: ubuntu-latest
     concurrency: 
-      group: ci-supabase-${{ github.ref }}
-      cancel-in-progress: true
-    if: github.event_name == 'pull_request'
+      group: ci-db-${{ github.ref }}
 
     steps:
-      - name: Start Supabase Stack
-        run: supabase db start --workdir ./database
+      - name: Checkout Repository
+        uses: actions/checkout@v5
 
-      - name: Lint Migrations
-        run: supabase db lint --workdir ./database
-      
-      - name: Test Migrations
-        run: supabase db test --workdir ./database
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+            bun-version: latest
+
+      - name: Install Packages
+        run: bun install --filter ./database
+
+      - name: Build Project
+        run: bun run build
+        working-directory: ./database
+
+      - name: Generate Migrations
+        run: bun db:generate
+        working-directory: ./database
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    concurrency: 
+      group: ci-lint-${{ github.ref }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v5
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+            bun-version: latest
+
+      - name: Install Packages
+        run: bun install
+
+      - name: Lint
+        run: bun lint:ci

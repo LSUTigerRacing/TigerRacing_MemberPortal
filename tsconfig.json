@@ -1,0 +1,23 @@
+{
+  "references": [
+    { "path": "./frontend/tsconfig.json" },
+    { "path": "./database/tsconfig.json" },
+    { "path": "./shared/tsconfig.json" }
+  ],
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "strictNullChecks": true,
+    "allowJs": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "noEmit": true
+  },
+  "exclude": ["node_modules"],
+  "include": ["eslint.config.js", "**/*.ts", "**/*.tsx"]
+}

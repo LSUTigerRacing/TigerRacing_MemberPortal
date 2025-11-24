@@ -11,7 +11,11 @@ import reactHooks from "eslint-plugin-react-hooks";
 import globals from "globals";
 
 export default defineConfig(
-    globalIgnores(["node_modules", "dist"]),
+    globalIgnores([
+        "**/node_modules",
+        "**/dist",
+        "**/drizzle"
+    ]),
     js.configs.recommended,
     ...tseslint.configs.recommended,
     ...tseslint.configs.stylistic,
@@ -54,7 +58,7 @@ export default defineConfig(
     {
         languageOptions: {
             parserOptions: {
-                project: ["tsconfig.node.json", "tsconfig.app.json"],
+                projectService: true,
                 tsconfigRootDir: import.meta.dirname,
                 warnOnUnsupportedTypeScriptVersion: false
             },

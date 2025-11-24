@@ -5,22 +5,18 @@
     "lib": ["ESNext"],
 
     "moduleResolution": "NodeNext",
-   
+
     "strict": true,
     "strictNullChecks": true,
     "alwaysStrict": true,
     "skipLibCheck": true,
-    "noEmit": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
     "verbatimModuleSyntax": true,
     "useDefineForClassFields": true,
-    "allowJs": true,
-    "checkJs": true,
-
-    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo"
+    "composite": true
   },
-  "include": ["vite.config.ts"],
+  "include": ["**/*.ts"],
   "exclude": ["node_modules"]
 }
