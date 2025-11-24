@@ -3,7 +3,7 @@ import { relations } from "drizzle-orm";
 
 import { User } from "./User.js";
 
-import { orderStatus, subsystems } from "../enums.js";
+import { orderStatus, subsystems } from "./enums.js";
 
 export const Order = pgTable("order", t => ({
     id: t.uuid().primaryKey().defaultRandom(),

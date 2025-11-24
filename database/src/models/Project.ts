@@ -3,7 +3,7 @@ import { relations } from "drizzle-orm";
 
 import { User } from "./User.js";
 
-import { projectPriority, subsystems } from "../enums.js";
+import { projectPriority, subsystems } from "./enums.js";
 
 export const Project = pgTable("project", t => ({
     id: t.uuid().primaryKey().defaultRandom(),

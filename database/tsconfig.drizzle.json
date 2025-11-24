@@ -19,7 +19,7 @@
     },
     "include": [
         "src/models/*.ts",
-        "src/enums.ts",
+        "src/enums.js",
         "drizzle.config.ts",
     ],
     "exclude": ["node_modules"]
