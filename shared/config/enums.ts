@@ -33,6 +33,15 @@ export enum Subsystem {
     PublicRelations = "Public Relations"
 }
 
+export enum ShirtSize {
+    XS = "Extra Small",
+    S = "Small",
+    M = "Medium",
+    L = "Large",
+    XL = "Extra Large",
+    XXL = "Extra Extra Large"
+}
+
 export enum ProjectPriority {
     Low = "low",
     Medium = "medium",
