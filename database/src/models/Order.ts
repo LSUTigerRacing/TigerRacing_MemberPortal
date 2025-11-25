@@ -12,7 +12,6 @@ export const Order = pgTable("order", t => ({
     name: t.text().notNull(),
     subsystem: subsystems().notNull(),
     status: orderStatus().notNull(),
-    supplier: t.text().notNull(),
     deadline: t.timestamp({ withTimezone: true }).notNull(),
     notes: t.text(),
 
@@ -25,8 +24,9 @@ export const OrderItem = pgTable("order_item", t => ({
     orderId: t.uuid().notNull().references(() => Order.id, { onDelete: "cascade" }),
 
     name: t.text().notNull(),
-    url: t.text().notNull(),
     partNumber: t.text().notNull(),
+    supplier: t.text().notNull(),
+    url: t.text().notNull(),
     quantity: t.integer().notNull(),
     price: t.numeric().notNull()
 }));
