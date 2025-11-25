@@ -1,3 +1,4 @@
+using TRFSAE.MemberPortal.API.Models;
 namespace TRFSAE.MemberPortal.API.DTOs
 {
     public class PurchaseItemSearchDto
@@ -5,7 +6,7 @@ namespace TRFSAE.MemberPortal.API.DTOs
         public string? PartName { get; set; }
         public int ManufacturerPtNo { get; set; }
         public string? Supplier { get; set; }
-        public string? Status { get; set; }
+        public PurchaseStatus PurchaseStatus { get; set; }
         public DateTime? NeededBy { get; set; }
         public string? PoNumber { get; set; }
         public string? OrderActiveStatus { get; set; }

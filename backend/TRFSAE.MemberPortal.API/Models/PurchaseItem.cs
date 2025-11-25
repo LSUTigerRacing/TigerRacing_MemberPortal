@@ -1,6 +1,6 @@
 using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
-
+using System.Text.Json.Serialization;
 namespace TRFSAE.MemberPortal.API.Models
 {
     [Table("purchase_item")]
@@ -31,7 +31,8 @@ namespace TRFSAE.MemberPortal.API.Models
         public string Supplier { get; set; } = string.Empty;
 
         [Column("status")]
-        public string Status { get; set; } = string.Empty;
+        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+        public PurchaseStatus PurchaseStatus { get; set; }
 
         [Column("notes")]
         public string? Notes { get; set; }
@@ -56,9 +57,6 @@ namespace TRFSAE.MemberPortal.API.Models
 
         [Column("request_id")]
         public Guid? RequestId { get; set; }
-
-        [Column("subtotal")]
-        public decimal? Subtotal { get; set; }
 
         [Column("approvals")]
         public bool[]? Approvals { get; set; }
