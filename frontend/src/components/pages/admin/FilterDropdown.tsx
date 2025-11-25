@@ -2,19 +2,19 @@
 import {
     useEffect,
     useState,
+    useMemo,
     type Dispatch,
     type SetStateAction
 } from "react";
 import { Circle } from "lucide-react";
-
 import { getUsers } from "@/services/userService";
 
+import { subsystemCategories } from "@/components/member-data-format/user";
 import {
-    subsystemCategories,
+    type User,
     type System,
-    type Subsystem,
-    type User
-} from "@/lib/dummyData/user";
+    type Subsystem
+} from "@/components/member-data-format/user";
 
 interface FilterDropdownProps {
     onFilterChange: (filteredMembers: User[]) => void
@@ -84,6 +84,9 @@ const FilterDropdown = ({
             return b.Name.localeCompare(a.Name);
         }
     });
+
+    const gradYears = useMemo(() => [...new Set(users.map(user => user.GradDate))]
+        .sort((a, b) => a.localeCompare(b)), [users]);
 
     // Event Handlers
     const handleSystemToggle = (system: System) => {
@@ -173,21 +176,19 @@ const FilterDropdown = ({
                             Grad Year
                         </h3>
                         <div className="flex justify-between">
-                            {Array.from(new Set(users.map(User => User.GradDate)))
-                                .sort()
-                                .map(GradDate => (
-                                    <button
-                                        key={GradDate}
-                                        onClick={() => handleYearToggle(GradDate)}
-                                        className={`font-sora inline-block not-first:items-center gap-2 p-2 rounded-lg transition-colors ${
-                                            filters.years.includes(GradDate)
-                                                ? "bg-primary/60 text-background"
-                                                : "bg-gray-100 dark:bg-gray-700"
-                                        }`}
-                                    >
-                                        {GradDate}
-                                    </button>
-                                ))}
+                            {gradYears.map(gradDate => (
+                                <button
+                                    key={gradDate}
+                                    onClick={() => handleYearToggle(gradDate)}
+                                    className={`font-sora inline-block not-first:items-center gap-2 p-2 rounded-lg transition-colors ${
+                                        filters.years.includes(gradDate)
+                                            ? "bg-primary/60 text-background"
+                                            : "bg-gray-100 dark:bg-gray-700"
+                                    }`}
+                                >
+                                    {gradDate}
+                                </button>
+                            ))}
                         </div>
                     </div>
 

@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useId, useState, useRef, useEffect } from "react";
 
-import type { User, System, Subsystem } from "@/components/dummyData/user";
+import type { User, System, Subsystem } from "@/components/member-data-format/user";
 import { TableProperties, FunnelIcon, SearchIcon, GalleryHorizontalIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,7 +15,7 @@ import {
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 
-import FilterDropdown from "@/components/ui/adminPortal/SearchBar/FilterDropdown";
+import FilterDropdown from "@/components/pages/admin/FilterDropdown";
 
 export interface SearchBarProps extends React.HTMLAttributes<HTMLElement> {
     searchPlaceholder?: string

@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { getUsers, deleteUser } from "@/services/userService";
-import type { User } from "@/components/dummyData/user";
+import type { User } from "@/components/member-data-format/user";
 
-import { Navbar } from "@/components/ui/NavBar/shadcn-io/navbar-06";
+import NavbarComponent from "@/components/layout/Navbar";
 import { SearchBar } from "@/components/ui/adminPortal/SearchBar/shadcn-io/SearchBar/index";
-import MemberTable from "@/components/ui/adminPortal/MemberTable/MemberTable";
-import GalleryCard from "@/components/ui/adminPortal/GalleryPageCard/GalleryCard";
+import MemberTable from "@/components/pages/admin/MemberTable";
+import GalleryCard from "@/components/pages/admin/GalleryCard";
 
 export const PagesView = () => {
     const [view, setView] = useState<"column" | "gallery">("column");
@@ -66,7 +66,7 @@ export const PagesView = () => {
     if (loading) {
         return (
             <>
-                <Navbar />
+                <NavbarComponent />
                 <div className="flex justify-center">
                     <h1>Loading members...</h1>
                 </div>
@@ -77,7 +77,7 @@ export const PagesView = () => {
     if (error) {
         return (
             <>
-                <Navbar />
+                <NavbarComponent />
                 <div className="flex justify-center pt-10">
                     <p className="text-lg font-sora items-center">Error loading members. Please retry.</p>
                 </div>
@@ -87,7 +87,7 @@ export const PagesView = () => {
 
     return (
         <>
-            <Navbar />
+            <NavbarComponent />
             <SearchBar
                 view={view}
                 setView={setView}
