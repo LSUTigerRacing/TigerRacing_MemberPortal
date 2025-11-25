@@ -35,5 +35,5 @@ jobs:
         working-directory: ./database
 
       - name: Deploy Migrations
-        run: bun db:push
+        run: bun db:push -- --force
         working-directory: ./database
