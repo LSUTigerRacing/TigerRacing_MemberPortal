@@ -21,12 +21,12 @@ import {
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 
-interface MemberDropdownProps {
+interface UserDropdownProps {
     user: User
     onDeleteMember: (memberId: string) => void
 }
 
-export default function MemberDropdown ({ user, onDeleteMember }: MemberDropdownProps): ReactElement {
+export default function MemberDropdown ({ user, onDeleteMember }: UserDropdownProps): ReactElement {
     const [open, setOpen] = useState(false);
 
     return (

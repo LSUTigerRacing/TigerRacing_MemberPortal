@@ -48,7 +48,7 @@ import {
     TooltipTrigger
 } from "@/components/ui/tooltip";
 
-import MemberDropdown from "@/components/ui/admin/MemberDropdown";
+import MemberDropdown from "@/components/pages/admin/MemberDropdown";
 
 interface FilterMemberTableProps {
     users: User[]
@@ -100,7 +100,9 @@ export default function MemberTable ({
             id: "actions",
             enableHiding: false,
             header: () => null,
-            cell: ({ row }) => <MemberDropdown user={row.original} onDeleteMember={onDeleteMember} />
+            cell: ({ row }) => (
+                <MemberDropdown user={row.original} onDeleteMember={onDeleteMember} />
+            )
         }
     ];
 
@@ -160,7 +162,7 @@ export default function MemberTable ({
                                         key={row.id}
                                         data-state={row.getIsSelected() && "selected"}
                                         className="border-b border-primary/10 hover:bg-accent hover:text-accent-foreground"
-                                        onClick={() => onRowClick?.(row.original.id)}
+                                        onClick={() => onRowClick?.(row.id)}
                                     >
                                         {row.getVisibleCells().map(cell => (
                                             <TableCell key={cell.id} className="py-4 text-center text-lg">

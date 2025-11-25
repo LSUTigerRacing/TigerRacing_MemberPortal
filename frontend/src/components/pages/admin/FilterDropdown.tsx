@@ -6,37 +6,32 @@ import {
     type SetStateAction
 } from "react";
 import { Circle } from "lucide-react";
+
 import { getUsers } from "@/services/userService";
 
-import { subsystemCategories } from "@/components/dummyData/user";
-import { 
-    type User, 
-    type System, 
-    type Subsystem 
-} from "@/components/dummyData/user";
+import {
+    subsystemCategories,
+    type System,
+    type Subsystem,
+    type User
+} from "@/lib/dummyData/user";
 
 interface FilterDropdownProps {
-    onFiltersChange: (filteredMembers: User[]) => void
+    onFilterChange: (filteredMembers: User[]) => void
     filters: {
         systems: System[]
         subsystems: Subsystem[]
         years: string[]
     }
-    setFilters: Dispatch<
-        SetStateAction<{
-            systems: System[]
-            subsystems: Subsystem[]
-            years: string[]
-        }>
-    >
+    setFilters: Dispatch<SetStateAction<FilterDropdownProps["filters"]>>
     filteredCount: number
     setFilteredCount: Dispatch<SetStateAction<number>>
     sortOrder: "asc" | "desc"
-    setSortOrder: Dispatch<SetStateAction<"asc" | "desc">>
+    setSortOrder: Dispatch<SetStateAction<FilterDropdownProps["sortOrder"]>>
 }
 
 const FilterDropdown = ({
-    onFiltersChange,
+    onFilterChange,
     filters,
     setFilters,
     filteredCount,
@@ -75,17 +70,9 @@ const FilterDropdown = ({
             return true;
         }
 
-        const systemMatch
-            = filters.systems.length === 0
-                || filters.systems.includes(User.System as System);
-
-        const subsystemMatch
-            = filters.subsystems.length === 0
-                || (User.Subsystem
-                    && filters.subsystems.includes(User.Subsystem as Subsystem));
-        const yearMatch
-            = filters.years.length === 0
-                || filters.years.includes(User.GradDate);
+        const systemMatch = filters.systems.length === 0 || filters.systems.includes(User.System as System);
+        const subsystemMatch = filters.subsystems.length === 0 || (User.Subsystem && filters.subsystems.includes(User.Subsystem as Subsystem));
+        const yearMatch = filters.years.length === 0 || filters.years.includes(User.GradDate);
 
         return systemMatch && subsystemMatch && yearMatch;
     });
@@ -99,7 +86,6 @@ const FilterDropdown = ({
     });
 
     // Event Handlers
-
     const handleSystemToggle = (system: System) => {
         setFilters(prev => ({
             ...prev,
@@ -153,8 +139,8 @@ const FilterDropdown = ({
     // Hooks: Filter Updates and Count Tracking
 
     useEffect(() => {
-        onFiltersChange(sortedMembers);
-    }, [filters, sortOrder, users, onFiltersChange]);
+        onFilterChange(sortedMembers);
+    }, [filters, sortOrder, users, onFilterChange]);
 
     useEffect(() => {
         setFilteredCount(filteredMembers.length);
@@ -163,21 +149,17 @@ const FilterDropdown = ({
     // Render
     if (loading) {
         return (
-            <>
-                <div className="flex justify-center">
-                    <h1>Loading members...</h1>
-                </div>
-            </>
+            <div className="flex justify-center">
+                <h1>Loading members...</h1>
+            </div>
         );
     }
 
     if (error) {
         return (
-            <>
-                <div className="flex justify-center">
-                    <h1>Error loading members. Please retry.</h1>
-                </div>
-            </>
+            <div className="flex justify-center">
+                <h1>Error loading members. Please retry.</h1>
+            </div>
         );
     }
 

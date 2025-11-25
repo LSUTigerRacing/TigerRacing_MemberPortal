@@ -11,8 +11,6 @@ import { ListTodoIcon, ArrowLeftFromLine } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-
-
 import {
     Carousel,
     CarouselContent,
@@ -22,7 +20,7 @@ import {
     type CarouselApi
 } from "@/components/ui/carousel";
 
-import DropdownMenuDemo from "@/components/ui/admin/MemberDropdown";
+import MemberDropdown from "@/components/pages/admin/MemberDropdown";
 
 interface FilterMemberCarouselProps {
     users: User[]
@@ -94,10 +92,7 @@ export default function CarouselDemo ({
                                                 <div className="ml-4 font-manrope font-semibold text-2xl text-foreground pb-2">
                                                     {user.Name}
                                                 </div>
-                                                <DropdownMenuDemo
-                                                    user={user}
-                                                    onDeleteMember={onDeleteMember}
-                                                />
+                                                <MemberDropdown user={user} onDeleteMember={onDeleteMember} />
                                             </div>
 
                                             {/* Details Section */}

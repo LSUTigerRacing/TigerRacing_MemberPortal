@@ -36,3 +36,25 @@ jobs:
       - name: Build Client
         run: pnpm build
         working-directory: ./frontend
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+  supabase:
+    name: Supabase
+    runs-on: ubuntu-latest
+    concurrency: 
+      group: ci-supabase-${{ github.ref }}
+      cancel-in-progress: true
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - name: Start Supabase Stack
+        run: supabase db start --workdir ./database
+
+      - name: Lint Migrations
+        run: supabase db lint --workdir ./database
+      
+      - name: Test Migrations
+        run: supabase db test --workdir ./database
