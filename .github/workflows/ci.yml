@@ -1,0 +1,80 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+    branches:
+      - main
+      - frontend
+      - backend
+      - database
+
+jobs:
+  client:
+    name: Client
+    runs-on: ubuntu-latest
+    concurrency: 
+      group: ci-client-${{ github.ref }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v5
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+            bun-version: latest
+
+      - name: Install Packages
+        run: bun install --filter ./frontend
+
+      - name: Build Client
+        run: bun run build
+        working-directory: ./frontend
+
+  database:
+    name: Database
+    runs-on: ubuntu-latest
+    concurrency: 
+      group: ci-db-${{ github.ref }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v5
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+            bun-version: latest
+
+      - name: Install Packages
+        run: bun install --filter ./database
+
+      - name: Build Project
+        run: bun run build
+        working-directory: ./database
+
+      - name: Generate Migrations
+        run: bun db:generate
+        working-directory: ./database
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    concurrency: 
+      group: ci-lint-${{ github.ref }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v5
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+            bun-version: latest
+
+      - name: Install Packages
+        run: bun install
+
+      - name: Lint
+        run: bun lint:ci

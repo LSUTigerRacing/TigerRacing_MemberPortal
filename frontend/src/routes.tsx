@@ -1,23 +1,33 @@
 import { lazy, Suspense } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { MemberTabs } from "./pages/Task-portal/Kanban.tsx";
 
-// Public pages
-const Home = lazy(() => import("./pages/Home.tsx").then(module => ({ default: module.Home })));
-const TaskPortal = lazy(() => import("./pages/Task-portal/Kanban.tsx").then(module => ({ default: module.MemberTabs })));
+// Public pages.
+const Home = lazy(() => import("./pages/Home.tsx"));
+
+// Private pages.
+const Admin = lazy(() => import("./pages/Admin.tsx"));
+const Dashboard = lazy(() => import("./pages/Dashboard.tsx"));
+const Orders = lazy(() => import("./pages/Orders.tsx"));
+const Projects = lazy(() => import("./pages/Projects.tsx"));
 
 export const AppRoutes = () => {
     return (
-        <>
+        <main>
             <Suspense fallback={null}>
                 <Routes>
-                    {/* public pages */}
+                    {/* Public Pages */}
                     <Route path="/" element={<Home />} />
-                    <Route path="TaskPortal" element={<MemberTabs />} />
-                    {/* if they try to go elsewhere */}
+
+                    {/* Private Pages */}
+                    <Route path="/admin" element={<Admin />} />
+                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/orders" element={<Orders />} />
+                    <Route path="/projects" element={<Projects />} />
+
+                    {/* 404 Redirect */}
                     <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
             </Suspense>
-        </>
+        </main>
     );
 };

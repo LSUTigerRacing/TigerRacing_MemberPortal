@@ -1,0 +1,39 @@
+name: CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  supabase:
+    name: Supabase
+    runs-on: ubuntu-latest
+    concurrency: cd-supabase-${{ github.ref }}
+
+    env:
+      DATABASE_URL: '${{ secrets.DATABASE_URL }}'
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v5
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+            bun-version: latest
+
+      - name: Install Packages
+        run: bun install --filter ./database
+
+      - name: Build Project
+        run: bun run build
+        working-directory: ./database
+
+      - name: Generate Migrations
+        run: bun db:generate
+        working-directory: ./database
+
+      - name: Deploy Migrations
+        run: bun db:push -- --force
+        working-directory: ./database
