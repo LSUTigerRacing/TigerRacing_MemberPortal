@@ -1,17 +1,33 @@
-import { Card } from "@/components/ui/shadcn-components/card";
-import { Button } from "@/components/ui/shadcn-components/button";
-import { useMemo, useState, useEffect } from "react";
+// Component for an entire Kanban column
+// Renders Column Header and Title
+// Renders the tasks inside the columns
+// Handles task creation and editing inside each column
+// Dropdown for moving columns left and right
+// Allows for deleting and editing column creation
+
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { useMemo, useState, useEffect, useCallback } from "react";
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/shadcn-components/dropdown-menu"
-import { Plus, Ellipsis, Trash, Circle, ChevronDownIcon, Pencil } from "lucide-react"
-import { SortableContext, useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities"
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Plus,
+  Ellipsis,
+  Trash,
+  Circle,
+  CalendarIcon,
+  Pencil,
+  PaperclipIcon,
+  MoveLeftIcon,
+  MoveRightIcon,
+} from "lucide-react";
+import { SortableContext } from "@dnd-kit/sortable";
 import type { Column, Id, Task } from "./KanbanBoard";
 import {
   Dialog,
@@ -21,292 +37,463 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/shadcn-components/dialog"
-import { Label } from "@/components/ui/shadcn-components/label"
-import { Input } from "@/components/ui/shadcn-components/input"
-import { Separator } from "@/components/ui/shadcn-components/separator"
-import { Textarea } from "@/components/ui/shadcn-components/textarea"
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
 import { TaskCard } from "./TaskCard";
-import { Calendar } from "@/components/ui/shadcn-components/calendar";
+import { TagsCombobox } from "./TagsCombobox";
+import { AssigneesCombobox } from "./AssigneesCombobox";
+import { Calendar } from "@/components/ui/calendar";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/shadcn-components/popover"
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { DescriptionEditor } from "./MarkdownEditor";
+import { useDroppable } from "@dnd-kit/core";
 
 const strokeColors = [
-    'stroke-[#25292E]',
-    'stroke-[#1D76DD]', 
-    'stroke-[#1A7F37]',
-    'stroke-[#9A6700]',
-    'stroke-[#BC4C00]',
-    'stroke-[#DA4E57]',
-    'stroke-[#BF3989]',
-    'stroke-[#8250DF]'
-  ];
+  "stroke-[#25292E]",
+  "stroke-[#1D76DD]",
+  "stroke-[#1A7F37]",
+  "stroke-[#9A6700]",
+  "stroke-[#BC4C00]",
+  "stroke-[#DA4E57]",
+  "stroke-[#BF3989]",
+  "stroke-[#8250DF]",
+];
 
 interface Props {
-    column: Column;
-    deleteColumn: (id: Id) => void;
-    createTask: (columnId: Id, title: string, description: string, startDate?: Date, endDate?: Date) => void;
-    deleteTask: (id: Id) => void;
-    tasks: Task[];
-    updateTask: (taskId: Id, title: string, description: string, startDate?: Date, endDate?: Date) => void;
-    editingTask: Task | null;
-    setEditingTask: (task: Task | null) => void;
-    setEditingColumn: (column: Column | null) => void;
+  column: Column;
+  deleteColumn: (id: Id) => void;
+  createTask: (
+    columnId: Id,
+    title: string,
+    description: string,
+    startDate?: Date,
+    endDate?: Date,
+    priority?: "High" | "Medium" | "Low",
+    tags?: string[],
+    assignees?: string[],
+    attachments?: File[]
+  ) => void;
+  deleteTask: (id: Id) => void;
+  tasks: Task[];
+  updateTask: (
+    taskId: Id,
+    title: string,
+    description: string,
+    startDate?: Date,
+    endDate?: Date,
+    priority?: "High" | "Medium" | "Low",
+    tags?: string[],
+    assignees?: string[],
+    attachments?: File[]
+  ) => void;
+  editingTask: Task | null;
+  setEditingTask: (task: Task | null) => void;
+  setEditingColumn: (column: Column | null) => void;
+  moveColumnLeft: (id: Id) => void;
+  moveColumnRight: (id: Id) => void;
+  columnIndex: number;
+  totalColumns: number;
 }
 
-export function ColumnContainer(props: Props) {
-    const [taskTitle, setTaskTitle] = useState('');
-    const [taskDescription, setTaskDescription] = useState('');
-    const [startOpen, setStartOpen] = useState(false)
-    const [endOpen, setEndOpen] = useState(false)
-    const [startDate, setStartDate] = useState<Date | undefined>(undefined);
-    const [endDate, setEndDate] = useState<Date | undefined>(undefined);
-    const [isOpen, setIsOpen] = useState(false);
+export function ColumnContainer({
+  column,
+  deleteColumn,
+  createTask,
+  deleteTask,
+  tasks,
+  updateTask,
+  editingTask,
+  setEditingTask,
+  setEditingColumn,
+  moveColumnLeft,
+  moveColumnRight,
+  columnIndex,
+  totalColumns,
+}: Props) {
+  const [taskTitle, setTaskTitle] = useState("");
+  const [taskDescription, setTaskDescription] = useState("");
+  const [startOpen, setStartOpen] = useState(false);
+  const [endOpen, setEndOpen] = useState(false);
+  const [startDate, setStartDate] = useState<Date | undefined>(undefined);
+  const [endDate, setEndDate] = useState<Date | undefined>(undefined);
+  const [isOpen, setIsOpen] = useState(false);
+  const [priority, setPriority] = useState<"High" | "Medium" | "Low">("Medium");
+  const [tags, setTags] = useState<string[]>([]);
+  const [assignees, setAssignees] = useState<string[]>([]);
+  const [attachments, setAttachments] = useState<File[]>([]);
 
-    const { 
-        column, 
-        deleteColumn, 
-        createTask,
-        deleteTask,
-        tasks,
-        updateTask,
-        editingTask,
-        setEditingTask,
-        setEditingColumn
-        } = props;
+  const tasksIds = useMemo(() => tasks.map((t) => t.id), [tasks]);
 
-    useEffect(() => {
-        if (editingTask && editingTask.columnId === column.id) {
-            setTaskTitle(editingTask.content);
-            setTaskDescription(editingTask.taskDescription);
-            setStartDate(editingTask.startDate);
-            setEndDate(editingTask.endDate);
-            setIsOpen(true);
-        }
-    }, [editingTask, column.id]);
+  // Reset all form fields
+  const resetForm = useCallback(() => {
+    setTaskTitle("");
+    setTaskDescription("");
+    setStartDate(undefined);
+    setEndDate(undefined);
+    setPriority("Medium");
+    setTags([]);
+    setAssignees([]);
+    setAttachments([]);
+  }, []);
 
-    const tasksIds = useMemo(() => {
-        return tasks.map((task) => task.id);
-    }, [tasks]);
+  // Populates dialog with data when editing. Adjust when adding features to dialog.
+  useEffect(() => {
+    if (!editingTask || editingTask.columnId !== column.id) return;
+    setTaskTitle(editingTask.content);
+    setTaskDescription(editingTask.taskDescription);
+    setStartDate(editingTask.startDate);
+    setEndDate(editingTask.endDate);
+    setPriority(editingTask.priority ?? "Medium");
+    setTags(editingTask.tags ?? []);
+    setAssignees(editingTask.assignees ?? []);
+    setAttachments(editingTask.attachments ?? []);
+    setIsOpen(true);
+  }, [editingTask, column.id]);
 
-    const { 
-        setNodeRef, 
-        attributes, 
-        listeners, 
-        transform,
-        transition,
-        isDragging
-    } =
-    useSortable({
-        id: column.id,
-        data: {
-            type: "Column",
-            column,
-        },
-    });
-
-    const style = {
-        transition,
-        transform: CSS.Transform.toString(transform),
-    };
-
-    if (isDragging) {
-        return (
-        <div
-            ref={setNodeRef} 
-            style={style}
-            className="flex flex-col w-70 p-4">
-        </div>
-        );
+  // When clicking out of dialog without creation makes sure to clear inputs
+  useEffect(() => {
+    if (!isOpen) {
+      setEditingTask(null);
+      resetForm();
     }
+  }, [isOpen, resetForm, setEditingTask]);
 
-    const handleSubmit = () => {
-        if (editingTask) {
-        updateTask(editingTask.id, taskTitle, taskDescription, startDate, endDate);
-        setEditingTask(null);
-        } else {
-        createTask(column.id, taskTitle, taskDescription, startDate, endDate);
-        }
-        // Reset form
-        setTaskTitle('');
-        setTaskDescription('');
-        setStartDate(undefined);
-        setEndDate(undefined);
-        setIsOpen(false);
-    };
+  const { setNodeRef } = useDroppable({
+    id: column.id,
+    data: { type: "Column", column },
+  });
 
-    return (
-        <Card 
-        ref={setNodeRef}
-        style={style}
-        className="flex flex-col w-[18vw] p-4 h-full">
-            <div 
-            {...attributes}
-            {...listeners}
-            className="flex justify-between items-center">
-                <div className="flex items-start gap-2">
-                    <div className={`${column.color} rounded-full mt-3`}>
-                    <Circle className={strokeColors[column.colorIndex]} />
-                    </div>
-                    <div className="flex-1 min-w-0 mt-3">
-                        <p className="font-semibold text-black whitespace-normal break-words">{column.title}</p>
-                        <p className="text-sm text-gray-600 mt-1 whitespace-normal break-words">{column.description}</p>
-                    </div>
+  // Handler for creating and updating tasks.
+  const handleSubmit = useCallback(() => {
+    if (editingTask) {
+      updateTask(
+        editingTask.id,
+        taskTitle,
+        taskDescription,
+        startDate,
+        endDate,
+        priority,
+        tags,
+        assignees,
+        attachments
+      );
+      setEditingTask(null);
+    } else {
+      createTask(
+        column.id,
+        taskTitle,
+        taskDescription,
+        startDate,
+        endDate,
+        priority,
+        tags,
+        assignees,
+        attachments
+      );
+    }
+    resetForm();
+    setIsOpen(false);
+  }, [
+    editingTask,
+    updateTask,
+    createTask,
+    column.id,
+    taskTitle,
+    taskDescription,
+    startDate,
+    endDate,
+    priority,
+    tags,
+    assignees,
+    attachments,
+    resetForm,
+    setEditingTask,
+  ]);
+
+  return (
+    <Card ref={setNodeRef} className="flex flex-col w-[23vw] p-0 pt-4 h-full bg-white">
+      {/* Column Header with drag listeners attached  */}
+      <div className="flex justify-between">
+        <div className="flex items-start gap-2">
+          <div className={`${column.color} rounded-full mt-3 ml-3`}>
+            <Circle className={strokeColors[column.colorIndex]} />
+          </div>
+          {/* Column Title and Description Display */}
+          <div className="flex-1 min-w-0 mt-2">
+            <p className="font-semibold text-2xl text-black whitespace-normal break-words">
+              {column.title}
+            </p>
+            <p className="text-sm text-gray-600 mt-1 whitespace-normal break-words">
+              {column.description}
+            </p>
+          </div>
+        </div>
+        {/* Dropdown Button for Editing, Deleting, and Moving Columns*/}
+        <div className="mr-4">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild className="bg-white">
+              <Button variant="ghost" className="bg-white w-10 cursor-pointer">
+                <Ellipsis />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="bg-white" align="start">
+              <DropdownMenuLabel>Column</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {columnIndex > 0 && (
+                <DropdownMenuItem
+                  onClick={() => moveColumnLeft(column.id)}
+                  className="cursor-pointer"
+                >
+                  <MoveLeftIcon /> Move Left
+                </DropdownMenuItem>
+              )}
+              {columnIndex < totalColumns - 1 && (
+                <DropdownMenuItem
+                  onClick={() => moveColumnRight(column.id)}
+                  className="cursor-pointer"
+                >
+                  Move Right <MoveRightIcon />
+                </DropdownMenuItem>
+              )}
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => setEditingColumn(column)} className="cursor-pointer">
+                <Pencil />
+                Edit
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  deleteColumn(column.id);
+                }}
+                className="cursor-pointer"
+              >
+                <Trash />
+                Delete
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </div>
+      {/* Task List through sortable */}
+      <div className="flex-grow overflow-y-auto px-2 min-h-0 -mb-6">
+        <div className="flex flex-col gap-4">
+          <SortableContext items={tasksIds}>
+            {tasks.map((task) => (
+              <TaskCard
+                key={task.id}
+                column={column}
+                task={task}
+                deleteTask={deleteTask}
+                setEditingTask={setEditingTask}
+              />
+            ))}
+          </SortableContext>
+        </div>
+      </div>
+      {/* Task Creation Dialog */}
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogTrigger asChild>
+          <Button
+            variant="ghost"
+            className="bg-gray-200 flex w-full gap-2 justify-start text-lg h-12 cursor-pointer"
+          >
+            <Plus />
+            Add task
+          </Button>
+        </DialogTrigger>
+        <DialogContent
+          aria-describedby={undefined}
+          className="w-full max-w-lg sm:max-w-xl lg:max-w-2xl h-full max-h-[90vh] sm:max-h-xl lg:max-h-2xl overflow-y-auto"
+        >
+          <DialogHeader>
+            <DialogTitle>{editingTask ? "Edit task" : "Create new task"}</DialogTitle>
+            <div className="pt-2">
+              <Separator />
+            </div>
+          </DialogHeader>
+          <div className="grid gap-4">
+            <div className="grid gap-3">
+              <Label>Create title</Label>
+              <Input
+                placeholder="Title"
+                value={taskTitle}
+                onChange={(e) => setTaskTitle(e.target.value)}
+              />
+            </div>
+            <div className="grid gap-3">
+              <Label>Description</Label>
+              <DescriptionEditor value={taskDescription} onChange={setTaskDescription} />
+            </div>
+            <div className="flex flex-col gap-3">
+              <Label>Attachments</Label>
+              <div>
+                <input
+                  type="file"
+                  multiple
+                  id="fileUpload"
+                  className="hidden"
+                  onChange={(e) => {
+                    if (e.target.files) {
+                      setAttachments([...attachments, ...Array.from(e.target.files)]);
+                    }
+                  }}
+                />
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => document.getElementById("fileUpload")?.click()}
+                  className="cursor-pointer"
+                >
+                  Upload Files
+                </Button>
+              </div>
+              {attachments.length > 0 ? (
+                <div className="flex flex-col gap-2 mt-2 border p-2 rounded-md bg-gray-50 max-h-40 overflow-y-auto">
+                  {attachments.map((file, index) => (
+                    <p
+                      key={index}
+                      className="text-sm text-gray-700 flex items-center gap-2 truncate"
+                    >
+                      <PaperclipIcon className="h-3 w-3" />
+                      {file.name}
+                    </p>
+                  ))}
                 </div>
-                <DropdownMenu>
-                    <DropdownMenuTrigger>
-                    <Button variant="ghost" className="w-10">
-                        <Ellipsis />
+              ) : (
+                <p className="text-sm text-gray-500 italic">No attachments uploaded</p>
+              )}
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="flex flex-col gap-3">
+                <Label htmlFor="date" className="px-1">
+                  Start Date
+                </Label>
+                <Popover open={startOpen} onOpenChange={setStartOpen}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      id="date"
+                      className="w-full justify-between font-normal cursor-pointer"
+                    >
+                      {startDate ? new Date(startDate).toLocaleDateString() : "Select date"}
+                      <CalendarIcon />
                     </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="bg-white" align="start">
-                    <DropdownMenuLabel>Column</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => setEditingColumn(column)}>
-                        <Pencil />
-                        Edit
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => {
-                        deleteColumn(column.id)
-                    }}>
-                        <Trash />
-                        Delete
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto overflow-hidden p-0 bg-white" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={startDate ? new Date(startDate) : undefined}
+                      captionLayout="dropdown"
+                      onSelect={(date) => {
+                        setStartDate(date);
+                        setStartOpen(false);
+                      }}
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+              <div className="flex flex-col gap-3">
+                <Label htmlFor="date" className="px-1">
+                  End Date
+                </Label>
+                <Popover open={endOpen} onOpenChange={setEndOpen}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      id="date"
+                      className="w-full justify-between font-normal cursor-pointer"
+                    >
+                      {endDate ? new Date(endDate).toLocaleDateString() : "Select date"}
+                      <CalendarIcon />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto overflow-hidden p-0 bg-white" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={endDate ? new Date(endDate) : undefined}
+                      captionLayout="dropdown"
+                      onSelect={(date) => {
+                        setEndDate(date);
+                        setEndOpen(false);
+                      }}
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+              <div className="flex flex-col gap-3">
+                <Label>Priority</Label>
+                <Select
+                  value={priority}
+                  onValueChange={(value) => setPriority(value as "High" | "Medium" | "Low")}
+                >
+                  <SelectTrigger className="w-full cursor-pointer border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50">
+                    <SelectValue placeholder="Select priority" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white">
+                    <SelectItem value="High">
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-red-500" />
+                        High
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="Medium">
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-yellow-500" />
+                        Medium
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="Low">
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-blue-400" />
+                        Low
+                      </div>
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
-            <div className="flex-grow overflow-y-auto overflow-x-hidden px-2 min-h-0">
-                <div className="flex flex-col gap-4 py-2">
-                <SortableContext items={tasksIds}>
-                    {tasks.map((task) => (
-                    <TaskCard key={task.id} column={column} task={task} deleteTask={deleteTask} setEditingTask={setEditingTask}/>
-                    ))}
-                </SortableContext>
-                </div>
+            <div className="flex gap-3 mt-3">
+              <div className="flex flex-col gap-3">
+                <Label>Tags</Label>
+                <TagsCombobox selectedTags={tags} onTagsChange={setTags} />
+              </div>
             </div>
-            <div className="">
-                <Dialog open={isOpen} onOpenChange={setIsOpen}>
-                    <div className="flex mt-4 gap-2">
-                        <div className="">
-                            <DialogTrigger asChild>
-                            <Button variant="ghost" className="flex gap-2 items-center">
-                                <Plus />
-                                Add task
-                            </Button>
-                            </DialogTrigger>
-                        </div>
-                    </div>
-                    <DialogContent className="sm:max-w-[30vw] border-5">
-                    <DialogHeader>
-                        <DialogTitle>
-                            {editingTask ? 'Edit task' : 'Create new task'}
-                        </DialogTitle>
-                        <div className="pt-2">
-                            <Separator />
-                        </div>
-                    </DialogHeader>
-                    <div className="grid gap-4">
-                        <div className="grid gap-3">
-                        <Label>Create title</Label>
-                        <Input 
-                            placeholder="Title"
-                            value={taskTitle}
-                            onChange={(e) => setTaskTitle(e.target.value)}
-                        />
-                        </div>
-                        <div className="grid gap-3">
-                        <Label>Description</Label>
-                        <Textarea 
-                            className="h-40" 
-                            placeholder="Type your description here..."
-                            value={taskDescription}
-                            onChange={(e) => setTaskDescription(e.target.value)}
-                        />
-                        </div>
-                        <div className="flex gap-4">
-                            <div className="flex flex-col gap-3">
-                                <Label htmlFor="date" className="px-1">
-                                    Start Date
-                                </Label>
-                                <Popover open={startOpen} onOpenChange={setStartOpen}>
-                                    <PopoverTrigger asChild>
-                                        <Button
-                                            variant="outline"
-                                            id="date"
-                                            className="w-48 justify-between font-normal"
-                                        >
-                                            {startDate ? startDate.toLocaleDateString() : "Select date"}
-                                            <ChevronDownIcon />
-                                        </Button>
-                                    </PopoverTrigger>
-                                    <PopoverContent className="w-auto overflow-hidden p-0 bg-white" align="start">
-                                    <Calendar
-                                        mode="single"
-                                        selected={startDate}
-                                        captionLayout="dropdown"
-                                        onSelect={(date) => {
-                                        setStartDate(date)
-                                        setStartOpen(false)
-                                        }}
-                                    />
-                                    </PopoverContent>
-                                </Popover>
-                            </div>
-                            <div className="flex flex-col gap-3">
-                                <Label htmlFor="date" className="px-1">
-                                    End Date
-                                </Label>
-                                <Popover open={endOpen} onOpenChange={setEndOpen}>
-                                    <PopoverTrigger asChild>
-                                        <Button
-                                            variant="outline"
-                                            id="date"
-                                            className="w-48 justify-between font-normal"
-                                        >
-                                            {endDate ? endDate.toLocaleDateString() : "Select date"}
-                                            <ChevronDownIcon />
-                                        </Button>
-                                    </PopoverTrigger>
-                                    <PopoverContent className="w-auto overflow-hidden p-0 bg-white" align="start">
-                                    <Calendar
-                                        mode="single"
-                                        selected={endDate}
-                                        captionLayout="dropdown"
-                                        onSelect={(date) => {
-                                        setEndDate(date)
-                                        setEndOpen(false)
-                                        }}
-                                    />
-                                    </PopoverContent>
-                                </Popover>
-                            </div>
-                        </div>
-                    </div>
-                    <DialogFooter>
-                        <DialogClose asChild>
-                        <Button variant="outline" 
-                            onClick={() => {
-                                setEditingTask(null);
-                                setTaskTitle('');
-                                setTaskDescription('');
-                                setStartDate(undefined);
-                                setEndDate(undefined);
-                            }}>
-                        Cancel
-                        </Button>
-                        </DialogClose>
-                        <DialogClose>
-                            <Button variant="outline" onClick={handleSubmit}>
-                            {editingTask ? 'Save' : 'Create'}
-                            </Button>
-                        </DialogClose>
-                    </DialogFooter>
-                    </DialogContent>
-                </Dialog>
+            <div className="flex gap-3 mt-3">
+              <div className="flex flex-col gap-3">
+                <Label>Assignees</Label>
+                <AssigneesCombobox selectedAssignees={assignees} onAssigneesChange={setAssignees} />
+              </div>
             </div>
-        </Card>
-    )
+          </div>
+          <DialogFooter className="border-t pt-4 mt-4">
+            <DialogClose asChild>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setEditingTask(null);
+                  resetForm();
+                }}
+                className="cursor-pointer"
+              >
+                Cancel
+              </Button>
+            </DialogClose>
+            <DialogClose asChild>
+              <Button variant="outline" onClick={handleSubmit} className="cursor-pointer">
+                {editingTask ? "Save" : "Create"}
+              </Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </Card>
+  );
 }
