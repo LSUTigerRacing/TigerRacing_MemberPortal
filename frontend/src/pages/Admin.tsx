@@ -4,7 +4,7 @@ import SearchBar from "@/components/pages/admin/SearchBar";
 import MemberTable from "@/components/pages/admin/MemberTable";
 import GalleryCard from "@/components/pages/admin/GalleryCard";
 
-import type { User } from "@/lib/dummyData/user";
+import type { User } from "@/components/member-data-format/user";
 
 import { getUsers, deleteUser } from "@/services/userService";
 
@@ -22,7 +22,7 @@ export default function Admin () {
             setError(null);
 
             const users = await getUsers();
-            const sortedMembers = [...users].sort((a, b) => a.Name.localeCompare(b.Name));
+            const sortedMembers = [...users].sort((a, b) => a.name.localeCompare(b.name));
 
             setFilteredMembers(sortedMembers);
         } catch (err) {
@@ -38,7 +38,7 @@ export default function Admin () {
             const success = await deleteUser(userId, "confirm");
             if (success) {
                 const updatedMembers = filteredMembers.filter(
-                    user => user.UserId !== userId
+                    user => user.userId !== userId
                 );
                 setFilteredMembers(updatedMembers);
             } else {

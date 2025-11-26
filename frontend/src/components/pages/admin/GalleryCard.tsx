@@ -1,4 +1,6 @@
 import type { User } from "@/components/member-data-format/user";
+import { getTaskByUserId } from "@/services/taskService";
+import { type Task } from "@/components/member-data-format/task";
 
 import {
     useEffect,
@@ -38,22 +40,38 @@ export default function CarouselDemo ({
     setView
 }: FilterMemberCarouselProps) {
     const [carouselApi, setCarouselApi] = useState<CarouselApi>();
+    const [tasks, setTasks] = useState<Task[]>([]);
 
     useEffect(() => {
         if (!carouselApi || !selectedMemberId) return;
 
         const selectedIndex = users.findIndex(
-            user => user.UserId === selectedMemberId
+            user => user.userId === selectedMemberId
         );
 
         if (selectedIndex !== -1) {
-            carouselApi.scrollTo(selectedIndex, true); // true stopped it from doing the crazy scroll thing
+            carouselApi.scrollTo(selectedIndex, true);
         }
     }, [carouselApi, selectedMemberId, users]);
 
+    useEffect(() => {
+        if (!selectedMemberId) return;
+
+        const fetchTasks = async () => {
+            try {
+                const tasks = await getTaskByUserId(selectedMemberId);
+                setTasks(tasks);
+            } catch (error) {
+                console.error("Error fetching tasks", error);
+            }
+        };
+
+        fetchTasks();
+    }, [selectedMemberId, setTasks]);
+
     return (
         <Carousel
-            className="max-h-screen max-w-3xl mx-auto flex flex-column justify-self-center-safe mt-6 p-0"
+            className="max-w-3xl max-h-screen mx-auto flex flex-column justify-self-center-safe mt-6 p-0"
             setApi={setCarouselApi}
         >
             <Button
@@ -68,7 +86,7 @@ export default function CarouselDemo ({
             </Button>
             <CarouselContent>
                 {users.map(user => (
-                    <CarouselItem key={user.UserId}>
+                    <CarouselItem key={user.userId}>
                         <div className="flex justify-between p-1 max-w-full gap-2">
                             <Card className="w-full h-full bg-background rounded-2xl">
                                 <CardContent className="flex flex-col w-full p-5">
@@ -90,7 +108,7 @@ export default function CarouselDemo ({
                                             {/* Container for Name and More Icon */}
                                             <div className="flex flex-row gap-3">
                                                 <div className="ml-4 font-manrope font-semibold text-2xl text-foreground pb-2">
-                                                    {user.Name}
+                                                    {user.name}
                                                 </div>
                                                 <MemberDropdown user={user} onDeleteMember={onDeleteMember} />
                                             </div>
@@ -98,19 +116,19 @@ export default function CarouselDemo ({
                                             {/* Details Section */}
                                             <div className="flex gap-20">
                                                 <div className="ml-4 font-sora text-gray-600">
-                                                    {user.LSUEmail}
+                                                    {user.lsuEmail}
                                                 </div>
                                                 <div className="ml-4 font-sora text-gray-600">
-                                                    {user.System}
+                                                    {user.system}
                                                 </div>
                                                 <div className="ml-4 font-sora text-gray-600">
-                                                    {user.GradDate}
+                                                    {user.gradDate}
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    {/* Three Column Info Section */}
+                                    {/* Two Column Info Section */}
                                     <div className="flex gap-x-20 w-full mb-4">
                                         {/* Info Section */}
                                         <div className="flex flex-col flex-1">
@@ -119,28 +137,28 @@ export default function CarouselDemo ({
                                             </div>
                                             <div className="p-3 space-y-2 flex flex-wrap justify-center">
                                                 <Button className="px-3 py-2 w-[200px] h-fit font-sora rounded-full bg-primary text-white whitespace-break-spaces wrap-break-word">
-                                                    Subsystem: {user.Subsystem}
+                                                    Subsystem: {user.subsystem}
                                                 </Button>
                                                 <Button className="px-3 py-2 w-[200px] h-fit font-sora rounded-full bg-primary text-white whitespace-break-spaces wrap-break-word">
-                                                    Personal Email: {user.PersonalEmail}
+                                                    Personal Email: {user.personalEmail}
                                                 </Button>
                                                 <Button className="px-3 w-[200px] py-2 font-sora rounded-full bg-primary text-white">
-                                                    Eight Nine Number: {user.EightNine}
+                                                    Eight Nine Number: {user.eightNine}
                                                 </Button>
                                                 <Button className="px-3 w-[200px] py-2 font-sora rounded-full bg-primary text-white">
-                                                    Hazing: {user.HazingStatus}
+                                                    Hazing: {user.hazingStatus}
                                                 </Button>
                                                 <Button className="px-3 w-[200px] py-2 font-sora rounded-full bg-primary text-white">
-                                                    Fees: {user.FeeStatus}
+                                                    Fees: {user.feeStatus}
                                                 </Button>
                                                 <Button className="px-3 w-[200px] py-2 font-sora rounded-full bg-primary text-white">
-                                                    T-Shirt Size: {user.ShirtSize}
+                                                    T-Shirt Size: {user.shirtSize}
                                                 </Button>
                                                 <Button className="px-3 w-[200px] py-2 font-sora rounded-full bg-primary text-white">
-                                                    Account Created: {user.AccountCreationDate}
+                                                    Account Created: {user.accountCreationDate}
                                                 </Button>
                                                 <Button className="px-3 w-[200px] py-2 font-sora rounded-full bg-primary text-white">
-                                                    Account Last Updated: {user.AccountLastUpdatedDate}
+                                                    Account Last Updated: {user.accountLastUpdatedDate}
                                                 </Button>
                                             </div>
                                         </div>
@@ -152,38 +170,16 @@ export default function CarouselDemo ({
                                                 Tasks
                                             </div>
 
-                                            {/* Tasks Information */}
-                                            <div className="flex p-2 max-w-full gap-4">
-                                                <div className="w-4 h-4">
-                                                    <ListTodoIcon className="w-5 h-5" />
+                                            {tasks.slice(0, 3).map(task => (
+                                                <div key={task.taskId} className="flex p-2 max-w-full gap-4">
+                                                    <div className="w-4 h-4">
+                                                        <ListTodoIcon className="w-5 h-5" />
+                                                    </div>
+                                                    <Button className="text-sora text-sm">
+                                                        {task.taskName}
+                                                    </Button>
                                                 </div>
-                                                <div className="text-sora text-sm">
-                                                    Create ToDo List on Saturday, October 32nd
-                                                </div>
-                                            </div>
-
-                                            <div className="flex p-2 max-w-full gap-4">
-                                                <div className="w-4 h-4">
-                                                    <ListTodoIcon className="w-5 h-5" />
-                                                </div>
-                                                <div className="text-sora text-sm">
-                                                    Create member portal
-                                                </div>
-                                            </div>
-
-                                            <div className="flex p-2 max-w-full gap-4">
-                                                <div className="w-4 h-4">
-                                                    <ListTodoIcon className="w-5 h-5" />
-                                                </div>
-                                                <div className="text-sora text-sm">Create thingy</div>
-                                            </div>
-                                        </div>
-
-                                        {/* Other Section */}
-                                        <div className="flex flex-col flex-1">
-                                            <div className="border-b border-black pt-4 font-manrope text-center font-semibold text-2xl text-foreground p-2">
-                                                Other
-                                            </div>
+                                            ))}
                                         </div>
                                     </div>
                                 </CardContent>

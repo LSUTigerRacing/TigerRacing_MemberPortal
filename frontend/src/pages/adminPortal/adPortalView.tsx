@@ -25,7 +25,7 @@ export const PagesView = () => {
             setError(null);
             const users = await getUsers();
             const sortedMembers = [...users].sort((a, b) =>
-                a.Name.localeCompare(b.Name)
+                a.name.localeCompare(b.name)
             );
             setFilteredMembers(sortedMembers);
         } catch (err) {
@@ -41,7 +41,7 @@ export const PagesView = () => {
             const success = await deleteUser(userId, "confirm");
             if (success) {
                 const updatedMembers = filteredMembers.filter(
-                    user => user.UserId !== userId
+                    user => user.userId !== userId
                 );
                 setFilteredMembers(updatedMembers);
             } else {

@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios";
-import type { User, UserSearchDto, UserUpdateDto } from "@/components/member-data-format/user";
+import type { Task, TaskSearchDto, CreateTaskDto } from "@/components/member-data-format/task";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5109/api";
 
@@ -12,9 +12,9 @@ const api = axios.create({
     withCredentials: true
 });
 
-export const getUsers = async (searchDto?: UserSearchDto): Promise<User[]> => {
+export const getTask = async (searchDto?: TaskSearchDto): Promise<Task[]> => {
     try {
-        const response = await api.get<User[]>("/user", {
+        const response = await api.get<Task[]>("/task", {
             params: searchDto
         });
         return response.data;
@@ -24,9 +24,9 @@ export const getUsers = async (searchDto?: UserSearchDto): Promise<User[]> => {
     }
 };
 
-export const getUserById = async (id: string): Promise<User> => {
+export const getTaskById = async (id: string): Promise<Task> => {
     try {
-        const response = await api.get<User>(`/user/${id}`);
+        const response = await api.get<Task>(`/task/${id}`);
         return response.data;
     } catch (error) {
         handleApiError(error);
@@ -34,9 +34,9 @@ export const getUserById = async (id: string): Promise<User> => {
     }
 };
 
-export const updateUser = async (id: string, userData: UserUpdateDto): Promise<User> => {
+export const createTask = async (taskData: CreateTaskDto): Promise<Task> => {
     try {
-        const response = await api.patch<User>(`/user/${id}`, userData);
+        const response = await api.post<Task>("/task", taskData);
         return response.data;
     } catch (error) {
         handleApiError(error);
@@ -44,12 +44,10 @@ export const updateUser = async (id: string, userData: UserUpdateDto): Promise<U
     }
 };
 
-export const deleteUser = async (id: string, confirmationString = "confirm"): Promise<boolean> => {
+export const getTaskByUserId = async (id: string): Promise<Task[]> => {
     try {
-        const res = await api.delete(`/user/${id}`, {
-            params: { confirmationString }
-        });
-        return res.status >= 200 && res.status < 300;
+        const response = await api.get<Task[]>(`task/user/${id}`);
+        return response.data;
     } catch (error) {
         handleApiError(error);
         throw error;

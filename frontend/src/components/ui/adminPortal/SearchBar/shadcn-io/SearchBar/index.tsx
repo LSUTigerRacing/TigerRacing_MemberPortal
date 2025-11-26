@@ -59,7 +59,7 @@ export const SearchBar = React.forwardRef<HTMLElement, SearchBarProps>(
 
             setUsers(users);
             const filtered = users.filter(User =>
-                User.Name.toLowerCase().includes(value.toLowerCase())
+                User.name.toLowerCase().includes(value.toLowerCase())
             );
             setFilteredItems(filtered);
             if (value.length > 0) setIsDropdownOpen(true);
@@ -139,15 +139,15 @@ export const SearchBar = React.forwardRef<HTMLElement, SearchBarProps>(
                                         ? (
                                             filteredItems.map(User => (
                                                 <div
-                                                    key={User.UserId}
+                                                    key={User.userId}
                                                     className="px-4 py-2 border-b border-muted-foreground/30 rounded hover:bg-accent cursor-pointer"
                                                     onClick={() => {
-                                                        onDropdownSelect(User.UserId);
+                                                        onDropdownSelect(User.userId);
                                                         setIsDropdownOpen(false);
                                                     }}
                                                 >
                                                     <ul>
-                                                        <li>{User.Name}</li>
+                                                        <li>{User.name}</li>
                                                     </ul>
                                                 </div>
                                             ))

@@ -1,35 +1,39 @@
 export interface User {
-    UserId: string
-    Name: string
-    LSUEmail: string
-    PersonalEmail: string
-    EightNine: number
-    HazingStatus: boolean
-    FeeStatus: boolean
-    GradDate: string
-    ShirtSize: string
-    System: string
-    Subsystem: string
-    AccountCreationDate: string
-    AccountLastUpdatedDate: string
+    userId: string
+    name: string
+    personalEmail: string
+    lsuEmail: string
+    eightNine: number
+    hazingStatus: boolean
+    feeStatus: boolean
+    gradDate: string
+    shirtSize: string
+    system: string
+    subsystem: string
+    accountCreationDate: string
+    accountLastUpdatedDate: string
 };
 
 export interface UserSearchDto {
-    Name?: string
+    name?: string
+    gradDate?: string
+    lsuEmail?: string
+    system?: string
+    subsystem?: string
 }
 
 export interface UserUpdateDto {
-    Name?: string
-    LSUEmail?: string
-    PersonalEmail?: string
-    EightNine?: number
-    HazingStatus?: boolean
-    FeeStatus?: boolean
-    GradDate?: string
-    ShirtSize?: string
-    System?: string
-    Subsystem?: string
-    AccountLastUpdatedDate?: string
+    name?: string
+    lsuEmail?: string
+    personalEmail?: string
+    eightNine?: number
+    hazingStatus?: boolean
+    feeStatus?: boolean
+    gradDate?: string
+    shirtSize?: string
+    system?: string
+    subsystem?: string
+    accountLastUpdatedDate?: string
 }
 
 export const subsystemCategories = {
