@@ -1,8 +1,13 @@
+// Component for Task Cards
+// Contains the Drag and Drop behavior for the Tasks
+// Handles task creation and editing inside each column
+// Allows for deleting and editing column creation
+
 import type { Task, Id, Column } from "./KanbanBoard";
 import { Ellipsis, Trash, Pencil } from "lucide-react";
-import { Button } from "@/components/ui/shadcn-components/button";
-import { Card } from "@/components/ui/shadcn-components/card";
-import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,19 +15,12 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/shadcn-components/dropdown-menu"
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/shadcn-components/sheet"
-import { Separator } from "@/components/ui/shadcn-components/separator";
+} from "@/components/ui/dropdown-menu";
 import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities"
-import { Label } from "@/components/ui/shadcn-components/label";
+import { CSS } from "@dnd-kit/utilities";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { TaskSheet } from "./TaskSheet";
+import { teamMembers, priorityStyles } from "@/lib/dummyData/dummyTasks";
 
 interface Props {
   column: Column;
@@ -33,21 +31,15 @@ interface Props {
 
 export function TaskCard({ column, task, deleteTask, setEditingTask }: Props) {
   const [mouseIsOver, setMouseIsOver] = useState(false);
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
 
-  const { 
-    setNodeRef, 
-    attributes, 
-    listeners, 
-    transform,
-    transition,
-    isDragging
-  } =
-  useSortable({
+  const { setNodeRef, attributes, listeners, transform, transition, isDragging } = useSortable({
     id: task.id,
     data: {
       type: "Task",
       task,
     },
+    disabled: isSheetOpen,
   });
 
   const style = {
@@ -55,121 +47,98 @@ export function TaskCard({ column, task, deleteTask, setEditingTask }: Props) {
     transform: CSS.Transform.toString(transform),
   };
 
-  useEffect(() => {
-    if (!isDragging) {
-      setMouseIsOver(false);
-    }
-  }, [isDragging]);
-
-  if(isDragging) {
-    return (
-      <div
-        ref={setNodeRef} 
-        style={style}
-        className="opacity-0">
-          <div className="p-4">
-            {task.content}
-          </div>
-      </div>
-  )}
+  const cardClassName = isDragging
+    ? "relative min-h-[60px] p-2 opacity-40 ring-2 ring-blue-300 ring-inset"
+    : "relative min-h-[60px] p-2 cursor-grab active:cursor-grabbing";
 
   return (
-  <Card 
-    className="h-[7vh] justify-center pl-2"
-    ref={setNodeRef}
-    style={style}
-    {...attributes}
-    {...listeners}
+    <Card
+      className={cardClassName}
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...(!isSheetOpen && !isDragging && listeners)}
     >
-    <div
-      className="justify-between flex items-center overflow-visible"
-      onMouseEnter={() => {
-        setMouseIsOver(true);
-      }}
-      onMouseLeave={() => {
-        setMouseIsOver(false);
-      }}
-    >
-      <div className="flex-1 min-w-0 pl-2">
-        <Sheet modal={false}>
-          <SheetTrigger asChild>
-            <span style={{ cursor: 'pointer'}}>
-              <p className="font-semibold text-black whitespace-normal break-words hover:text-blue-700 hover:underline">{task.content}</p>
-            </span>
-          </SheetTrigger>
-            <SheetContent className="min-w-[67vw] top-16 h-[calc(100vh-4rem)] rounded-l-3xl border-1">
-              <SheetHeader className="">
-                <SheetTitle className="">
-                  <p className="font-semibold text-black whitespace-normal break-words">{task.content}</p>
-                </SheetTitle>
-              </SheetHeader>
-              <Separator className="-mt-4"/>
-              <div className="flex min-h-0 flex-grow gap-4 overflow-y-auto">
-                <div className="flex-grow flex flex-col pt-2 pl-3 border-1 ml-3 ">
-                  <SheetDescription className="flex-grow">
-                    <p className="text-sm text-gray-600 mt-1 whitespace-normal break-words">{task.taskDescription}</p>
-                  </SheetDescription>
-                  <div className="">footer</div>
-                </div>
-                <div className="min-w-[18vw] pl-5 flex flex-col gap-5">
-                  <div>
-                    <Label className="text-sm font-semibold">Status</Label>
-                    {column.title}
-                  </div>
-                  <div className="">
-                    <Label className="text-sm font-semibold">Start Date</Label>
-                    {task.startDate ? (
-                      <div>
-                        <p className="text-sm">
-                          {new Date(task.startDate).toLocaleDateString()}
-                        </p>
-                      </div>
-                    ) : (
-                      <p className="text-sm">To Be Determined</p>
-                    )}
-                  </div>
-                  <div>
-                    <Label className="text-sm font-semibold">End Date</Label>
-                    {task.endDate ? (
-                      <div>
-                        <p className="text-sm">
-                          {new Date(task.endDate).toLocaleDateString()}
-                        </p>
-                      </div>
-                    ) : (
-                        <p className="text-sm">To Be Determined</p>
-                      )}
-                  </div>
-                </div>
-              </div>
-            </SheetContent>
-        </Sheet>
+      <div
+        className="flex overflow-visible"
+        onMouseEnter={() => {
+          if (!isDragging) setMouseIsOver(true);
+        }}
+        onMouseLeave={() => {
+          setMouseIsOver(false);
+        }}
+      >
+        {task.priority && (
+          <div
+            className={`absolute left-0 top-0 h-full w-2 rounded-l-xl ${
+              priorityStyles[task.priority]
+            }`}
+          ></div>
+        )}
+        <div className="mt-4">
+          <TaskSheet task={task} column={column} onOpenChange={setIsSheetOpen} />
+        </div>
+        <div className="flex top-1 right-2 absolute">
+          {!isDragging && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild className="bg-white">
+                <Button
+                  variant="ghost"
+                  className={`w-10 h-3 rounded-full cursor-pointer ${
+                    mouseIsOver ? "opacity-100" : "opacity-0"
+                  }`}
+                >
+                  <Ellipsis />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="bg-white" align="start">
+                <DropdownMenuLabel>Task</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={() => {
+                    setEditingTask({ ...task });
+                  }}
+                  className="cursor-pointer"
+                >
+                  <Pencil />
+                  Edit
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    deleteTask(task.id);
+                  }}
+                  className="cursor-pointer"
+                >
+                  <Trash />
+                  Delete
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
+          {task.assignees && task.assignees.length > 0 && (
+            <div className="flex -space-x-2">
+              {task.assignees.slice(0, 3).map((assigneeValue) => {
+                const member = teamMembers.find((member) => member.value === assigneeValue);
+                if (!member) return null;
+                return (
+                  <Avatar key={assigneeValue} className="h-6 w-6 border-2 border-white">
+                    <AvatarFallback className={`${member.color} text-white text-xs`}>
+                      {member.initials}
+                    </AvatarFallback>
+                  </Avatar>
+                );
+              })}
+              {task.assignees.length > 3 && (
+                <Avatar className="h-6 w-6 border-2 border-white">
+                  <AvatarFallback className="bg-gray-300 text-gray-700 text-xs">
+                    +{task.assignees.length - 3}
+                  </AvatarFallback>
+                </Avatar>
+              )}
+            </div>
+          )}
+        </div>
       </div>
-        <DropdownMenu>
-          <DropdownMenuTrigger>
-          <Button 
-            variant="ghost" 
-            className={`w-10 ${mouseIsOver ? 'opacity-100' : 'opacity-0'}`}
-          >
-            <Ellipsis />
-          </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="bg-white" align="start">
-            <DropdownMenuLabel>Task</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => setEditingTask(task)}>
-              <Pencil />
-              Edit
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => {
-                deleteTask(task.id);
-              }}>
-                <Trash />
-                Delete
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
-  </Card>
-  )
+    </Card>
+  );
 }
