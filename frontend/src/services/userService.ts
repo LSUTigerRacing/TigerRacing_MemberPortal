@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios";
-import type { User, UserSearchDto, UserUpdateDto } from "@/components/dummyData/user.ts";
+import type { User, UserSearchDto, UserUpdateDto } from "@/components/member-data-format/user.ts";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5096/api";
 

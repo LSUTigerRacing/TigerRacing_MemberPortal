@@ -1,89 +1,45 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
-    useEffect,
-    useState,
+    useMemo,
     type Dispatch,
     type SetStateAction
 } from "react";
 import { Circle } from "lucide-react";
 
-import { getUsers } from "@/services/userService";
-
+import { subsystemCategories } from "@/components/member-data-format/user";
 import {
-    subsystemCategories,
+    type User,
     type System,
-    type Subsystem,
-    type User
-} from "@/lib/dummyData/user";
+    type Subsystem
+} from "@/components/member-data-format/user";
 
 interface FilterDropdownProps {
-    onFilterChange: (filteredMembers: User[]) => void
     filters: {
         systems: System[]
         subsystems: Subsystem[]
         years: string[]
     }
-    setFilters: Dispatch<SetStateAction<FilterDropdownProps["filters"]>>
+    setFilters: React.Dispatch<React.SetStateAction<{
+        systems: System[]
+        subsystems: Subsystem[]
+        years: string[]
+    }>>
     filteredCount: number
-    setFilteredCount: Dispatch<SetStateAction<number>>
     sortOrder: "asc" | "desc"
     setSortOrder: Dispatch<SetStateAction<FilterDropdownProps["sortOrder"]>>
+    users: User[]
 }
 
 const FilterDropdown = ({
-    onFilterChange,
     filters,
     setFilters,
     filteredCount,
-    setFilteredCount,
     sortOrder,
-    setSortOrder
+    setSortOrder,
+    users
 }: FilterDropdownProps) => {
-    // Derived Data (Filtered Members)
-    const [users, setUsers] = useState<User[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-
-    useEffect(() => {
-        fetchMembers();
-    }, []);
-
-    const fetchMembers = async () => {
-        try {
-            setLoading(true);
-            const users = await getUsers();
-            setUsers(users);
-        } catch (err) {
-            console.error("Error fetching members: ", err);
-            setError("Failed to load members. Please try again.");
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const filteredMembers = users.filter(User => {
-        if (
-            filters.systems.length === 0
-            && filters.subsystems.length === 0
-            && filters.years.length === 0
-        ) {
-            return true;
-        }
-
-        const systemMatch = filters.systems.length === 0 || filters.systems.includes(User.System as System);
-        const subsystemMatch = filters.subsystems.length === 0 || (User.Subsystem && filters.subsystems.includes(User.Subsystem as Subsystem));
-        const yearMatch = filters.years.length === 0 || filters.years.includes(User.GradDate);
-
-        return systemMatch && subsystemMatch && yearMatch;
-    });
-
-    const sortedMembers = [...filteredMembers].sort((a, b) => {
-        if (sortOrder === "asc") {
-            return a.Name.localeCompare(b.Name);
-        } else {
-            return b.Name.localeCompare(a.Name);
-        }
-    });
+    const gradYears = useMemo(() => [...new Set(users.map(user => user.GradDate))]
+        .sort((a, b) => a.localeCompare(b)), [users]);
 
     // Event Handlers
     const handleSystemToggle = (system: System) => {
@@ -136,33 +92,6 @@ const FilterDropdown = ({
         return active;
     };
 
-    // Hooks: Filter Updates and Count Tracking
-
-    useEffect(() => {
-        onFilterChange(sortedMembers);
-    }, [filters, sortOrder, users, onFilterChange]);
-
-    useEffect(() => {
-        setFilteredCount(filteredMembers.length);
-    }, [filteredMembers, setFilteredCount]);
-
-    // Render
-    if (loading) {
-        return (
-            <div className="flex justify-center">
-                <h1>Loading members...</h1>
-            </div>
-        );
-    }
-
-    if (error) {
-        return (
-            <div className="flex justify-center">
-                <h1>Error loading members. Please retry.</h1>
-            </div>
-        );
-    }
-
     return (
         <div className="bg-background px-6 py-4 mx-auto overflow-y-auto max-h-[80vh] max-w-full">
             <div className="space-y-6">
@@ -173,21 +102,19 @@ const FilterDropdown = ({
                             Grad Year
                         </h3>
                         <div className="flex justify-between">
-                            {Array.from(new Set(users.map(User => User.GradDate)))
-                                .sort()
-                                .map(GradDate => (
-                                    <button
-                                        key={GradDate}
-                                        onClick={() => handleYearToggle(GradDate)}
-                                        className={`font-sora inline-block not-first:items-center gap-2 p-2 rounded-lg transition-colors ${
-                                            filters.years.includes(GradDate)
-                                                ? "bg-primary/60 text-background"
-                                                : "bg-gray-100 dark:bg-gray-700"
-                                        }`}
-                                    >
-                                        {GradDate}
-                                    </button>
-                                ))}
+                            {gradYears.map(gradDate => (
+                                <button
+                                    key={gradDate}
+                                    onClick={() => handleYearToggle(gradDate)}
+                                    className={`font-sora inline-block not-first:items-center gap-2 p-2 rounded-lg transition-colors ${
+                                        filters.years.includes(gradDate)
+                                            ? "bg-primary/60 text-background"
+                                            : "bg-gray-100 dark:bg-gray-700"
+                                    }`}
+                                >
+                                    {gradDate}
+                                </button>
+                            ))}
                         </div>
                     </div>
 
