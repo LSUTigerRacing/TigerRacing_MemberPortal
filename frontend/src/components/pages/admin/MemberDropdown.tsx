@@ -1,6 +1,5 @@
 import { useState, type ReactElement } from "react";
 import { MoreHorizontal } from "lucide-react";
-
 import {
     AlertDialog,
     AlertDialogAction,
@@ -12,6 +11,7 @@ import {
     AlertDialogTitle
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import type { User } from "@/components/member-data-format/user";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -21,14 +21,12 @@ import {
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 
-import type { Member } from "@/lib/dummyData/members";
-
-interface MemberDropdownProps {
-    member: Member
+interface UserDropdownProps {
+    user: User
     onDeleteMember: (memberId: string) => void
 }
 
-export default function MemberDropdown ({ member, onDeleteMember }: MemberDropdownProps): ReactElement {
+export default function MemberDropdown ({ user, onDeleteMember }: UserDropdownProps): ReactElement {
     const [open, setOpen] = useState(false);
 
     return (
@@ -55,16 +53,16 @@ export default function MemberDropdown ({ member, onDeleteMember }: MemberDropdo
                 <AlertDialogContent>
                     <AlertDialogHeader>
                         <AlertDialogTitle className="font-manrope h1 text-center">
-                            Are you absolutely sure you want to delete {member.name}?
+                            Are you absolutely sure you want to delete {user.Name}?
                         </AlertDialogTitle>
                         <AlertDialogDescription className="font-sora text-gray-600 text-center">
-                            This action cannot be undone. This will permanently delete {member.name}'s
+                            This action cannot be undone. This will permanently delete {user.Name}'s
                             account and remove their data from the servers.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter className="items-center font-sora">
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction onClick={() => onDeleteMember(member.id)}>
+                        <AlertDialogAction onClick={() => onDeleteMember(user.UserId)}>
                             Continue
                         </AlertDialogAction>
                     </AlertDialogFooter>
