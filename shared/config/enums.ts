@@ -7,7 +7,8 @@ export enum System {
     Chassis = "Chassis",
     Powertrain = "Powertrain",
     Software = "Software",
-    Business = "Business"
+    Business = "Business",
+    PublicRelations = "Public Relations"
 }
 
 export enum Subsystem {
@@ -30,6 +31,10 @@ export enum Subsystem {
     Data = "Data Acquisition",
 
     // Business
+    Business = "Business",
+    Financial = "Financial",
+
+    // Public Relations
     PublicRelations = "Public Relations"
 }
 
