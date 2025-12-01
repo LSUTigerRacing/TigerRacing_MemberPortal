@@ -30,7 +30,8 @@ export enum Subsystem {
     Data = "Data Acquisition",
 
     // Business
-    PublicRelations = "Public Relations"
+    PublicRelations = "Public Relations",
+    Finance = "Finance"
 }
 
 export enum ShirtSize {
