@@ -1,85 +1,46 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+import { Circle } from "lucide-react";
 import {
-    useEffect,
+    useMemo,
     type Dispatch,
     type SetStateAction
 } from "react";
-import { Circle } from "lucide-react";
 
 import {
-    data,
     subsystemCategories,
+    type User,
     type System,
-    type Subsystem,
-    type Member
-} from "@/lib/dummyData/members";
+    type Subsystem
+} from "@/lib/member-data-format/user";
 
 interface FilterDropdownProps {
-    onFiltersChange: (filteredMembers: Member[]) => void
     filters: {
         systems: System[]
         subsystems: Subsystem[]
-        years: Member["grad"][]
+        years: string[]
     }
-    setFilters: Dispatch<
-        SetStateAction<{
-            systems: System[]
-            subsystems: Subsystem[]
-            years: Member["grad"][]
-        }>
-    >
+    setFilters: Dispatch<SetStateAction<{
+        systems: System[]
+        subsystems: Subsystem[]
+        years: string[]
+    }>>
     filteredCount: number
-    setFilteredCount: Dispatch<SetStateAction<number>>
     sortOrder: "asc" | "desc"
-    setSortOrder: Dispatch<SetStateAction<"asc" | "desc">>
+    setSortOrder: Dispatch<SetStateAction<FilterDropdownProps["sortOrder"]>>
+    users: User[]
 }
 
 const FilterDropdown = ({
-    onFiltersChange,
     filters,
     setFilters,
     filteredCount,
-    setFilteredCount,
     sortOrder,
-    setSortOrder
+    setSortOrder,
+    users
 }: FilterDropdownProps) => {
-    // Derived Data (Filtered Members)
-
-    const filteredMembers = data.filter(member => {
-        if (
-            filters.systems.length === 0
-            && filters.subsystems.length === 0
-            && filters.years.length === 0
-        ) {
-            return true;
-        }
-
-        const systemMatch
-            = filters.systems.length === 0
-                || member.system.some(s => filters.systems.includes(s));
-
-        const subsystemMatch
-            = filters.subsystems.length === 0
-                || (member.subsystem
-                    && member.subsystem.some(ss => filters.subsystems.includes(ss)));
-
-        const yearMatch
-            = filters.years.length === 0
-                || filters.years.includes(member.grad);
-
-        return systemMatch && subsystemMatch && yearMatch;
-    });
-
-    const sortedMembers = [...filteredMembers].sort((a, b) => {
-        if (sortOrder === "asc") {
-            return a.name.localeCompare(b.name);
-        } else {
-            return b.name.localeCompare(a.name);
-        }
-    });
+    const gradYears = useMemo(() => [...new Set(users.map(user => user.GradDate))]
+        .sort((a, b) => a.localeCompare(b)), [users]);
 
     // Event Handlers
-
     const handleSystemToggle = (system: System) => {
         setFilters(prev => ({
             ...prev,
@@ -98,7 +59,7 @@ const FilterDropdown = ({
         }));
     };
 
-    const handleYearToggle = (gradYear: Member["grad"]) => {
+    const handleYearToggle = (gradYear: User["GradDate"]) => {
         setFilters(prev => ({
             ...prev,
             years: prev.years.includes(gradYear)
@@ -130,18 +91,6 @@ const FilterDropdown = ({
         return active;
     };
 
-    // Hooks: Filter Updates and Count Tracking
-
-    useEffect(() => {
-        onFiltersChange(sortedMembers);
-    }, [filters, sortOrder, onFiltersChange]);
-
-    useEffect(() => {
-        setFilteredCount(filteredMembers.length);
-    }, [filteredMembers]);
-
-    // Render
-
     return (
         <div className="bg-background px-6 py-4 mx-auto overflow-y-auto max-h-[80vh] max-w-full">
             <div className="space-y-6">
@@ -152,21 +101,19 @@ const FilterDropdown = ({
                             Grad Year
                         </h3>
                         <div className="flex justify-between">
-                            {Array.from(new Set(data.map(member => member.grad)))
-                                .sort()
-                                .map(gradYear => (
-                                    <button
-                                        key={gradYear}
-                                        onClick={() => handleYearToggle(gradYear)}
-                                        className={`font-sora inline-block not-first:items-center gap-2 p-2 rounded-lg transition-colors ${
-                                            filters.years.includes(gradYear)
-                                                ? "bg-primary/60 text-background"
-                                                : "bg-gray-100 dark:bg-gray-700"
-                                        }`}
-                                    >
-                                        {gradYear}
-                                    </button>
-                                ))}
+                            {gradYears.map(gradDate => (
+                                <button
+                                    key={gradDate}
+                                    onClick={() => handleYearToggle(gradDate)}
+                                    className={`font-sora inline-block not-first:items-center gap-2 p-2 rounded-lg transition-colors ${
+                                        filters.years.includes(gradDate)
+                                            ? "bg-primary/60 text-background"
+                                            : "bg-gray-100 dark:bg-gray-700"
+                                    }`}
+                                >
+                                    {gradDate}
+                                </button>
+                            ))}
                         </div>
                     </div>
 
@@ -228,7 +175,7 @@ const FilterDropdown = ({
                                         : "bg-gray-100 dark:bg-gray-700"
                                 }`}
                             >
-                                Ascending (Z-A)
+                                Ascending (A-Z)
                             </button>
                             <button
                                 onClick={() => handleSort("desc")}
@@ -238,7 +185,7 @@ const FilterDropdown = ({
                                         : "bg-gray-100 dark:bg-gray-700"
                                 }`}
                             >
-                                Descending (A-Z)
+                                Descending (Z-A)
                             </button>
                         </div>
                     </div>
