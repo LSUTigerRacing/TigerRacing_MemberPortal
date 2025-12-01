@@ -25,8 +25,15 @@ export const config = {
             Subsystem.Embedded,
             Subsystem.Data
         ],
+        /**
+         * This implementation is out of date with regards to the
+         * future structure of the system. It will be modified at a later time.
+         * DO NOT modify this in an attempt to "sync" the website and Discord
+         * without prior authorization. Your PR will be rejected.
+         */
         [System.Business]: [
-            Subsystem.PublicRelations
+            Subsystem.PublicRelations,
+            Subsystem.Finance
         ]
     }
 
