@@ -1,5 +1,10 @@
+using System.Runtime.Serialization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+
 namespace TRFSAE.MemberPortal.API.Enums;
 
+[JsonConverter(typeof(StringEnumConverter))]
 public enum System
 {
     Chassis,
@@ -8,6 +13,7 @@ public enum System
     Business
 }
 
+[JsonConverter(typeof(StringEnumConverter))]
 public enum Subsystem
 {
     // Chassis
@@ -24,18 +30,16 @@ public enum Subsystem
     TractiveSystem,
 
     // Software
-    AppDev,
+    App,
     Embedded,
-    DataAcq,
+    Data,
 
     // Business
-    Business,
     Finance,
     PublicRelations
-    // Public Relations
-
 }
 
+[JsonConverter(typeof(StringEnumConverter))]
 public enum ShirtSize
 {
     XS,
@@ -46,6 +50,7 @@ public enum ShirtSize
     XXL
 }
 
+[JsonConverter(typeof(StringEnumConverter))]
 public enum Role
 {
     SuperAdmin,
@@ -55,6 +60,7 @@ public enum Role
     Member
 }
 
+[JsonConverter(typeof(StringEnumConverter))]
 public enum ProjectPriority
 {
     Low,
@@ -62,6 +68,7 @@ public enum ProjectPriority
     High
 }
 
+[JsonConverter(typeof(StringEnumConverter))]
 public enum OrderStatus
 {
     Pending,
