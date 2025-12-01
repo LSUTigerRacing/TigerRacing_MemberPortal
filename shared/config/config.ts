@@ -36,7 +36,6 @@ export const config = {
             Subsystem.Finance
         ]
     }
-
 } satisfies Config as Config;
 
 interface Config {

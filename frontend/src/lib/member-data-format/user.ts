@@ -1,43 +1,28 @@
+import { System, Subsystem, ShirtSize } from "../../../../shared/config/enums";
+
 export interface User {
-    UserId: string
-    Name: string
-    LSUEmail: string
-    PersonalEmail: string
-    EightNine: number
-    HazingStatus: boolean
-    FeeStatus: boolean
-    GradDate: string
-    ShirtSize: string
-    System: string
-    Subsystem: string
-    AccountCreationDate: string
-    AccountLastUpdatedDate: string
+    /**
+     * User UUID
+     */
+    id: string
+    /**
+     * User's institution-controlled student ID.
+     */
+    sid: string
+    name: string
+    /**
+     * User's institutional email.
+     */
+    email: string
+    hazingStatus: boolean
+    feeStatus: boolean
+    gradDate: number
+    shirtSize: ShirtSize
+    system: System
+    subsystem: Subsystem
+    createdAt: string
+    updatedAt: string
 };
 
-export interface UserSearchDto {
-    Name?: string
-}
-
-export interface UserUpdateDto {
-    Name?: string
-    LSUEmail?: string
-    PersonalEmail?: string
-    EightNine?: number
-    HazingStatus?: boolean
-    FeeStatus?: boolean
-    GradDate?: string
-    ShirtSize?: string
-    System?: string
-    Subsystem?: string
-    AccountLastUpdatedDate?: string
-}
-
-export const subsystemCategories = {
-    Powertrain: ["Electronics", "Battery", "Low Voltage", "Tractive System"],
-    Software: ["Embedded", "App Dev", "Daq"],
-    Chassis: ["Frame", "Aero", "Ergo", "Brakes", "Suspension", "Drivetrain"],
-    Business: ["Financial", "General Business", "Public Relations"]
-} as const;
-
-export type System = keyof typeof subsystemCategories;
-export type Subsystem = typeof subsystemCategories[System][number];
+export type UserSearchDto = Pick<User, "name">;
+export type UserUpdateDto = Omit<User, "id" | "createdAt" | "updatedAt">;

@@ -42,9 +42,7 @@ export default function CarouselDemo ({
     useEffect(() => {
         if (!carouselApi || !selectedMemberId) return;
 
-        const selectedIndex = users.findIndex(
-            user => user.UserId === selectedMemberId
-        );
+        const selectedIndex = users.findIndex(user => user.id === selectedMemberId);
 
         if (selectedIndex !== -1) {
             carouselApi.scrollTo(selectedIndex, true); // true stopped it from doing the crazy scroll thing
@@ -68,7 +66,7 @@ export default function CarouselDemo ({
             </Button>
             <CarouselContent>
                 {users.map(user => (
-                    <CarouselItem key={user.UserId}>
+                    <CarouselItem key={user.id}>
                         <div className="flex justify-between p-1 max-w-full gap-2">
                             <Card className="w-full h-full bg-background rounded-2xl">
                                 <CardContent className="flex flex-col w-full p-5">
@@ -90,21 +88,21 @@ export default function CarouselDemo ({
                                             {/* Container for Name and More Icon */}
                                             <div className="flex flex-row gap-3">
                                                 <div className="ml-4 font-manrope font-semibold text-2xl text-foreground pb-2">
-                                                    {user.Name}
+                                                    {user.name}
                                                 </div>
-                                                <MemberDropdown user={user} onDeleteMember={onDeleteMember} />
+                                                <MemberDropdown member={user} onDeleteMember={onDeleteMember} />
                                             </div>
 
                                             {/* Details Section */}
                                             <div className="flex gap-20">
                                                 <div className="ml-4 font-sora text-gray-600">
-                                                    {user.LSUEmail}
+                                                    {user.email}
                                                 </div>
                                                 <div className="ml-4 font-sora text-gray-600">
-                                                    {user.System}
+                                                    {user.system}
                                                 </div>
                                                 <div className="ml-4 font-sora text-gray-600">
-                                                    {user.GradDate}
+                                                    {user.gradDate}
                                                 </div>
                                             </div>
                                         </div>
@@ -119,28 +117,25 @@ export default function CarouselDemo ({
                                             </div>
                                             <div className="p-3 space-y-2 flex flex-wrap justify-center">
                                                 <Button className="px-3 py-2 w-[200px] h-fit font-sora rounded-full bg-primary text-white whitespace-break-spaces wrap-break-word">
-                                                    Subsystem: {user.Subsystem}
-                                                </Button>
-                                                <Button className="px-3 py-2 w-[200px] h-fit font-sora rounded-full bg-primary text-white whitespace-break-spaces wrap-break-word">
-                                                    Personal Email: {user.PersonalEmail}
+                                                    Subsystem: {user.subsystem}
                                                 </Button>
                                                 <Button className="px-3 w-[200px] py-2 font-sora rounded-full bg-primary text-white">
-                                                    Eight Nine Number: {user.EightNine}
+                                                    Student ID: {user.sid}
                                                 </Button>
                                                 <Button className="px-3 w-[200px] py-2 font-sora rounded-full bg-primary text-white">
-                                                    Hazing: {user.HazingStatus}
+                                                    Hazing: {user.hazingStatus}
                                                 </Button>
                                                 <Button className="px-3 w-[200px] py-2 font-sora rounded-full bg-primary text-white">
-                                                    Fees: {user.FeeStatus}
+                                                    Fees: {user.feeStatus}
                                                 </Button>
                                                 <Button className="px-3 w-[200px] py-2 font-sora rounded-full bg-primary text-white">
-                                                    T-Shirt Size: {user.ShirtSize}
+                                                    T-Shirt Size: {user.shirtSize}
                                                 </Button>
                                                 <Button className="px-3 w-[200px] py-2 font-sora rounded-full bg-primary text-white">
-                                                    Account Created: {user.AccountCreationDate}
+                                                    Account Created: {user.createdAt}
                                                 </Button>
                                                 <Button className="px-3 w-[200px] py-2 font-sora rounded-full bg-primary text-white">
-                                                    Account Last Updated: {user.AccountLastUpdatedDate}
+                                                    Account Last Updated: {user.updatedAt}
                                                 </Button>
                                             </div>
                                         </div>

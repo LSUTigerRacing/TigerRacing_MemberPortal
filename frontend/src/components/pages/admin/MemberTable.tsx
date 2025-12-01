@@ -103,7 +103,7 @@ export default function MemberTable ({
             enableHiding: false,
             header: () => null,
             cell: ({ row }) => (
-                <MemberDropdown user={row.original} onDeleteMember={onDeleteMember} />
+                <MemberDropdown member={row.original} onDeleteMember={onDeleteMember} />
             )
         }
     ];
