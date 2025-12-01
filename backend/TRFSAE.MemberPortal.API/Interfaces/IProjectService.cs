@@ -1,13 +1,12 @@
 using TRFSAE.MemberPortal.API.DTOs;
+using TRFSAE.MemberPortal.API.Enums;
 
 namespace TRFSAE.MemberPortal.API.Interfaces;
 
 public interface IProjectService
 {
-    Task<List<ProjectResponseDto>> GetAllProjectsAsync(ProjectSearchDto searchDto);
-    // Task<ProjectResponseDto> UpdateUserProjectAsync(Guid userId, Guid projectId);
-    // Task<List<ProjectResponseDto>> GetAllAssignedProjectsAsync(Guid id);
-    Task<bool> CreateNewProjectAsync(CreateProjectDto createDto);
-    Task<bool> AssignProjectAsync(Guid userId, Guid projectId);
-
+    Task<IEnumerable<ProjectSummaryDto>> GetAllProjectsAsync(int pageNumber, int pageSize, string? search, ProjectPriority? priority, Subsystem? subsystem);    
+    Task<CreateProjectResponse> CreateNewProjectAsync(CreateProjectDto createDto);
+    Task<bool> AssignProjectUserAsync(Guid userId, Guid projectId);
+    Task<bool> RemoveProjectUserAsync(Guid userId, Guid projectId);
 }

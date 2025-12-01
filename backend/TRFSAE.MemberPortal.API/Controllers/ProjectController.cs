@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TRFSAE.MemberPortal.API.DTOs;
 using TRFSAE.MemberPortal.API.Interfaces;
+using TRFSAE.MemberPortal.API.Enums;
 
 namespace TRFSAE.MemberPortal.API.Controllers;
 
@@ -15,32 +16,11 @@ public class ProjectController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllProjects(ProjectSearchDto searchDto)
+    public async Task<IActionResult> GetAllProjects(string? search, ProjectPriority? priority, Subsystem? subsystem, int pageNumber = 1, int pageSize = 8)
     {
-        var projects = await _ProjectService.GetAllProjectsAsync(searchDto);
+        var projects = await _ProjectService.GetAllProjectsAsync(pageNumber, pageSize, search, priority, subsystem);
         return Ok(projects);
     }
-
-    // [HttpGet("{id}")]
-    // public async Task<IActionResult> GetAllProjectTasks(Guid id)
-    // {
-    //     var tasks = await _ProjectService.GetAllProjectTasksAsync(id);
-    //     return Ok(tasks);
-    // }
-
-    // [HttpPut("{userId}/projectId")]
-    // public async Task<IActionResult> UpdateUserProject(Guid userId, Guid projectId)
-    // {
-    //     var update = await _ProjectService.UpdateUserProjectAsync(userId, projectId);
-    //     return Ok(update);
-    // }
-
-    // [HttpGet("{id}")]
-    // public async Task<IActionResult> GetAllAssignedProjects(Guid id)
-    // {
-    //     var projects = await _ProjectService.GetAllAssignedProjectsAsync(id);
-    //     return Ok(projects);
-    // }
 
     [HttpPost]
     public async Task<IActionResult> CreateNewProject(CreateProjectDto createDto)
@@ -50,9 +30,16 @@ public class ProjectController : ControllerBase
     }
 
     [HttpPost("{projectId}/users/{userId}")]
-    public async Task<IActionResult> AssignProject(Guid userId, Guid projectId)
+    public async Task<IActionResult> AssignProjectUser(Guid userId, Guid projectId)
     {
-        var assign = await _ProjectService.AssignProjectAsync(userId, projectId);
+        var assign = await _ProjectService.AssignProjectUserAsync(userId, projectId);
+        return Ok(assign);
+    }
+
+    [HttpDelete("{projectId}/users/{userId}")]
+    public async Task<IActionResult> RemoveProjectUser(Guid userId, Guid projectId)
+    {
+        var assign = await _ProjectService.RemoveProjectUserAsync(userId, projectId);
         return Ok(assign);
     }
 }
