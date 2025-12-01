@@ -1,10 +1,8 @@
 import axios, { AxiosError } from "axios";
-import type { User, UserSearchDto, UserUpdateDto } from "@/components/member-data-format/user.ts";
-
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5096/api";
+import type { User, UserSearchDto, UserUpdateDto } from "@/lib/member-data-format/user.ts";
 
 const api = axios.create({
-    baseURL: API_BASE_URL,
+    baseURL: "/api",
     headers: {
         "Content-Type": "application/json"
     },
@@ -12,7 +10,7 @@ const api = axios.create({
     withCredentials: true
 });
 
-export const getUsers = async (searchDto?: UserSearchDto): Promise<User[]> => {
+export const getUsers = async (searchDto?: UserSearchDto): Promise<User[] | undefined> => {
     try {
         const response = await api.get<User[]>("/user", {
             params: searchDto
@@ -20,27 +18,24 @@ export const getUsers = async (searchDto?: UserSearchDto): Promise<User[]> => {
         return response.data;
     } catch (error) {
         handleApiError(error);
-        throw error;
     }
 };
 
-export const getUserById = async (id: string): Promise<User> => {
+export const getUserById = async (id: string): Promise<User | undefined> => {
     try {
         const response = await api.get<User>(`/user/${id}`);
         return response.data;
     } catch (error) {
         handleApiError(error);
-        throw error;
     }
 };
 
-export const updateUser = async (id: string, userData: UserUpdateDto): Promise<User> => {
+export const updateUser = async (id: string, userData: UserUpdateDto): Promise<User | undefined> => {
     try {
         const response = await api.patch<User>(`/user/${id}`, userData);
         return response.data;
     } catch (error) {
         handleApiError(error);
-        throw error;
     }
 };
 
@@ -51,7 +46,6 @@ export const deleteUser = async (id: string, confirmationString = "confirm"): Pr
         });
     } catch (error) {
         handleApiError(error);
-        throw error;
     }
 };
 
