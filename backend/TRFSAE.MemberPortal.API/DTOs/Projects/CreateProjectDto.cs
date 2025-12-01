@@ -1,9 +1,12 @@
-namespace TRFSAE.MemberPortal.API.DTOs;
+using TRFSAE.MemberPortal.API.Enums;
 
+namespace TRFSAE.MemberPortal.API.DTOs;
 public class CreateProjectDto
 {
-    public string ProjectName { get; set; } = "untitled project";
-    public DateTime ProjectDueDate { get; set; }
-    public int ProjectMemberCount { get; set; }
-    
+    public string Name { get; set; } = "Untitled Project";
+    public string Description { get; set; } = string.Empty;
+    public Subsystem Subsystem { get; set; }
+    public ProjectPriority Priority { get; set; }
+    public DateTime StartDate { get; set; }
+    public DateTime Deadline { get; set; }
 }
