@@ -50,6 +50,10 @@ jobs:
       - name: Install Packages
         run: bun install --filter ./database
 
+      - name: Typecheck Project
+        run: bun run build:ci
+        working-directory: ./database
+
       - name: Build Project
         run: bun run build
         working-directory: ./database
