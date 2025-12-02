@@ -22,11 +22,32 @@ public class ProjectController : ControllerBase
         return Ok(projects);
     }
 
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetProjectById(Guid id)
+    {
+        var projects = await _ProjectService.GetProjectByIdAsync(id);
+        return Ok(projects);
+    }
+
     [HttpPost]
     public async Task<IActionResult> CreateNewProject(CreateProjectDto createDto)
     {
         var project = await _ProjectService.CreateNewProjectAsync(createDto);
         return Ok(project);
+    }
+
+    [HttpPatch("{id}")]
+    public async Task<IActionResult> UpdateProject(Guid id, UpdateProjectDto updateDto)
+    {
+        var projects = await _ProjectService.UpdateProjectAsync(id, updateDto);
+        return Ok(projects);
+    }
+
+    [HttpGet("{projectId}/users")]
+    public async Task<IActionResult> GetProjectUsers(Guid projectId)
+    {
+        var users = await _ProjectService.GetAllProjectUsersAsync(projectId);
+        return Ok(users);
     }
 
     [HttpPost("{projectId}/users/{userId}")]
