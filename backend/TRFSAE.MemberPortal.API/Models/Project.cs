@@ -7,7 +7,7 @@ namespace TRFSAE.MemberPortal.API.Models
     [Table("project")]
     public class ProjectModel : BaseModel
     {
-        [PrimaryKey]
+        [PrimaryKey("id", false)]
         [Column("id")]
         public Guid Id { get; set; }
 
