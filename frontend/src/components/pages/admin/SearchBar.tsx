@@ -27,10 +27,7 @@ import { Input } from "@/components/ui/input";
 
 import FilterDropdown from "@/components/pages/admin/FilterDropdown";
 
-import {
-    type Subsystem,
-    type System
-} from "@/lib/member-data-format/user";
+import type { Subsystem, System } from "../../../../../shared/config/enums";
 
 export interface SearchBarProps extends HTMLAttributes<HTMLElement> {
     view: "column" | "gallery"
@@ -91,10 +88,11 @@ export default function SearchBar (props: SearchBarProps): ReactElement<SearchBa
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className="max-w-fit" align="start">
                             <FilterDropdown
-                                filters={filters}
-                                setFilters={setFilters}
-                                sortOrder={sortOrder}
-                                setSortOrder={setSortOrder}
+                                filters={props.filters}
+                                setFilters={props.setFilters}
+                                filteredCount={props.filteredCount}
+                                sortOrder={props.sortOrder}
+                                setSortOrder={props.setSortOrder}
                             />
                         </DropdownMenuContent>
                     </DropdownMenu>
