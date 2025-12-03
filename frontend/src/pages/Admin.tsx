@@ -8,7 +8,6 @@ import type { User } from "@/lib/member-data-format/user";
 
 import { getUsers, deleteUser } from "@/services/userService";
 
-import { config } from "../../../shared/config/config";
 import { System, Subsystem } from "../../../shared/config/enums";
 
 export default function Admin () {
@@ -53,9 +52,8 @@ export default function Admin () {
     async function handleDelete (userId: string) {
         try {
             await deleteUser(userId, "confirm");
-            const updatedMembers = users.filter(
-                user => user.UserId !== userId
-            );
+
+            const updatedMembers = users.filter(user => user.id !== userId);
             setUsers(updatedMembers);
         } catch (err) {
             console.error("Failed to delete member: ", err);
@@ -91,24 +89,6 @@ export default function Admin () {
         setFilteredCount(filteredMembers.length);
     }, [filteredMembers, setFilteredCount]);
 
-    if (loading) {
-        return (
-            <div className="xl:mt-16.75 flex justify-center pt-10 px-8">
-                <h1>Loading members...</h1>
-            </div>
-        );
-    }
-
-    if (error) {
-        return (
-            <div className="xl:mt-16.75 flex justify-center pt-10 px-8">
-                <p className="text-lg font-sora items-center">
-                    Error loading members. Please retry.
-                </p>
-            </div>
-        );
-    }
-
     return (
         <div className="xl:mt-16.75 px-8">
             <div className="rounded-sm pt-4">
@@ -124,23 +104,40 @@ export default function Admin () {
                     filteredCount={filteredCount}
                 />
 
-                {view === "column"
+                {loading
                     ? (
-                        <MemberTable
-                            users={filteredMembers}
-                            onDeleteMember={handleDelete}
-                            onRowClick={handleRowClick}
-                        />
+                        <div className="bg-background w-full my-4 py-4 rounded-xl">
+                            <h1>Loading members...</h1>
+                            <div className="overflow-hidden"></div>
+                        </div>
                     )
-                    : (
-                        <GalleryCard
-                            users={filteredMembers}
-                            view={view}
-                            setView={setView}
-                            onDeleteMember={handleDelete}
-                            selectedMemberId={selectedMemberId}
-                        />
-                    )}
+                    : error
+                        ? (
+                            <div className="bg-background w-full my-4 py-4 rounded-xl">
+                                <h1>Error loading members. Please retry.</h1>
+                                <div className="overflow-hidden"></div>
+                            </div>
+                        )
+                        : view === "column"
+                            ? (
+                                <MemberTable
+                                    users={filteredMembers}
+                                    onDeleteMember={handleDelete}
+                                    onRowClick={handleRowClick}
+                                />
+                            )
+                            : (
+                                <GalleryCard
+                                    users={filteredMembers}
+                                    view={view}
+                                    setView={setView}
+                                    onDeleteMember={handleDelete}
+                                    selectedMemberId={selectedMemberId}
+                                />
+
+                            )
+                }
+
             </div>
         </div>
     );

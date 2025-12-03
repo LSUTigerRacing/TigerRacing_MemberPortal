@@ -5,12 +5,10 @@ import {
     type SetStateAction
 } from "react";
 
-import {
-    subsystemCategories,
-    type User,
-    type System,
-    type Subsystem
-} from "@/lib/member-data-format/user";
+import type { User } from "@/lib/member-data-format/user";
+
+import { config } from "../../../../../shared/config/config";
+import { System, Subsystem } from "../../../../../shared/config/enums";
 
 interface FilterDropdownProps {
     filters: {
@@ -26,7 +24,6 @@ interface FilterDropdownProps {
     filteredCount: number
     sortOrder: "asc" | "desc"
     setSortOrder: Dispatch<SetStateAction<FilterDropdownProps["sortOrder"]>>
-    users: User[]
 }
 
 const FilterDropdown = ({
@@ -34,12 +31,8 @@ const FilterDropdown = ({
     setFilters,
     filteredCount,
     sortOrder,
-    setSortOrder,
-    users
+    setSortOrder
 }: FilterDropdownProps) => {
-    const gradYears = useMemo(() => [...new Set(users.map(user => user.GradDate))]
-        .sort((a, b) => a.localeCompare(b)), [users]);
-
     // Event Handlers
     const handleSystemToggle = (system: System) => {
         setFilters(prev => ({
@@ -59,7 +52,7 @@ const FilterDropdown = ({
         }));
     };
 
-    const handleYearToggle = (gradYear: User["GradDate"]) => {
+    const handleYearToggle = (gradYear: User["gradDate"]) => {
         setFilters(prev => ({
             ...prev,
             years: prev.years.includes(gradYear)
@@ -124,7 +117,7 @@ const FilterDropdown = ({
                                 System & Subsystem
                             </h3>
                             <div className="flex justify-between gap-3">
-                                {(Object.keys(subsystemCategories) as System[]).map(system => (
+                                {(Object.keys(config.systems) as unknown as Array<keyof typeof config.systems>).map(system => (
                                     <div key={system} className="flex flex-col gap-4">
                                         <button
                                             onClick={() => handleSystemToggle(system)}
@@ -140,7 +133,7 @@ const FilterDropdown = ({
 
                                         {/* Subsystem Filters */}
                                         <div className="flex flex-col gap-2">
-                                            {subsystemCategories[system].map(subsystem => (
+                                            {config.systems[system].map(subsystem => (
                                                 <button
                                                     key={subsystem}
                                                     onClick={() => handleSubsystemToggle(subsystem)}
