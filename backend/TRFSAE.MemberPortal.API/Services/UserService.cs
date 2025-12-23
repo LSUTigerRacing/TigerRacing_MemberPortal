@@ -1,114 +1,156 @@
 using TRFSAE.MemberPortal.API.DTOs;
 using TRFSAE.MemberPortal.API.Interfaces;
 using TRFSAE.MemberPortal.API.Models;
+using TRFSAE.MemberPortal.API.Enums;
 using System.Text.Json;
 using Supabase;
 
 namespace TRFSAE.MemberPortal.API.Services
 {
-  public class UserService : IUserService
-  {
-    private readonly Client _supabaseClient;
-
-    public UserService(Client supabaseClient)
+    public class UserService : IUserService
     {
-      _supabaseClient = supabaseClient;
+        private readonly Client _supabaseClient;
+        
+
+        public UserService(Client supabaseClient)
+        {
+            _supabaseClient = supabaseClient;
+        }
+
+        public async Task<IEnumerable<UserSummaryDto>> GetAllUsersAsync(
+            int pageNumber,
+            int pageSize,
+            string? search,
+            bool? completedHazingForm,
+            bool? paidMemberFee,
+            int? gradDate,
+            ShirtSize? shirtSize,
+            Subsystem? subsystem
+        )
+        {
+            var query = _supabaseClient.From<UserModel>();
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                query = (Supabase.Interfaces.ISupabaseTable<UserModel, Supabase.Realtime.RealtimeChannel>)
+                query.Where(u => u.Name == search);
+            }
+
+            if (completedHazingForm != null)
+            {
+                query = (Supabase.Interfaces.ISupabaseTable<UserModel, Supabase.Realtime.RealtimeChannel>)
+                query.Where(u => u.CompletedHazingForm == completedHazingForm);
+            }
+
+            if (paidMemberFee != null)
+            {
+                query = (Supabase.Interfaces.ISupabaseTable<UserModel, Supabase.Realtime.RealtimeChannel>)
+                query.Where(u => u.PaidMemberFee == paidMemberFee);
+            }
+
+            if (gradDate != null)
+            {
+                query = (Supabase.Interfaces.ISupabaseTable<UserModel, Supabase.Realtime.RealtimeChannel>)
+                query.Where(u => u.GradDate == gradDate);
+            }
+
+            if (shirtSize != null)
+            {
+                query = (Supabase.Interfaces.ISupabaseTable<UserModel, Supabase.Realtime.RealtimeChannel>)
+                query.Where(u => u.ShirtSize == shirtSize);
+            }
+
+            if (subsystem != null)
+            {
+                query = (Supabase.Interfaces.ISupabaseTable<UserModel, Supabase.Realtime.RealtimeChannel>)
+                query.Where(u => u.Subsystem == subsystem);
+            }
+
+            var response = await query
+                .Order(u => u.CreatedAt, Supabase.Postgrest.Constants.Ordering.Ascending)
+                .Range((pageNumber - 1) * pageSize, pageNumber * pageSize - 1)
+                .Select("id,name,email,gradDate,subsystem")
+                .Get();
+            
+            var userSummaries = response.Models.Select(u => new UserSummaryDto
+            {
+                Id = u.Id,
+                Name = u.Name,
+                Email = u.Email,
+                GradDate = u.GradDate,
+                Subsystem = u.Subsystem
+            }
+
+            return userSummaries;
+        }
+
+        public async Task<UserDetailDto> GetUserByIDAsync(Guid id)
+        {
+            var response = await _supabaseClient
+              .From<UserModel>()
+              .Select("*")
+              .Where(x => x.Id == id)
+              .Single();
+
+            if (response == null)
+            {
+                throw new Exception("User not found");
+            }
+
+            var userDetail = new UserDetailDto
+            {
+                Id = response.Id,
+                Name = response.Name,
+                Email = response.Email,
+                GradDate = response.GradDate,
+                Subsystem = response.Subsystem
+            };
+
+            return userDetail;
+        }
+
+        public async Task<CreateUserResponse> CreateUserAsync(CreateUserDto createDto)
+        {
+            
+        }
+
+
+        public async Task<UserResponseDto> UpdateUserByIdAsync(Guid userID, UserUpdateDto updateDto)
+        {
+
+        }
+
+        public async Task<bool> DeleteUserAsync(Guid userId, string confirmationString)
+        {
+            if (confirmationString != "confirm")
+            {
+                return false;
+            }
+            // Console.WriteLine("Attempting to delete user with ID: " + userId);
+            try
+            {
+                await _supabaseClient
+                  .From<UserModel>()
+                  .Where(x => x.UserId == userId)
+                  .Delete();
+
+                return true;
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                return false;
+            }
+        }
+
+        public async Task<bool> AssignUserRoleAsync(Guid userID, Role role)
+        {
+
+        }
+        public async Task<bool> RemoveUserRoleAsync(Guid userID)
+        {
+
+        }
     }
-
-    public async Task<UserResponseDto> GetUserByIDAsync(Guid userID)
-    {
-      var response = await _supabaseClient
-        .From<UserModel>()
-        .Where(x => x.UserId == userID)
-        .Single();
-
-      if (response == null)
-      {
-        throw new Exception("User not found");
-      }
-
-      var userResponse = new UserResponseDto
-      {
-        UserId = response.UserId,
-        Name = response.Name,
-        PersonalEmail = response.PersonalEmail,
-        LSUEmail = response.LSUEmail,
-        EightNine = response.EightNine,
-        HazingStatus = response.HazingStatus,
-        FeeStatus = response.FeeStatus,
-        GradDate = response.GradDate,
-        ShirtSize = response.ShirtSize,
-        System = response.System,
-        Subsystem = response.Subsystem
-      };
-
-      return userResponse;
-    }
-
-    public async Task<List<UserResponseDto>> GetAllUsersAsync(UserSearchDto searchDto)
-    {
-      var response = await _supabaseClient
-        .From<UserModel>()
-        .Get();
-      return new List<UserResponseDto>();
-    }
-
-    public async Task<UserResponseDto> UpdateUserByIdAsync(Guid userID, UserUpdateDto updateDto)
-    {
-      var updates = new Dictionary<string, object?>();
-
-      updates["user_id"] = userID;
-      if (updateDto.Name != string.Empty) updates["name"] = updateDto.Name;
-      if (updateDto.PersonalEmail != string.Empty) updates["email"] = updateDto.PersonalEmail;
-      if (updateDto.LSUEmail != string.Empty) updates["lsu_email"] = updateDto.LSUEmail;
-      if (updateDto.EightNine != -1) updates["eight_nine"] = updateDto.EightNine;
-      if (updateDto.HazingStatus != null) updates["hazing_status"] = updateDto.HazingStatus;
-      if (updateDto.FeeStatus != null) updates["fee_status"] = updateDto.FeeStatus;
-      if (updateDto.GradDate != null) updates["grad_date"] = updateDto.GradDate;
-      if (updateDto.ShirtSize != string.Empty) updates["shirt_size"] = updateDto.ShirtSize;
-      if (updateDto.System != string.Empty) updates["system"] = updateDto.System;
-      if (updateDto.Subsystem != string.Empty) updates["subsystem"] = updateDto.Subsystem;
-
-      var response = await _supabaseClient
-        .Rpc("update_user", new { updates = updates });
-
-      if (response.Content == null)
-      {
-        throw new Exception("User not found or update failed");
-      }
-
-      var userResponse = JsonSerializer.Deserialize<List<UserResponseDto>>(response.Content);
-
-      if (userResponse == null)
-      {
-        throw new Exception("User not found or update failed");
-      }
-
-      return userResponse.FirstOrDefault() ?? new UserResponseDto();
-    }
-
-    public async Task<bool> DeleteUserAsync(Guid userId, string confirmationString)
-    {
-      if (confirmationString != "confirm")
-      {
-        return false;
-      }
-      // Console.WriteLine("Attempting to delete user with ID: " + userId);
-      try
-      {
-        await _supabaseClient
-          .From<UserModel>()
-          .Where(x => x.UserId == userId)
-          .Delete();
-
-        return true;
-
-      }
-      catch (Exception e)
-      {
-        Console.WriteLine(e.ToString());
-        return false;
-      }
-    }
-  }
 }
