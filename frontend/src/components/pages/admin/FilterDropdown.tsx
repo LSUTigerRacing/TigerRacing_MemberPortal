@@ -164,138 +164,141 @@ const FilterDropdown = ({
     }
 
     return (
-        <div className="bg-background px-6 py-4 mx-auto overflow-y-auto max-h-[80vh] max-w-full">
-            <div className="space-y-6">
-                <div className="flex flex-col justify-between gap-6 mb-4">
-                    {/* Graduation Year Filter */}
-                    <div className="space-y-4">
-                        <h3 className="inline-block shadow-none font-manrope font-semibold border-b border-b-black">
-                            Grad Year
-                        </h3>
-                        <div className="flex justify-between">
-                            {Array.from(new Set(users.map(User => User.GradDate)))
-                                .sort()
-                                .map(GradDate => (
-                                    <button
-                                        key={GradDate}
-                                        onClick={() => handleYearToggle(GradDate)}
-                                        className={`font-sora inline-block not-first:items-center gap-2 p-2 rounded-lg transition-colors ${
-                                            filters.years.includes(GradDate)
-                                                ? "bg-primary/60 text-background"
-                                                : "bg-gray-100 dark:bg-gray-700"
-                                        }`}
-                                    >
-                                        {GradDate}
-                                    </button>
-                                ))}
-                        </div>
-                    </div>
+        <div className="h-full overflow-y-auto">
+            <div className="bg-background px-6 py-6 max-w-[290px] md:max-w-[700px] md:w-fit mx-auto">
+                <div className="space-y-6">
+                    <div className="flex flex-col justify-between gap-6 mb-4 md:max-w-full">
 
-                    {/* System Filters */}
-                    <div className="gap-2">
+                        {/* Graduation Year Filter */}
                         <div className="space-y-4">
-                            <h3 className="inline-block font-manrope mb-2 font-semibold border-b border-b-black">
-                                System & Subsystem
+                            <h3 className="inline-block shadow-none font-manrope font-semibold border-b border-b-black">
+                                Grad Year
                             </h3>
-                            <div className="flex justify-between gap-3">
-                                {(Object.keys(subsystemCategories) as System[]).map(system => (
-                                    <div key={system} className="flex flex-col gap-4">
+                            <div className="flex gap-3 flex-wrap md:justify-between">
+                                {Array.from(new Set(users.map(User => User.GradDate)))
+                                    .sort()
+                                    .map(GradDate => (
                                         <button
-                                            onClick={() => handleSystemToggle(system)}
-                                            className={`flex text-2xl items-center gap-2 p-2 rounded-xl max-h-fit transition-colors ${
-                                                filters.systems.includes(system)
-                                                    ? "bg-primary/60 text-foreground"
-                                                    : "bg-primary text-background dark:bg-gray-700"
+                                            key={GradDate}
+                                            onClick={() => handleYearToggle(GradDate)}
+                                            className={`font-sora inline-block not-first:items-center flex-1 min-w-[80px] md:max-w-fit p-2 rounded-lg transition-colors ${
+                                                filters.years.includes(GradDate)
+                                                    ? "bg-primary/60 text-background"
+                                                    : "bg-gray-100 dark:bg-gray-700"
                                             }`}
                                         >
-                                            <Circle size={16} />
-                                            <span className="h3 text-lg">{system}</span>
+                                            {GradDate}
                                         </button>
+                                    ))}
+                            </div>
+                        </div>
 
-                                        {/* Subsystem Filters */}
-                                        <div className="flex flex-col gap-2">
-                                            {subsystemCategories[system].map(subsystem => (
-                                                <button
-                                                    key={subsystem}
-                                                    onClick={() => handleSubsystemToggle(subsystem)}
-                                                    className={`flex items-center gap-2 p-2 max-h-fit rounded-lg transition-colors ${
-                                                        filters.subsystems.includes(subsystem)
-                                                            ? "bg-primary/25 text-foreground"
-                                                            : "bg-background dark:bg-gray-700"
-                                                    }`}
-                                                >
-                                                    <Circle size={16} />
-                                                    <span className="manrope-body">{subsystem}</span>
-                                                </button>
-                                            ))}
+                        {/* System Filters */}
+                        <div className="gap-2">
+                            <div className="space-y-6">
+                                <h3 className="inline-block font-manrope mb-2 font-semibold border-b border-b-black">
+                                    System & Subsystem
+                                </h3>
+                                <div className="flex flex-col md:flex-row justify-between gap-y-4 gap-x-2">
+                                    {(Object.keys(subsystemCategories) as System[]).map(system => (
+                                        <div key={system} className="flex flex-col gap-2">
+                                            <button
+                                                onClick={() => handleSystemToggle(system)}
+                                                className={`flex text-2xl items-center gap-2 p-2 rounded-xl max-h-fit max-w-full transition-colors ${
+                                                    filters.systems.includes(system)
+                                                        ? "bg-primary/60 text-foreground"
+                                                        : "bg-primary text-background dark:bg-gray-700"
+                                                }`}
+                                            >
+                                                <Circle size={16} />
+                                                <span className="h3 text-lg">{system}</span>
+                                            </button>
+
+                                            {/* Subsystem Filters */}
+                                            <div className="flex flex-col gap-2">
+                                                {subsystemCategories[system].map(subsystem => (
+                                                    <button
+                                                        key={subsystem}
+                                                        onClick={() => handleSubsystemToggle(subsystem)}
+                                                        className={`flex items-center gap-3 p-2 max-h-fit rounded-lg transition-colors ${
+                                                            filters.subsystems.includes(subsystem)
+                                                                ? "bg-primary/25 text-foreground"
+                                                                : "bg-background dark:bg-gray-700"
+                                                        }`}
+                                                    >
+                                                        <Circle size={16} />
+                                                        <span className="manrope-body">{subsystem}</span>
+                                                    </button>
+                                                ))}
+                                            </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Ascending/Descending Filters */}
+                        <div className="space-y-4">
+                            <h3 className="inline-block shadow-none font-manrope font-semibold border-b border-b-black">
+                                Sort by Members
+                            </h3>
+                            <div className="flex flex-col md:justify-between md:flex-row gap-y-3 pb-3">
+                                <button
+                                    onClick={() => handleSort("asc")}
+                                    className={`font-sora inline-block not-first:items-center gap-2 p-2 rounded-lg transition-colors ${
+                                        sortOrder === "asc"
+                                            ? "bg-primary/60 text-background"
+                                            : "bg-gray-100 dark:bg-gray-700"
+                                    }`}
+                                >
+                                    Ascending (A-Z)
+                                </button>
+                                <button
+                                    onClick={() => handleSort("desc")}
+                                    className={`font-sora inline-block not-first:items-center gap-2 p-2 rounded-lg transition-colors ${
+                                        sortOrder === "desc"
+                                            ? "bg-primary/60 text-background"
+                                            : "bg-gray-100 dark:bg-gray-700"
+                                    }`}
+                                >
+                                    Descending (Z-A)
+                                </button>
                             </div>
                         </div>
                     </div>
 
-                    {/* Ascending/Descending Filters */}
-                    <div className="space-y-4">
-                        <h3 className="inline-block shadow-none font-manrope font-semibold border-b border-b-black">
-                            Sort by Members
-                        </h3>
-                        <div className="flex justify-between pb-3">
-                            <button
-                                onClick={() => handleSort("asc")}
-                                className={`font-sora inline-block not-first:items-center gap-2 p-2 rounded-lg transition-colors ${
-                                    sortOrder === "asc"
-                                        ? "bg-primary/60 text-background"
-                                        : "bg-gray-100 dark:bg-gray-700"
-                                }`}
-                            >
-                                Ascending (A-Z)
-                            </button>
-                            <button
-                                onClick={() => handleSort("desc")}
-                                className={`font-sora inline-block not-first:items-center gap-2 p-2 rounded-lg transition-colors ${
-                                    sortOrder === "desc"
-                                        ? "bg-primary/60 text-background"
-                                        : "bg-gray-100 dark:bg-gray-700"
-                                }`}
-                            >
-                                Descending (Z-A)
-                            </button>
+                    {/* Active Filters */}
+                    <div className="border-t dark:border-gray-700 pt-4">
+                        <h3 className="font-sora mb-2">Active Filters</h3>
+                        <div className="flex flex-wrap gap-2 pb-2 max-w-full">
+                            {getActiveFilters().map((filter, index) => (
+                                <span
+                                    key={index}
+                                    className="font-sora px-3 py-1 bg-background dark:bg-foreground text-foreground dark:text-blue-200 rounded-full text-sm break-words whitespace-normal"
+                                >
+                                    {filter}
+                                </span>
+                            ))}
+                            {getActiveFilters().length === 0 && (
+                                <span className="text-gray-500 dark:text-gray-400 text-sm font-sora">
+                                    No active filters
+                                </span>
+                            )}
                         </div>
                     </div>
-                </div>
 
-                {/* Active Filters */}
-                <div className="border-t dark:border-gray-700 pt-4">
-                    <h3 className="font-sora mb-2">Active Filters</h3>
-                    <div className="flex flex-wrap gap-2 pb-2 max-w-full">
-                        {getActiveFilters().map((filter, index) => (
-                            <span
-                                key={index}
-                                className="font-sora px-3 py-1 bg-background dark:bg-foreground text-foreground dark:text-blue-200 rounded-full text-sm shrink-0 max-w-full wrap-break-word"
-                            >
-                                {filter}
-                            </span>
-                        ))}
-                        {getActiveFilters().length === 0 && (
-                            <span className="text-gray-500 dark:text-gray-400 text-sm font-sora">
-                                No active filters
-                            </span>
-                        )}
+                    {/* Reset Filters */}
+                    <div className="flex justify-between items-center gap-4 pt-4 border-t dark:border-gray-700 font-sora">
+                        <div className="text-sm text-gray-600 dark:text-gray-400">
+                            {filteredCount} results found
+                        </div>
+                        <button
+                            onClick={handleReset}
+                            className="px-4 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white font-manrope text-md lg:text-lg transition-colors"
+                        >
+                            Reset Filters
+                        </button>
                     </div>
-                </div>
-
-                {/* Reset Filters */}
-                <div className="flex justify-between items-center gap-4 pt-4 border-t dark:border-gray-700 font-sora">
-                    <div className="text-sm text-gray-600 dark:text-gray-400">
-                        {filteredCount} results found
-                    </div>
-                    <button
-                        onClick={handleReset}
-                        className="px-4 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white font-manrope transition-colors"
-                    >
-                        Reset Filters
-                    </button>
                 </div>
             </div>
         </div>
