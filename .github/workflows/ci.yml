@@ -13,12 +13,12 @@ jobs:
   client:
     name: Client
     runs-on: ubuntu-latest
-    concurrency: 
-      group: ci-client-${{ github.ref }}
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
@@ -65,7 +65,7 @@ jobs:
   lint:
     name: Lint
     runs-on: ubuntu-latest
-    concurrency: 
+    concurrency:
       group: ci-lint-${{ github.ref }}
 
     steps:
