@@ -3,9 +3,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "preview": "vite preview"
+    "dev": "bun --bun vite",
+    "build": "bun --bun tsc -b && bun --bun vite build",
+    "preview": "bun --bun vite preview"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

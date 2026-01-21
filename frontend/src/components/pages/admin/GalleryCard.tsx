@@ -90,7 +90,7 @@ export default function CarouselDemo ({
                                                 <div className="ml-4 font-manrope font-semibold text-2xl text-foreground pb-2">
                                                     {user.name}
                                                 </div>
-                                                <MemberDropdown user={user} onDeleteMember={onDeleteMember} />
+                                                <MemberDropdown member={user} onDeleteMember={onDeleteMember} />
                                             </div>
 
                                             {/* Details Section */}

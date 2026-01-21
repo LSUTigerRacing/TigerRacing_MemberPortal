@@ -60,7 +60,7 @@ const FilterDropdown = ({
         }));
     };
 
-    const handleSort = (order: "asc" | "desc") => setSortOrder(order);
+    const handleSort = (order: FilterDropdownProps["sortOrder"]) => setSortOrder(order);
 
     const handleReset = () => {
         setFilters({
@@ -74,12 +74,9 @@ const FilterDropdown = ({
 
     const getActiveFilters = () => {
         const active = [];
-        if (filters.systems.length > 0)
-            active.push(`Systems: ${filters.systems.join(", ")}`);
-        if (filters.subsystems.length > 0)
-            active.push(`Subsystem: ${filters.subsystems.join(", ")}`);
-        if (filters.years.length > 0)
-            active.push(`Graduation Years: ${filters.years.join(", ")}`);
+        if (filters.systems.length > 0) active.push(`Systems: ${filters.systems.join(", ")}`);
+        if (filters.subsystems.length > 0) active.push(`Subsystem: ${filters.subsystems.join(", ")}`);
+        if (filters.years.length > 0) active.push(`Graduation Years: ${filters.years.join(", ")}`);
         return active;
     };
 

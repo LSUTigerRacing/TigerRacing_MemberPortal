@@ -12,7 +12,6 @@ import {
     useRef,
     useEffect,
     type Dispatch,
-    type HTMLAttributes,
     type SetStateAction,
     type ReactElement
 } from "react";
@@ -29,7 +28,7 @@ import FilterDropdown from "@/components/pages/admin/FilterDropdown";
 
 import type { Subsystem, System } from "../../../../../shared/config/enums";
 
-export interface SearchBarProps extends HTMLAttributes<HTMLElement> {
+export interface SearchBarProps {
     view: "column" | "gallery"
     setView: Dispatch<SetStateAction<"column" | "gallery">>
     sortOrder: "asc" | "desc"

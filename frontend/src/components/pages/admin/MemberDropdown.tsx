@@ -23,12 +23,12 @@ import {
 
 import type { User } from "@/lib/member-data-format/user";
 
-interface UserDropdownProps {
-    user: User
+interface MemberDropdownProps {
+    member: User
     onDeleteMember: (memberId: string) => void
 }
 
-export default function MemberDropdown ({ user, onDeleteMember }: UserDropdownProps): ReactElement {
+export default function MemberDropdown ({ member, onDeleteMember }: MemberDropdownProps): ReactElement {
     const [open, setOpen] = useState(false);
 
     return (
@@ -55,16 +55,16 @@ export default function MemberDropdown ({ user, onDeleteMember }: UserDropdownPr
                 <AlertDialogContent>
                     <AlertDialogHeader>
                         <AlertDialogTitle className="font-manrope h1 text-center">
-                            Are you absolutely sure you want to delete {user.Name}?
+                            Are you absolutely sure you want to delete {member.name}?
                         </AlertDialogTitle>
                         <AlertDialogDescription className="font-sora text-gray-600 text-center">
-                            This action cannot be undone. This will permanently delete {user.Name}'s
+                            This action cannot be undone. This will permanently delete {member.name}'s
                             account and remove their data from the servers.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter className="items-center font-sora">
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction onClick={() => onDeleteMember(user.UserId)}>
+                        <AlertDialogAction onClick={() => onDeleteMember(member.id)}>
                             Continue
                         </AlertDialogAction>
                     </AlertDialogFooter>
