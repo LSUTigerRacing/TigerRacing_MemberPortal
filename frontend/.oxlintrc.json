@@ -1,0 +1,19 @@
+{
+  "$schema": "../node_modules/oxlint/configuration_schema.json",
+  "extends": ["../.oxlintrc.json"],
+  "env": {
+    "browser": true,
+    "builtin": true,
+    "node": true
+  },
+  "ignorePatterns": [
+    "**/dist",
+    "**/node_modules"
+  ],
+  "jsPlugins": ["@stylistic/eslint-plugin"],
+  "plugins": [
+    "jsx-a11y",
+    "react",
+    "react-perf"
+  ],
+}

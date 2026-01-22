@@ -4,8 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "lint": "bun --bun eslint . --fix",
-    "lint:ci": "bun --bun eslint ."
+    "lint": "bunx --bun oxlint --fix",
+    "lint:ci": "bunx --bun oxlint"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",
@@ -17,6 +17,7 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
     "globals": "^17.0.0",
+    "oxlint": "^1.39.0",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.53.0"
   },
