@@ -143,14 +143,5 @@ namespace TRFSAE.MemberPortal.API.Services
                 return false;
             }
         }
-
-        public async Task<bool> AssignUserRoleAsync(Guid userID, Role role)
-        {
-
-        }
-        public async Task<bool> RemoveUserRoleAsync(Guid userID)
-        {
-
-        }
     }
 }
