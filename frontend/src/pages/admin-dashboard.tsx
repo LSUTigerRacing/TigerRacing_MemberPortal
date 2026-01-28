@@ -147,12 +147,12 @@ export const AdminDashboard = () => {
             <div className="min-h-screen bg-white">
 
                 {/* Main content */}
-                <main className="px-8 py-6 max-w-[1600px] mx-auto">
+                <main className="px-8 sm:px-6 lg:px-8 py-6 max-w-[1600px] mx-auto">
 
                     {/* Page header with filters */}
-                    <div className="mb-6 flex justify-between items-center">
+                    <div className="mb-6 flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4">
                         <h1 className="text-2xl font-bold text-gray-900">Projects</h1>
-                        <div className="flex gap-3 items-center">
+                        <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
 
                             {/* Search input */}
                             <input
@@ -160,15 +160,15 @@ export const AdminDashboard = () => {
                                 value={searchTerm}
                                 onChange={e => setSearchTerm(e.target.value)}
                                 placeholder="Search projects..."
-                                className="px-4 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:border-purple-600 w-48"
+                                className="w-full sm:w-48 px-4 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:border-purple-600 w-48"
                             />
 
                             {/* Status filter */}
                             <Select value={statusFilter} onValueChange={setStatusFilter}>
-                                <SelectTrigger className="w-[140px]">
+                                <SelectTrigger className="w-full sm:w-[140px]">
                                     <SelectValue placeholder="All Status" />
                                 </SelectTrigger>
-                                <SelectContent>
+                                <SelectContent className="bg-white">
                                     <SelectItem value="All Status">All Status</SelectItem>
                                     <SelectItem value="Active">Active</SelectItem>
                                     <SelectItem value="Planning">Planning</SelectItem>
@@ -179,10 +179,10 @@ export const AdminDashboard = () => {
 
                             {/* Priority filter */}
                             <Select value={priorityFilter} onValueChange={setPriorityFilter}>
-                                <SelectTrigger className="w-[150px]">
+                                <SelectTrigger className="w-full sm:w-[150px]">
                                     <SelectValue placeholder="All Priorities" />
                                 </SelectTrigger>
-                                <SelectContent>
+                                <SelectContent className="bg-white">
                                     <SelectItem value="All Priorities">All Priorities</SelectItem>
                                     <SelectItem value="HIGH">High Priority</SelectItem>
                                     <SelectItem value="MEDIUM">Medium Priority</SelectItem>
@@ -194,7 +194,7 @@ export const AdminDashboard = () => {
                             <Button
                                 onClick={handleOpenModal}
                                 style={{ backgroundColor: "#510087" }}
-                                className="hover:opacity-90"
+                                className="hover:opacity-90 w-full sm:w-auto"
                             >
                                 <span className="text-lg leading-none">+</span> New Project
                             </Button>
@@ -222,13 +222,13 @@ export const AdminDashboard = () => {
 
                 {/* CREATE PROJECT MODAL */}
                 {showModal && (
-                    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto">
-                        <div className="bg-white rounded-3xl shadow-2xl w-full max-w-3xl my-8 flex flex-col overflow-hidden" style={{ maxHeight: "calc(100vh - 4rem)" }}>
+                    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-2 sm:p-4 overflow-y-auto">
+                        <div className="bg-white rounded-2xl sm:rounded-3xl shadow-2xl w-full max-w-3xl my-4 sm:my-8 flex flex-col overflow-hidden" style={{ maxHeight: "calc(100vh - 4rem)" }}>
 
                             {/* Modal Header */}
-                            <div className="flex items-center justify-between px-8 py-5 border-b border-slate-200 flex-shrink-0">
+                            <div className="flex items-center justify-between px-4 sm:px-6 lg:px-8 py-4 sm:py-5 border-b border-slate-200 flex-shrink-0">
                                 <div>
-                                    <h2 className="text-2xl font-extrabold text-slate-900">Create New Project</h2>
+                                    <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900">Create New Project</h2>
                                     <p className="text-xs text-slate-500 mt-1">Fill in the details to get started</p>
                                 </div>
                                 {/* Close button */}
@@ -244,7 +244,7 @@ export const AdminDashboard = () => {
 
                             {/* Modal Content - Scrollable form area */}
                             <div className="flex-1 overflow-y-auto py-6">
-                                <div className="space-y-6 px-8">
+                                <div className="space-y-6 px-4 sm:px-6 lg:px-8">
 
                                     {/* SECTION 1: BASIC INFORMATION */}
                                     <div className="space-y-4">
@@ -252,7 +252,7 @@ export const AdminDashboard = () => {
                                             <div className="w-7 h-7 rounded-lg bg-[#510087] flex items-center justify-center text-white text-xs">1</div>
                                             Basic Information
                                         </h3>
-                                        <div className="space-y-4 pl-9">
+                                        <div className="space-y-4 pl-4 sm:pl-9">
 
                                             {/* Project Name - Required field */}
                                             <div>
@@ -283,7 +283,7 @@ export const AdminDashboard = () => {
                                             </div>
 
                                             {/* Category, Status, Priority - 3 column grid */}
-                                            <div className="grid grid-cols-3 gap-3">
+                                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
 
                                                 {/* Category dropdown */}
                                                 <div>
@@ -443,18 +443,18 @@ export const AdminDashboard = () => {
                             </div>
 
                             {/* Modal Footer - Action buttons */}
-                            <div className="flex justify-between items-center px-8 py-5 border-t border-slate-200 flex-shrink-0 bg-slate-50">
+                            <div className="flex flex-col sm:flex row justify-between items-stretch sm:items-center gap-3 px-4 sm:px-6 lg:px-8 py-4 sm:py-5 border-t border-slate-200 flex-shrink-0 bg-slate-50">
                                 {/* Required fields note */}
-                                <p className="text-xs text-slate-500">
+                                <p className="text-xs text-slate-500 text-center sm:text-left">
                                     <span className="text-red-500">*</span> Required fields
                                 </p>
                                 {/* Action buttons */}
-                                <div className="flex gap-3">
+                                <div className="flex gap-3 w-full sm:w-auto">
                                     {/* Cancel button */}
                                     <button
                                         type="button"
                                         onClick={() => setShowModal(false)}
-                                        className="px-5 py-2.5 text-sm border-2 border-slate-200 rounded-xl font-semibold text-slate-600 hover:bg-white transition-colors"
+                                        className="flex-1 sm:flex-none px-5 py-2.5 text-sm border-2 border-slate-200 rounded-xl font-semibold text-slate-600 hover:bg-white transition-colors"
                                     >
                                         Cancel
                                     </button>
@@ -463,7 +463,7 @@ export const AdminDashboard = () => {
                                         type="button"
                                         onClick={handleCreateProject}
                                         style={{ backgroundColor: "#510087" }}
-                                        className="px-6 py-2.5 text-sm text-white rounded-xl font-semibold hover:opacity-90 transition-opacity"
+                                        className="flex-1 sm:flex-none px-6 py-2.5 text-sm text-white rounded-xl font-semibold hover:opacity-90 transition-opacity"
                                     >
                                         Create Project
                                     </button>
