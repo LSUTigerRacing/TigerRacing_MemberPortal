@@ -12,8 +12,17 @@
     "no-duplicate-imports": "warn",
     "no-useless-computed-key": "warn",
     "prefer-template": "warn",
-    "sort-imports": ["warn", { "allowSeparatedGroups": true }],
+    "sort-imports": ["warn", {
+      "allowSeparatedGroups": true,
+      "memberSyntaxSortOrder": ["all", "multiple", "single", "none"]
+    }],
     "yoda": "warn",
+
+    // Import
+    "import/extensions": ["error", "always", {
+      "checkTypeImports": true,
+      "ignorePackages": true
+    }],
 
     // TypeScript
     "typescript/adjacent-overload-structures": "warn",
@@ -24,6 +33,11 @@
     "typescript/no-array-delete": "off",
     "typescript/no-deprecated": "error",
     "typescript/no-empty-interface": "warn",
-    "typescript/no-empty-object-type": "error"
+    "typescript/no-empty-object-type": "error",
+    "typescript/no-extraneous-class": "error",
+    "typescript/no-misused-promises": "error",
+    "typescript/no-unnecessary-boolean-literal-compare": "error",
+    "typescript/prefer-nullish-coalescing": "error",
+    "typescript/prefer-optional-chain": "error"
   }
 }
