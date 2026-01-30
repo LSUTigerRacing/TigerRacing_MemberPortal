@@ -5,6 +5,25 @@
     "typescript"
   ],
   "rules": {
-    
+    // ESLint
+    // ESLint (Style)
+    "arrow-body-style": ["warn", "as-needed"],
+    "curly": ["warn", "multi-line"],
+    "no-duplicate-imports": "warn",
+    "no-useless-computed-key": "warn",
+    "prefer-template": "warn",
+    "sort-imports": ["warn", { "allowSeparatedGroups": true }],
+    "yoda": "warn",
+
+    // TypeScript
+    "typescript/adjacent-overload-structures": "warn",
+    "typescript/explicit-function-return-type": ["warn", {
+      "allowIIFEs": true,
+      "allowTypedFunctionExpressions": true
+    }],
+    "typescript/no-array-delete": "off",
+    "typescript/no-deprecated": "error",
+    "typescript/no-empty-interface": "warn",
+    "typescript/no-empty-object-type": "error"
   }
 }

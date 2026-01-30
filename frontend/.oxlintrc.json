@@ -10,7 +10,7 @@
     "**/dist",
     "**/node_modules"
   ],
-  "jsPlugins": ["@stylistic/eslint-plugin"],
+  // "jsPlugins": ["@stylistic/eslint-plugin"],
   "plugins": [
     "jsx-a11y",
     "react",
