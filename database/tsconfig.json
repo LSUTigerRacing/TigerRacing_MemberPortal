@@ -24,7 +24,7 @@
   "include": [
     "../shared/**/*.ts",
     "src/**/*.ts",
-    "drizzle.config.ts"
-  ],
+    "drizzle.config.ts",
+    "seed_data/SeedData.ts"  ],
   "exclude": ["node_modules", "drizzle"]
 }
