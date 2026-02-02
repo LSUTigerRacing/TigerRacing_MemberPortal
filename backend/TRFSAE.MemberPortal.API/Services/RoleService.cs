@@ -1,51 +1,71 @@
-using TRFSAE.MemberPortal.API.DTOs;
 using TRFSAE.MemberPortal.API.Interfaces;
 using TRFSAE.MemberPortal.API.Models;
-using Supabase;
+using Npgsql;
+using System.CodeDom;
 
 namespace TRFSAE.MemberPortal.API.Services;
 
 public class RoleService : IRoleService
 {
-    private readonly Client _supabaseClient;
+    private readonly string _connectionString;
 
-    public RoleService(Client supabaseClient)
+    public RoleService(IConfiguration config)
     {
-        _supabaseClient = supabaseClient;
+        _connectionString = config.GetConnectionString("Postgres");
     }
 
-    public async Task<List<RoleResponseDto>> GetAllRolesAsync()
+    public async Task<Role> GetUserRoleAsync(Guid id)
     {
-        var response = await _supabaseClient
-            .From<RoleModel>()
-            .Get();
+        await using var conn = new NpgsqlConnection(_connectionString);
+        await conn.OpenAsync();
 
-        return new List<RoleResponseDto>();
+        const string sql = @"SELECT role FROM ""user"" WHERE id = @id;";
+
+        await using var cmd = new NpgsqlCommand(sql, conn);
+        cmd.Parameters.AddWithValue("id", id);
+
+        var result = await cmd.ExecuteScalarAsync();
+        var dbRole = result.ToString()!;
+        return DbRoleToEnum(dbRole);
     }
 
-    public async Task<RoleResponseDto> GetRoleByIdAsync(Guid id)
+    public async Task AssignRoleToUserAsync(Guid id, Role role)
     {
-        var response = await _supabaseClient
-            .From<RoleModel>()
-            .Where(x => x.Id == id)
-            .Single();
+        await using var conn = new NpgsqlConnection(_connectionString);
+        await conn.OpenAsync();
 
-        return new RoleResponseDto();
+        const string sql = @"UPDATE ""user"" SET role = @role WHERE id = @id;";
+        await using var cmd = new NpgsqlCommand(sql, conn);
+        cmd.Parameters.AddWithValue("id", id);
+        cmd.Parameters.AddWithValue("role", EnumToDbRole(role));
+
+        var result = await cmd.ExecuteNonQueryAsync();
     }
 
-    public async Task<RoleResponseDto> UpdateRoleAsync(Guid id, UpdateRoleDto dto)
+    public async Task RemoveUserRoleAsync(Guid id)
     {
-        var parameters = new Dictionary<string, object>
-        {
-            { "role_id", id },
-            { "permission_updates", dto }
-        };
-
-        var response = await _supabaseClient
-            .Rpc("update_role_permissions", parameters);
-
-        // var role = JsonSerializer.Deserialize<List<RoleResponseDto>>(response.Content);
-
-        return new RoleResponseDto();
+        await AssignRoleToUserAsync(id, Role.Member);
     }
+
+    private static string EnumToDbRole(Role role) => role switch
+    {
+        Role.SuperAdmin => "Superadmin",
+        Role.Admin => "Admin",
+        Role.SystemLead => "System Lead",
+        Role.SubsystemLead => "Subsystem Lead",
+        Role.Member => "Member",
+        _ => "Member"
+    };
+
+    private static Role DbRoleToEnum(string dbRole) => dbRole switch
+    {
+        "Superadmin" => Role.SuperAdmin,
+        "Admin" => Role.Admin,
+        "System Lead" => Role.SystemLead,
+        "Subsystem Lead" => Role.SubsystemLead,
+        "Member" => Role.Member,
+        _ => Role.Member
+    };
 }
+
+

@@ -1,11 +1,11 @@
-using TRFSAE.MemberPortal.API.DTOs;
+using TRFSAE.MemberPortal.API.Models;
 
 namespace TRFSAE.MemberPortal.API.Interfaces;
 
 public interface IRoleService
 {
-    Task<List<RoleResponseDto>> GetAllRolesAsync();
-    Task<RoleResponseDto> GetRoleByIdAsync(Guid id);
-    Task<RoleResponseDto> UpdateRoleAsync(Guid id, UpdateRoleDto dto);
+    Task<Role> GetUserRoleAsync(Guid id);
+    Task AssignRoleToUserAsync(Guid id, Role role);
+    Task RemoveUserRoleAsync(Guid id);
 }
 
