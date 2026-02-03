@@ -111,7 +111,34 @@ namespace TRFSAE.MemberPortal.API.Services
 
         public async Task<CreateUserResponse> CreateUserAsync(CreateUserDto createDto)
         {
-            
+            var userId = Guid.NewGuid();
+
+            var newUser = new UserModel
+            {
+                Id = userId,
+                Name = createDto.Name,
+                Subsystem = createDto.Subsystem,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+
+            };
+
+            try
+            {
+                var response = await _supabaseClient
+                    .From<UserModel>()
+                    .Insert(newUser);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error creating user: {ex.Message}");
+                throw;
+            }
+
+            return new CreateUserResponse
+            {
+                Location = $"/api/users/{userId}"
+            };
         }
 
 
