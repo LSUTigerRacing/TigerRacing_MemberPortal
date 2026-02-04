@@ -1,12 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using TRFSAE.MemberPortal.API.Models;
 using TRFSAE.MemberPortal.API.Interfaces;
-using Sprache;
 
 namespace TRFSAE.MemberPortal.API.Controllers;
 
 [ApiController]
-[Route("api/user/role")]
+[Route("api/user/{id}/role")]
 public class RoleController : ControllerBase
 {
     private readonly IRoleService _roleService;
