@@ -202,6 +202,7 @@ namespace TRFSAE.MemberPortal.API.Services
 
                 var response = await _supabaseClient
                     .From<UserModel>()
+                    .Where(u => u.Id == userID)
                     .Update(model);
 
                 return new UserResponseDto
