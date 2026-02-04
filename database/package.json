@@ -10,7 +10,8 @@
     "db:seed": "bun --bun --env-file=./.env seed_data/SeedData.ts"
   },
   "dependencies": {
-    "drizzle-orm": "^0.44.7"
+    "drizzle-orm": "^0.44.7",
+    "drizzle-seed": "^0.3.1"
   },
   "devDependencies": {
     "@types/bun": "^1.3.3",
