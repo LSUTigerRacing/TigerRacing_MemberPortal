@@ -26,7 +26,7 @@ namespace TRFSAE.MemberPortal.API.DTOs
         public bool FeeStatus { get; set; }
 
         [JsonPropertyName("grad_date")]
-        public DateTime? GradDate { get; set; }
+        public int GradDate { get; set; }
 
         [JsonPropertyName("shirt_size")]
         public string? ShirtSize { get; set; }

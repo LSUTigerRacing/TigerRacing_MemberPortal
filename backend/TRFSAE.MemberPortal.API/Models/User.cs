@@ -4,7 +4,7 @@ using TRFSAE.MemberPortal.API.Enums;
 
 namespace TRFSAE.MemberPortal.API.Models
 {
-    [Table("users")]
+    [Table("user")]
     public class UserModel : BaseModel
     {
         [PrimaryKey("id")]
