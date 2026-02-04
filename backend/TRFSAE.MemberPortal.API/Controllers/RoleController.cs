@@ -1,11 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using TRFSAE.MemberPortal.API.Models;
 using TRFSAE.MemberPortal.API.Interfaces;
+using Sprache;
 
 namespace TRFSAE.MemberPortal.API.Controllers;
 
 [ApiController]
-[Route("api/role")]
+[Route("api/user/role")]
 public class RoleController : ControllerBase
 {
     private readonly IRoleService _roleService;
@@ -22,16 +23,16 @@ public class RoleController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> AssignRoleToUser(Guid id, [FromBody] Role role)
+    public async Task<IActionResult> AssignRoleToUser(Guid id, Role role)
     {
         await _roleService.AssignRoleToUserAsync(id, role);
-        return NoContent();
+        return Ok(new { message = $"Change role to {role}" });
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> RemoveUserRole(Guid id)
     {
         await _roleService.RemoveUserRoleAsync(id);
-        return NoContent();
+        return Ok(new { message = "Change role to Member" });
     }
 }

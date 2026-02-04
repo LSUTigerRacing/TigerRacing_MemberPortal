@@ -3,7 +3,7 @@ using Supabase.Postgrest.Models;
 
 namespace TRFSAE.MemberPortal.API.Models
 {
-    [Table("users")]
+    [Table("user")]
     public class UserModel : BaseModel
     {
         [PrimaryKey("id")]
@@ -13,36 +13,33 @@ namespace TRFSAE.MemberPortal.API.Models
         public string Name { get; set; } = string.Empty;
 
         [Column("email")]
-        public string PersonalEmail { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
 
-        [Column("lsu_email")]
-        public string LSUEmail { get; set; } = string.Empty;
+        [Column("role")]
+        public string role { get; set; } = "Member";
 
-        [Column("eight_nine")]
-        public int EightNine { get; set; } = -1;
-
-        [Column("hazing_status")]
-        public bool HazingStatus { get; set; }
-
-        [Column("fee_status")]
-        public bool FeeStatus { get; set; }
-
-        [Column("grad_date")]
-        public DateTime? GradDate { get; set; }
-
-        [Column("shirt_size")]
-        public string ShirtSize { get; set; } = string.Empty;
-
-        [Column("system")]
-        public string System { get; set; } = string.Empty;
+        [Column("studentId")]
+        public int StudentId { get; set; } = -1;
 
         [Column("subsystem")]
         public string Subsystem { get; set; } = string.Empty;
 
-        [Column("created_at")]
-        public DateTime AccountCreationDate { get; set; }
+        [Column("shirtSize")]
+        public string ShirtSize { get; set; } = string.Empty;
 
-        [Column("updated_at")]
-        public DateTime AccountLastUpdatedDate { get; set; }
+        [Column("completedHazingForm")]
+        public bool CompletedHazingForm { get; set; }
+
+        [Column("paidMemberFee")]
+        public bool PaidMemberFee { get; set; }
+
+        [Column("gradDate")]
+        public int GradDate { get; set; }
+
+        [Column("createdAt")]
+        public DateTime CreatedAt { get; set; }
+
+        [Column("updatedAt")]
+        public DateTime UpdatedAt { get; set; }
     }
 }

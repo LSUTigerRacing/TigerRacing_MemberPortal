@@ -31,14 +31,13 @@ namespace TRFSAE.MemberPortal.API.Services
       {
         UserId = response.UserId,
         Name = response.Name,
-        PersonalEmail = response.PersonalEmail,
-        LSUEmail = response.LSUEmail,
-        EightNine = response.EightNine,
-        HazingStatus = response.HazingStatus,
-        FeeStatus = response.FeeStatus,
+        PersonalEmail = response.Email,
+        EightNine = response.StudentId,
+        HazingStatus = response.CompletedHazingForm,
+        FeeStatus = response.PaidMemberFee,
         GradDate = response.GradDate,
         ShirtSize = response.ShirtSize,
-        System = response.System,
+        System = response.Subsystem,
         Subsystem = response.Subsystem
       };
 

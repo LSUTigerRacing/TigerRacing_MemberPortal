@@ -1,71 +1,53 @@
+using TRFSAE.MemberPortal.API.DTOs;
 using TRFSAE.MemberPortal.API.Interfaces;
 using TRFSAE.MemberPortal.API.Models;
-using Npgsql;
-using System.CodeDom;
+using Supabase;
+using System.Linq.Expressions;
+using System.Reflection.Metadata.Ecma335;
 
 namespace TRFSAE.MemberPortal.API.Services;
 
 public class RoleService : IRoleService
 {
-    private readonly string _connectionString;
+    private readonly Client _supabaseClient;
 
-    public RoleService(IConfiguration config)
+    public RoleService(Client supabaseClient)
     {
-        _connectionString = config.GetConnectionString("Postgres");
+        _supabaseClient = supabaseClient;
     }
 
-    public async Task<Role> GetUserRoleAsync(Guid id)
+    public async Task<string> GetUserRoleAsync(Guid id)
     {
-        await using var conn = new NpgsqlConnection(_connectionString);
-        await conn.OpenAsync();
+        var user = await _supabaseClient
+            .From<UserModel>()
+            .Where(x => x.UserId == id)
+            .Single();
 
-        const string sql = @"SELECT role FROM ""user"" WHERE id = @id;";
-
-        await using var cmd = new NpgsqlCommand(sql, conn);
-        cmd.Parameters.AddWithValue("id", id);
-
-        var result = await cmd.ExecuteScalarAsync();
-        var dbRole = result.ToString()!;
-        return DbRoleToEnum(dbRole);
+        return user.role;
     }
 
-    public async Task AssignRoleToUserAsync(Guid id, Role role)
+    public async Task<bool> AssignRoleToUserAsync(Guid id, Role role)
     {
-        await using var conn = new NpgsqlConnection(_connectionString);
-        await conn.OpenAsync();
+        var user = await _supabaseClient
+         .From<UserModel>()
+         .Where(x => x.UserId == id)
+         .Single();
 
-        const string sql = @"UPDATE ""user"" SET role = @role WHERE id = @id;";
-        await using var cmd = new NpgsqlCommand(sql, conn);
-        cmd.Parameters.AddWithValue("id", id);
-        cmd.Parameters.AddWithValue("role", EnumToDbRole(role));
+        user.role = role switch
+        {
+            Role.SuperAdmin => "Superadmin",
+            Role.Admin => "Admin",
+            Role.SystemLead => "System Lead",
+            Role.SubsystemLead => "Subsystem Lead",
+            _ => "Member"
+        };
 
-        var result = await cmd.ExecuteNonQueryAsync();
+        await user.Update<UserModel>();
+        return true;
     }
 
-    public async Task RemoveUserRoleAsync(Guid id)
+    public async Task<bool> RemoveUserRoleAsync(Guid id)
     {
-        await AssignRoleToUserAsync(id, Role.Member);
+        return await AssignRoleToUserAsync(id, Role.Member);
     }
-
-    private static string EnumToDbRole(Role role) => role switch
-    {
-        Role.SuperAdmin => "Superadmin",
-        Role.Admin => "Admin",
-        Role.SystemLead => "System Lead",
-        Role.SubsystemLead => "Subsystem Lead",
-        Role.Member => "Member",
-        _ => "Member"
-    };
-
-    private static Role DbRoleToEnum(string dbRole) => dbRole switch
-    {
-        "Superadmin" => Role.SuperAdmin,
-        "Admin" => Role.Admin,
-        "System Lead" => Role.SystemLead,
-        "Subsystem Lead" => Role.SubsystemLead,
-        "Member" => Role.Member,
-        _ => Role.Member
-    };
 }
-
-

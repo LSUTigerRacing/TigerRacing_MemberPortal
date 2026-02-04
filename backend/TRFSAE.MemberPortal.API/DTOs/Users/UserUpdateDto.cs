@@ -8,7 +8,7 @@ namespace TRFSAE.MemberPortal.API.DTOs
         public int? EightNine { get; set; }
         public bool? HazingStatus { get; set; }
         public bool? FeeStatus { get; set; }
-        public DateTime? GradDate { get; set; }
+        public int GradDate { get; set; }
         public string ShirtSize { get; set; } = string.Empty;
         public string System { get; set; } = string.Empty;
         public string Subsystem { get; set; } = string.Empty;
