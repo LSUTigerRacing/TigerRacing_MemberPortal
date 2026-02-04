@@ -20,7 +20,6 @@ import {
     type SortingState,
     type VisibilityState
 } from "@tanstack/react-table";
-
 import {
     Pagination,
     PaginationContent,
@@ -42,6 +41,7 @@ import {
     TableHeader,
     TableRow
 } from "@/components/ui/table";
+import type { User } from "@/components/member-data-format/user";
 import {
     Tooltip,
     TooltipContent,
@@ -50,16 +50,14 @@ import {
 
 import MemberDropdown from "@/components/pages/admin/MemberDropdown";
 
-import type { Member } from "@/lib/dummyData/members";
-
 interface FilterMemberTableProps {
-    members: Member[]
-    onDeleteMember: (memberId: string) => void
+    users: User[]
+    onDeleteMember: (userId: string) => void
     onRowClick?: (rowId: string) => void
 }
 
 export default function MemberTable ({
-    members,
+    users,
     onDeleteMember,
     onRowClick
 }: FilterMemberTableProps) {
@@ -72,7 +70,7 @@ export default function MemberTable ({
         pageSize: 8
     });
 
-    const columns: ColumnDef<Member>[] = [
+    const columns: ColumnDef<User>[] = [
         {
             accessorKey: "name",
             header: () => <div className="text-center text-xl">Name</div>,
@@ -102,13 +100,15 @@ export default function MemberTable ({
             id: "actions",
             enableHiding: false,
             header: () => null,
-            cell: ({ row }) => <MemberDropdown member={row.original} onDeleteMember={onDeleteMember} />
+            cell: ({ row }) => (
+                <MemberDropdown user={row.original} onDeleteMember={onDeleteMember} />
+            )
         }
     ];
 
     // eslint-disable-next-line react-hooks/incompatible-library
     const table = useReactTable({
-        data: members,
+        data: users,
         columns,
         state: { sorting, columnFilters, columnVisibility, rowSelection, pagination },
         onSortingChange: setSorting,
@@ -162,7 +162,7 @@ export default function MemberTable ({
                                         key={row.id}
                                         data-state={row.getIsSelected() && "selected"}
                                         className="border-b border-primary/10 hover:bg-accent hover:text-accent-foreground"
-                                        onClick={() => onRowClick?.(row.original.id)}
+                                        onClick={() => onRowClick?.(row.id)}
                                     >
                                         {row.getVisibleCells().map(cell => (
                                             <TableCell key={cell.id} className="py-4 text-center text-lg">
