@@ -12,7 +12,7 @@ async function seedData (db: ReturnType<typeof drizzle>) {
     // Seed Users and Projects first for foreign keys
     const schemaOne = { User, Project };
 
-    await seed(db, schemaOne, { seed: 1 }).refine(f => ({
+    await seed(db, schemaOne, { seed: 1 }).refine((f: any) => ({
         User: {
             count: 5,
             columns: {
@@ -50,7 +50,7 @@ async function seedData (db: ReturnType<typeof drizzle>) {
     const projectIdArray = projectId.map(u => u.id);
 
     // Seed ProjectTasks and ProjectUsers
-    await seed(db, { ProjectTask }, { seed: 1 }).refine(f => ({
+    await seed(db, { ProjectTask }, { seed: 1 }).refine((f: any) => ({
         ProjectTask: {
             count: 10,
             columns: {
