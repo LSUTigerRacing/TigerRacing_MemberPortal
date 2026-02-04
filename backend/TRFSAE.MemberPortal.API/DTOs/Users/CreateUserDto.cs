@@ -14,8 +14,6 @@ public class CreateUserDto
     public int StudentId { get; set; } = -1;
     public bool CompletedHazingForm { get; set; }
     public bool PaidMemberFee { get; set; }
-    public int GradDate { get; set; }
+    public DateTime? GradDate { get; set; }
     public ShirtSize? ShirtSize { get; set; }
-
-
 }

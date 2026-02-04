@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore.Query;
+using TRFSAE.MemberPortal.API.Enums;
+
 namespace TRFSAE.MemberPortal.API.DTOs
 {
     public class UserUpdateDto
@@ -9,8 +12,11 @@ namespace TRFSAE.MemberPortal.API.DTOs
         public bool? HazingStatus { get; set; }
         public bool? FeeStatus { get; set; }
         public int GradDate { get; set; }
-        public string ShirtSize { get; set; } = string.Empty;
-        public string System { get; set; } = string.Empty;
-        public string Subsystem { get; set; } = string.Empty;
+        public ShirtSize? ShirtSize { get; set; }
+        public System System { get; set; } = string.Empty;
+        public Subsystem Subsystem { get; set; }
+        public Role? Role {get;set; }
+        public int? StudentId {get;set; }
+        
     }
 }

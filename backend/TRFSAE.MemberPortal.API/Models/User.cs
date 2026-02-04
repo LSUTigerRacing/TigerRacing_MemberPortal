@@ -29,7 +29,7 @@ namespace TRFSAE.MemberPortal.API.Models
         public bool PaidMemberFee { get; set; }
 
         [Column("gradDate")]
-        public int GradDate { get; set; }
+        public DateTime GradDate { get; set; }
 
         [Column("shirtSize")]
         public ShirtSize? ShirtSize { get; set; }

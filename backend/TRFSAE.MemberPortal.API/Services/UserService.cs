@@ -5,15 +5,17 @@ using TRFSAE.MemberPortal.API.Enums;
 using System.Text.Json;
 using Supabase;
 using Supabase.Gotrue;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.CodeDom;
 
 namespace TRFSAE.MemberPortal.API.Services
 {
     public class UserService : IUserService
     {
-        private readonly Client _supabaseClient;
+        private readonly Supabase.Client _supabaseClient;
         
 
-        public UserService(Client supabaseClient)
+        public UserService(Supabase.Client supabaseClient)
         {
             _supabaseClient = supabaseClient;
         }
@@ -24,7 +26,7 @@ namespace TRFSAE.MemberPortal.API.Services
             string? search,
             bool? completedHazingForm,
             bool? paidMemberFee,
-            int? gradDate,
+            DateTime? gradDate,
             ShirtSize? shirtSize,
             Subsystem? subsystem
         )
@@ -80,7 +82,7 @@ namespace TRFSAE.MemberPortal.API.Services
                 Email = u.Email,
                 GradDate = u.GradDate,
                 Subsystem = u.Subsystem
-            }
+            });
 
             return userSummaries;
         }
@@ -123,12 +125,10 @@ namespace TRFSAE.MemberPortal.API.Services
                 StudentId = createDto.StudentId,
                 CompletedHazingForm = createDto.CompletedHazingForm,
                 PaidMemberFee = createDto.PaidMemberFee,
-                GradDate = createDto.GradDate,
+                GradDate = createDto.GradDate.Value,
                 ShirtSize = createDto.ShirtSize,
                 Subsystem = createDto.Subsystem,
                 CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
-
             };
 
             try
@@ -152,7 +152,78 @@ namespace TRFSAE.MemberPortal.API.Services
 
         public async Task<UserResponseDto> UpdateUserByIdAsync(Guid userID, UserUpdateDto updateDto)
         {
+            try
+            {
+                var model = await _supabaseClient.From<UserModel>()
+                    .Where(u => u.Id == userID)
+                    .Single();
 
+                if (model == null)
+                {
+                    throw new Exception($"User with ID {userID} not found");
+                }
+                if (!string.IsNullOrEmpty(updateDto.Name))
+                {
+                    model.Name = updateDto.Name;
+                }
+                if (!string.IsNullOrEmpty(updateDto.LSUEmail))
+                {
+                    model.Email = updateDto.LSUEmail;
+                }
+                if (updateDto.Role.HasValue)
+                {
+                    model.Role = updateDto.Role.Value;
+                }
+                if (updateDto.StudentId.HasValue)
+                {
+                    model.StudentId = updateDto.StudentId.Value;
+                }
+                if (updateDto.HazingStatus.HasValue)
+                {
+                    model.CompletedHazingForm = updateDto.HazingStatus.Value;
+                }
+                if (updateDto.FeeStatus.HasValue)
+                {
+                    model.PaidMemberFee = updateDto.FeeStatus.Value;
+                }
+                if (updateDto.GradDate.HasValue)
+                {
+                    model.GradDate = updateDto.GradDate.Value;
+                }
+                if (updateDto.ShirtSize.HasValue)
+                {
+                    model.ShirtSize = updateDto.ShirtSize;
+                }
+                if (updateDto.Subsystem.HasValue)
+                {
+                    model.Subsystem = updateDto.Subsystem;
+                }
+                model.UpdatedAt = DateTime.UtcNow;
+
+                var response = await _supabaseClient
+                    .From<UserModel>()
+                    .Update(model);
+
+                return new UserResponseDto
+                {
+                    UserId = userID,
+                    Name = model.Name,
+                    LSUEmail = model.Email,
+                    Role = model.Role,
+                    StudentId = model.StudentId,
+                    HazingStatus = model.CompletedHazingForm,
+                    FeeStatus = model.PaidMemberFee,
+                    GradDate = model.GradDate,
+                    ShirtSize = model.ShirtSize,
+                    Subsystem = model.Subsystem
+
+                };
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error attempting update: {ex.Message}");
+                throw;
+            }
         }
 
         public async Task<bool> DeleteUserAsync(Guid userId, string confirmationString)
@@ -166,7 +237,7 @@ namespace TRFSAE.MemberPortal.API.Services
             {
                 await _supabaseClient
                   .From<UserModel>()
-                  .Where(x => x.UserId == userId)
+                  .Where(x => x.Id == userId)
                   .Delete();
 
                 return true;

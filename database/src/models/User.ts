@@ -18,8 +18,8 @@ export const User = pgTable("user", t => ({
      * This is the student's 89 number.
      */
     sid: t.integer().notNull(),
-    system: systems(),
-    subsystem: subsystems(),
+    system: systems().notNull(),
+    subsystem: subsystems().notNull(),
 
     shirtSize: shirtSizes(),
     hazingStatus: t.boolean().notNull().default(false),

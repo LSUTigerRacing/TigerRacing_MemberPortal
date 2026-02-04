@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using TRFSAE.MemberPortal.API.Enums;
 
 namespace TRFSAE.MemberPortal.API.DTOs
 {
@@ -29,18 +30,24 @@ namespace TRFSAE.MemberPortal.API.DTOs
         public int GradDate { get; set; }
 
         [JsonPropertyName("shirt_size")]
-        public string? ShirtSize { get; set; }
+        public ShirtSize? ShirtSize { get; set; }
 
         [JsonPropertyName("system")]
         public string? System { get; set; }
 
         [JsonPropertyName("subsystem")]
-        public string? Subsystem { get; set; }
+        public Subsystem? Subsystem { get; set; }
 
         [JsonPropertyName("created_at")]
         public DateTime AccountCreationDate { get; set; }
 
         [JsonPropertyName("updated_at")]
         public DateTime AccountLastUpdatedDate { get; set; }
+
+        [JsonPropertyName("role")]
+        public Role? Role {get;set; }
+
+        [JsonPropertyName("studentId")]
+        public int? StudentId {get;set; }
     }
 }
