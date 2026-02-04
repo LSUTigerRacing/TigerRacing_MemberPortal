@@ -1,7 +1,7 @@
 using TRFSAE.MemberPortal.API.Enums;
 
 namespace TRFSAE.MemberPortal.API.DTOs;
-public class CreateProjectDto
+public class CreateUserDto
 {
     public string Name { get; set; } = "Untitled Project";
     public string Description { get; set; } = string.Empty;

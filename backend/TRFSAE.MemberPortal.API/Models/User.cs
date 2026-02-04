@@ -1,5 +1,6 @@
 using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
+using TRFSAE.MemberPortal.API.Enums;
 
 namespace TRFSAE.MemberPortal.API.Models
 {
@@ -7,7 +8,7 @@ namespace TRFSAE.MemberPortal.API.Models
     public class UserModel : BaseModel
     {
         [PrimaryKey("id")]
-        public Guid UserId { get; set; }
+        public Guid Id { get; set; }
 
         [Column("name")]
         public string Name { get; set; } = string.Empty;
@@ -16,16 +17,10 @@ namespace TRFSAE.MemberPortal.API.Models
         public string Email { get; set; } = string.Empty;
 
         [Column("role")]
-        public string role { get; set; } = "Member";
+        public Role Role { get; set; }
 
         [Column("studentId")]
         public int StudentId { get; set; } = -1;
-
-        [Column("subsystem")]
-        public string Subsystem { get; set; } = string.Empty;
-
-        [Column("shirtSize")]
-        public string ShirtSize { get; set; } = string.Empty;
 
         [Column("completedHazingForm")]
         public bool CompletedHazingForm { get; set; }
@@ -36,10 +31,16 @@ namespace TRFSAE.MemberPortal.API.Models
         [Column("gradDate")]
         public int GradDate { get; set; }
 
-        [Column("createdAt")]
+        [Column("shirtSize")]
+        public ShirtSize? ShirtSize { get; set; }
+
+        [Column("subsystem")]
+        public Subsystem? Subsystem { get; set; }
+
+        [Column("created_at")]
         public DateTime CreatedAt { get; set; }
 
-        [Column("updatedAt")]
+        [Column("updated_at")]
         public DateTime UpdatedAt { get; set; }
     }
 }
