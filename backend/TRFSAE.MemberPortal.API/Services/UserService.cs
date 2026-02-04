@@ -4,6 +4,7 @@ using TRFSAE.MemberPortal.API.Models;
 using TRFSAE.MemberPortal.API.Enums;
 using System.Text.Json;
 using Supabase;
+using Supabase.Gotrue;
 
 namespace TRFSAE.MemberPortal.API.Services
 {
@@ -117,6 +118,13 @@ namespace TRFSAE.MemberPortal.API.Services
             {
                 Id = userId,
                 Name = createDto.Name,
+                Email = createDto.Email,
+                Role = createDto.Role,
+                StudentId = createDto.StudentId,
+                CompletedHazingForm = createDto.CompletedHazingForm,
+                PaidMemberFee = createDto.PaidMemberFee,
+                GradDate = createDto.GradDate,
+                ShirtSize = createDto.ShirtSize,
                 Subsystem = createDto.Subsystem,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow

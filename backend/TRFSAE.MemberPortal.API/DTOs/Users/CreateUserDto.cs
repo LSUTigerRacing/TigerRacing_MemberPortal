@@ -9,4 +9,13 @@ public class CreateUserDto
     public ProjectPriority Priority { get; set; }
     public DateTime StartDate { get; set; }
     public DateTime Deadline { get; set; }
+    public string Email { get; set; } = string.Empty;
+    public Role Role { get; set; }
+    public int StudentId { get; set; } = -1;
+    public bool CompletedHazingForm { get; set; }
+    public bool PaidMemberFee { get; set; }
+    public int GradDate { get; set; }
+    public ShirtSize? ShirtSize { get; set; }
+
+
 }
