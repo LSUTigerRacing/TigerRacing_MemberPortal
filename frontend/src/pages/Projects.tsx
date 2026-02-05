@@ -14,7 +14,7 @@ import {
     SelectValue
 } from "@/components/ui/select";
 
-import { ProjectCard, type Project } from "@/components/pages/projects/ProjectCard";
+import { ProjectCard, type Project } from "@/components/pages/projects/dashboard/ProjectCard";
 
 export default function Projects () {
     // Projects Data

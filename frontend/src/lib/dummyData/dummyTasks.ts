@@ -1,0 +1,167 @@
+export const teamMembers = [
+    { value: "ricky", label: "Ricky", initials: "R", color: "bg-blue-500" },
+    { value: "ahan", label: "Ahan", initials: "A", color: "bg-purple-500" },
+    { value: "rachael", label: "Rachael Bergeron", initials: "RB", color: "bg-green-500" },
+    { value: "trinh", label: "Trinh", initials: "T", color: "bg-pink-500" },
+    { value: "cardin", label: "Cardin", initials: "C", color: "bg-orange-500" }
+];
+
+export const availableTags = [
+    { value: "frontend", label: "Frontend", color: "bg-blue-500" },
+    { value: "backend", label: "Backend", color: "bg-green-500" },
+    { value: "database", label: "Database", color: "bg-purple-500" }
+];
+
+export const priorityLevels: Array<{ value: "High" | "Medium" | "Low", color: string }> = [
+    { value: "High", color: "bg-red-500" },
+    { value: "Medium", color: "bg-yellow-500" },
+    { value: "Low", color: "bg-blue-400" }
+];
+
+export const priorityStyles = {
+    High: "bg-red-500 hover:bg-red-600 text-white",
+    Medium: "bg-yellow-500 hover:bg-yellow-600 text-white",
+    Low: "bg-blue-400 hover:bg-blue-500 text-white"
+};
+
+export const dummyColumns = [
+    {
+        id: 1763765681713,
+        color: "bg-gray-600",
+        colorIndex: 0,
+        description: "This item hasn't been started",
+        title: "Backlog"
+    },
+    {
+        id: 1763765683697,
+        color: "bg-blue-400",
+        colorIndex: 1,
+        description: "This is actively being worked on",
+        title: "In Progress"
+    },
+    {
+        id: 1763765685587,
+        color: "bg-green-500",
+        colorIndex: 2,
+        description: "This is ready to be picked up",
+        title: "In Review"
+    },
+    {
+        id: 1763765687636,
+        color: "bg-yellow-500",
+        colorIndex: 3,
+        description: "This has been completed",
+        title: "Done"
+    }
+];
+
+export const dummyTasks = [
+    {
+        assignees: ["cardin"],
+        attachments: [],
+        columnId: 1763765681713,
+        content: "Testing 1",
+        endDate: new Date(),
+        id: 1763765692316,
+        priority: "High" as const,
+        startDate: new Date(),
+        tags: ["frontend"],
+        taskDescription: "Testing"
+    },
+    {
+        assignees: ["ricky"],
+        attachments: [],
+        columnId: 1763765681713,
+        content: "Testing 2",
+        endDate: new Date(),
+        id: 1763765694622,
+        priority: "Medium" as const,
+        startDate: new Date(),
+        tags: ["backend"],
+        taskDescription: "Testing"
+    },
+    {
+        assignees: ["trinh"],
+        attachments: [],
+        columnId: 1763765681713,
+        content: "Testing 3",
+        endDate: new Date(),
+        id: 1763765697006,
+        priority: "Low" as const,
+        startDate: new Date(),
+        tags: ["frontend"],
+        taskDescription: "Testing"
+    },
+    {
+        assignees: ["ahan"],
+        attachments: [],
+        columnId: 1763765681713,
+        content: "Testing 4",
+        endDate: new Date(),
+        id: 1763765699390,
+        priority: "Medium" as const,
+        startDate: new Date(),
+        tags: ["database"],
+        taskDescription: "Testing"
+    },
+    {
+        assignees: ["rachael"],
+        attachments: [],
+        columnId: 1763765681713,
+        content: "Testing 5",
+        endDate: new Date(),
+        id: 1763765702081,
+        priority: "Low" as const,
+        startDate: new Date(),
+        tags: ["frontend"],
+        taskDescription: "Testing"
+    },
+    {
+        assignees: ["cardin", "rachael", "ahan", "trinh", "ricky"],
+        attachments: [],
+        columnId: 1763765681713,
+        content: "Testing 6",
+        endDate: new Date(),
+        id: 1763765704367,
+        priority: "High" as const,
+        startDate: new Date(),
+        tags: ["database"],
+        taskDescription: "Testing"
+    },
+    {
+        assignees: ["cardin", "rachael", "ahan", "trinh", "ricky"],
+        attachments: [],
+        columnId: 1763765683697,
+        content: "Testing 7",
+        endDate: new Date(),
+        id: 1763765706430,
+        priority: "Medium" as const,
+        startDate: new Date(),
+        tags: ["backend"],
+        taskDescription: "Testing"
+    },
+    {
+        assignees: ["cardin", "rachael", "ahan", "trinh", "ricky"],
+        attachments: [],
+        columnId: 1763765685587,
+        content: "Testing 8",
+        endDate: new Date(),
+        id: 1763765708602,
+        priority: "Low" as const,
+        startDate: new Date(),
+        tags: ["frontend"],
+        taskDescription: "Testing"
+    },
+    {
+        assignees: ["cardin", "rachael", "ahan", "trinh", "ricky"],
+        attachments: [],
+        columnId: 1763765687636,
+        content: "Testing 9",
+        endDate: new Date(),
+        id: 1763765710925,
+        priority: "Medium" as const,
+        startDate: new Date(),
+        tags: ["frontend"],
+        taskDescription: "Testing"
+    }
+];
