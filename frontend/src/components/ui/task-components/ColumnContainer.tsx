@@ -219,7 +219,7 @@ export function ColumnContainer({
   ]);
 
   return (
-    <Card ref={setNodeRef} className="flex flex-col w-[23vw] p-0 pt-4 h-full bg-white">
+    <Card ref={setNodeRef} className="flex flex-col w-72 sm:w-80 lg:w-96 flex-shrink-0 p-0 pt-4 h-full bg-white border-5">
       {/* Column Header with drag listeners attached  */}
       <div className="flex justify-between">
         <div className="flex items-start gap-2">
@@ -310,7 +310,7 @@ export function ColumnContainer({
         </DialogTrigger>
         <DialogContent
           aria-describedby={undefined}
-          className="w-full max-w-lg sm:max-w-xl lg:max-w-2xl h-full max-h-[90vh] sm:max-h-xl lg:max-h-2xl overflow-y-auto"
+          className="w-full max-w-lg sm:max-w-xl lg:max-w-2xl h-full max-h-[100svh] sm:max-h-[90vh] overflow-y-auto"
         >
           <DialogHeader>
             <DialogTitle>{editingTask ? "Edit task" : "Create new task"}</DialogTitle>
@@ -318,7 +318,7 @@ export function ColumnContainer({
               <Separator />
             </div>
           </DialogHeader>
-          <div className="grid gap-4">
+          <div className="grid gap-4 max-w-lg sm:max-w-xl lg:max-w-2xl">
             <div className="grid gap-3">
               <Label>Create title</Label>
               <Input
@@ -473,7 +473,7 @@ export function ColumnContainer({
               </div>
             </div>
           </div>
-          <DialogFooter className="border-t pt-4 mt-4">
+          <DialogFooter className="border-t pt-4 mt-4 flex flex-row gap-2">
             <DialogClose asChild>
               <Button
                 variant="outline"
@@ -481,13 +481,13 @@ export function ColumnContainer({
                   setEditingTask(null);
                   resetForm();
                 }}
-                className="cursor-pointer"
+                className="cursor-pointer flex-1 sm:flex-none"
               >
                 Cancel
               </Button>
             </DialogClose>
             <DialogClose asChild>
-              <Button variant="outline" onClick={handleSubmit} className="cursor-pointer">
+              <Button variant="outline" onClick={handleSubmit} className="cursor-pointer flex-1 sm:flex-none">
                 {editingTask ? "Save" : "Create"}
               </Button>
             </DialogClose>

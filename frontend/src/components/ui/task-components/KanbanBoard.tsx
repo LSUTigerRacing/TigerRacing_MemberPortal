@@ -32,6 +32,7 @@ import {
 import { SortableContext, arrayMove } from "@dnd-kit/sortable";
 import { TaskCard } from "./TaskCard";
 import { dummyColumns, dummyTasks } from "@/lib/dummyData/dummyTasks";
+import { Popover, PopoverContent, PopoverTrigger } from "../shadcn-components/popover";
 
 const buttonColors = [
   "bg-gray-600",
@@ -139,7 +140,7 @@ export function KanbanBoard({ columns, setColumns, tasks, setTasks }: KanbanBoar
       <div className="m-auto flex mt-2 h-full overflow-x-auto">
         <Dialog open={columnDialogOpen} onOpenChange={setColumnDialogOpen}>
           <SortableContext items={columnsId}>
-            <div className="flex gap-4 h-full">
+            <div className="flex gap-4 h-full ">
               {columns.map((col, index) => (
                 <ColumnContainer
                   key={col.id}
@@ -164,7 +165,10 @@ export function KanbanBoard({ columns, setColumns, tasks, setTasks }: KanbanBoar
             <DialogTrigger asChild>
               {columns.length === 0 ? (
                 // Initial button
-                <Button variant="outline" className="h-full w-[23vw] p-4 cursor-pointer">
+                <Button
+                  variant="outline"
+                  className="h-full w-72 sm:w-80 lg:w-96 p-4 cursor-pointer"
+                >
                   <Plus />
                   Create Column
                 </Button>
@@ -193,7 +197,28 @@ export function KanbanBoard({ columns, setColumns, tasks, setTasks }: KanbanBoar
               </div>
               <div className="grid gap-3">
                 <Label>Color</Label>
-                <div className="flex gap-2">
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button variant="outline" className="sm:hidden">Colors</Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-80">
+                    <div className="grid gap-4">
+                      {buttonColors.map((color, i) => (
+                    <Button
+                      key={i}
+                      variant="outline"
+                      onClick={() => selectedButton(color, i)}
+                      className={`h-10 w-10 cursor-pointer ${color} ${
+                        isSelected === i ? "ring-2 ring-blue-500" : ""
+                      }`}
+                    >
+                      <Circle className={strokeColors[i]} />
+                    </Button>
+                  ))}
+                    </div>
+                  </PopoverContent>
+                </Popover>
+                <div className="hidden sm:flex gap-2">
                   {buttonColors.map((color, i) => (
                     <Button
                       key={i}
@@ -218,7 +243,7 @@ export function KanbanBoard({ columns, setColumns, tasks, setTasks }: KanbanBoar
                 />
               </div>
             </div>
-            <DialogFooter>
+            <DialogFooter className="flex flex-row gap-2">
               <DialogClose asChild>
                 <Button
                   variant="outline"
@@ -229,13 +254,13 @@ export function KanbanBoard({ columns, setColumns, tasks, setTasks }: KanbanBoar
                     setIsSelected(0);
                     setColumnColor(buttonColors[0]);
                   }}
-                  className="cursor-pointer"
+                  className="cursor-pointer flex-1 sm:flex-none"
                 >
                   Cancel
                 </Button>
               </DialogClose>
               <DialogClose asChild>
-                <Button variant="outline" onClick={handleColumnSubmit} className="cursor-pointer">
+                <Button variant="outline" onClick={handleColumnSubmit} className="cursor-pointer flex-1 sm:flex-none">
                   {editingColumn ? "Save" : "Create"}
                 </Button>
               </DialogClose>

@@ -20,7 +20,7 @@ interface Props {
 
 export function TaskSheet({ task, column, truncate, onOpenChange }: Props) {
   return (
-    <div className=" min-w-0 pl-2 justify-start">
+    <div className="min-w-0 pl-2 justify-start">
       <Sheet modal={false} onOpenChange={onOpenChange}>
         <SheetTrigger asChild>
           <span style={{ cursor: "pointer" }}>
@@ -38,7 +38,7 @@ export function TaskSheet({ task, column, truncate, onOpenChange }: Props) {
         </SheetTrigger>
         <SheetContent
           aria-describedby={undefined}
-          className="min-w-[67vw] top-16 h-auto rounded-l-3xl border-1"
+          className="w-full sm:min-w-[67vw] sm:top-16 h-auto rounded-l-3xl border-1 overflow-y-auto"
         >
           <SheetHeader className="">
             <SheetTitle className="">
@@ -48,10 +48,10 @@ export function TaskSheet({ task, column, truncate, onOpenChange }: Props) {
             </SheetTitle>
           </SheetHeader>
           <Separator className="-mt-4" />
-          <div className="flex gap-4 min-h-0">
-            <div className="flex flex-col mb-5 ml-3 w-full">
-              <div className="flex min-h-[50vh] p-3 border-1 overflow-y-auto">
-                <div className="prose prose-sm max-w-none dark:prose-invert">
+          <div className="flex flex-col gap-4 m-3 mt-0 sm:flex-row">
+            <div className="flex flex-col mb-5 w-full">
+              <div className="flex w-full max-w-full min-h-[50vh] p-3 border-1 overflow-y-auto">
+                <div className="prose prose-sm max-w-none break-words dark:prose-invert">
                   <ReactMarkdown remarkPlugins={[remarkGfm]}>{task.taskDescription}</ReactMarkdown>
                 </div>
               </div>
@@ -86,7 +86,7 @@ export function TaskSheet({ task, column, truncate, onOpenChange }: Props) {
                 )}
               </div>
             </div>
-            <div className="min-w-[18vw] pl-5 flex flex-col gap-5">
+            <div className="min-w-[18vw] sm:pl-5 flex flex-col gap-5">
               <div>
                 <Label className="text-sm font-semibold">Assignee</Label>
                 {task.assignees && task.assignees.length > 0 ? (

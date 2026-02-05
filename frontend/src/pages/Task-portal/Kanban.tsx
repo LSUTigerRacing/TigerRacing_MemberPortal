@@ -121,9 +121,9 @@ export default function MemberTabs() {
 
   return (
     <div className="h-screen flex flex-col">
-      <div className="w-full bg-gray-100 px-4 pt-3 pb-1 flex xl:mt-16.75">
+      <div className="w-full px-4 pt-3 pb-1 flex xl:mt-16.75">
         <h1 className="text-2xl font-semibold tracking-tight mb-3">Project Title</h1>
-        <div className="ml-auto flex items-center pr-10">
+        <div className="ml-auto flex items-center">
           <LearnMore />
         </div>
       </div>
@@ -132,24 +132,24 @@ export default function MemberTabs() {
         onValueChange={setActiveTab}
         className="flex-1 flex flex-col min-h-0"
       >
-        <TabsList className="justify-start grid grid-cols-2 gap-2 pl-5 bg-transparent">
+        <TabsList className="justify-start grid grid-cols-2 sm:gap-2 sm:pl-5 bg-transparent">
           <TabsTrigger
             value="my-task"
             className="h-11 rounded-none px-4 text-sm font-medium cursor-pointer
-              data-[state=active]:bg-white data-[state=inactive]:bg-gray-100 w-[10vw]"
+              data-[state=active]:bg-white w-[50svw] sm:w-[10vw]"
           >
             My Task
           </TabsTrigger>
           <TabsTrigger
             value="overall"
             className="h-11 rounded-none px-4 text-sm font-medium cursor-pointer
-              data-[state=active]:bg-white data-[state=inactive]:bg-gray-100 w-[10vw]"
+              data-[state=active]:bg-white w-[50svw] sm:w-[10vw]"
           >
             Overall
           </TabsTrigger>
         </TabsList>
         <TabsContent value="my-task" className="flex-1 mt-0 bg-white p-0 min-h-0">
-          <div className="p-5 gap-8 justify-center flex text-gray-500 h-auto">
+          <div className="p-5 gap-8 justify-center flex text-gray-500 h-auto bg-white sm:bg-red-500 md:bg-blue-500 lg:bg-green-500">
             <MyTask
               columns={columns}
               tasks={tasks}
