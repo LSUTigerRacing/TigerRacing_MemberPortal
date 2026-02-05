@@ -2,6 +2,8 @@ using TRFSAE.MemberPortal.API.DTOs;
 using TRFSAE.MemberPortal.API.Interfaces;
 using TRFSAE.MemberPortal.API.Models;
 using Supabase;
+using System.Linq.Expressions;
+using System.Reflection.Metadata.Ecma335;
 
 namespace TRFSAE.MemberPortal.API.Services;
 
@@ -14,38 +16,38 @@ public class RoleService : IRoleService
         _supabaseClient = supabaseClient;
     }
 
-    public async Task<List<RoleResponseDto>> GetAllRolesAsync()
+    public async Task<string> GetUserRoleAsync(Guid id)
     {
-        var response = await _supabaseClient
-            .From<RoleModel>()
-            .Get();
-
-        return new List<RoleResponseDto>();
-    }
-
-    public async Task<RoleResponseDto> GetRoleByIdAsync(Guid id)
-    {
-        var response = await _supabaseClient
-            .From<RoleModel>()
-            .Where(x => x.Id == id)
+        var user = await _supabaseClient
+            .From<UserModel>()
+            .Where(x => x.UserId == id)
             .Single();
 
-        return new RoleResponseDto();
+        return user.role;
     }
 
-    public async Task<RoleResponseDto> UpdateRoleAsync(Guid id, UpdateRoleDto dto)
+    public async Task<bool> AssignRoleToUserAsync(Guid id, Role role)
     {
-        var parameters = new Dictionary<string, object>
+        var user = await _supabaseClient
+         .From<UserModel>()
+         .Where(x => x.UserId == id)
+         .Single();
+
+        user.role = role switch
         {
-            { "role_id", id },
-            { "permission_updates", dto }
+            Role.SuperAdmin => "Superadmin",
+            Role.Admin => "Admin",
+            Role.SystemLead => "System Lead",
+            Role.SubsystemLead => "Subsystem Lead",
+            _ => "Member"
         };
 
-        var response = await _supabaseClient
-            .Rpc("update_role_permissions", parameters);
+        await user.Update<UserModel>();
+        return true;
+    }
 
-        // var role = JsonSerializer.Deserialize<List<RoleResponseDto>>(response.Content);
-
-        return new RoleResponseDto();
+    public async Task<bool> RemoveUserRoleAsync(Guid id)
+    {
+        return await AssignRoleToUserAsync(id, Role.Member);
     }
 }

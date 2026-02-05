@@ -3,15 +3,13 @@ using Supabase.Postgrest.Models;
 
 namespace TRFSAE.MemberPortal.API.Models
 {
-    [Table("user_project")]
+    [Table("project_user")]
     public class UserProjectModel: BaseModel
     {
-        [PrimaryKey("user_id")]
-        [Column("user_id")]
+        [Column("userId")]
         public Guid UserId { get; set; }
 
-        [PrimaryKey("project_id")]
-        [Column("project_id")]
+        [Column("projectId")]
         public Guid ProjectId { get; set; }
     }
 }
