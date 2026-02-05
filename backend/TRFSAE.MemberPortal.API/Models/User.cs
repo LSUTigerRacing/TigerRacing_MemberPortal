@@ -1,48 +1,46 @@
 using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
+using TRFSAE.MemberPortal.API.Enums;
 
 namespace TRFSAE.MemberPortal.API.Models
 {
-    [Table("users")]
+    [Table("user")]
     public class UserModel : BaseModel
     {
         [PrimaryKey("id")]
-        public Guid UserId { get; set; }
+        public Guid Id { get; set; }
 
         [Column("name")]
         public string Name { get; set; } = string.Empty;
 
         [Column("email")]
-        public string PersonalEmail { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
 
-        [Column("lsu_email")]
-        public string LSUEmail { get; set; } = string.Empty;
+        [Column("role")]
+        public Role Role { get; set; }
 
-        [Column("eight_nine")]
-        public int EightNine { get; set; } = -1;
+        [Column("studentId")]
+        public int StudentId { get; set; } = -1;
 
-        [Column("hazing_status")]
-        public bool HazingStatus { get; set; }
+        [Column("completedHazingForm")]
+        public bool CompletedHazingForm { get; set; }
 
-        [Column("fee_status")]
-        public bool FeeStatus { get; set; }
+        [Column("paidMemberFee")]
+        public bool PaidMemberFee { get; set; }
 
-        [Column("grad_date")]
-        public DateTime? GradDate { get; set; }
+        [Column("gradDate")]
+        public int GradDate { get; set; }
 
-        [Column("shirt_size")]
-        public string ShirtSize { get; set; } = string.Empty;
-
-        [Column("system")]
-        public string System { get; set; } = string.Empty;
+        [Column("shirtSize")]
+        public ShirtSize? ShirtSize { get; set; }
 
         [Column("subsystem")]
-        public string Subsystem { get; set; } = string.Empty;
+        public Subsystem? Subsystem { get; set; }
 
         [Column("created_at")]
-        public DateTime AccountCreationDate { get; set; }
+        public DateTime CreatedAt { get; set; }
 
         [Column("updated_at")]
-        public DateTime AccountLastUpdatedDate { get; set; }
+        public DateTime UpdatedAt { get; set; }
     }
 }
