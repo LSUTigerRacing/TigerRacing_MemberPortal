@@ -6,17 +6,15 @@ import { User } from "../src/models/User.ts";
 import { Project, ProjectTask, ProjectUser } from "../src/models/Project.ts";
 
 async function seedData (db: ReturnType<typeof drizzle>) {
-    // Reset the database so primary keys start from scratch
-    await reset(db, { schema: { User, Project, ProjectTask, ProjectUser } });
+    // Reset the database 
+    await reset(db, { User, Project, ProjectTask, ProjectUser });
 
     // Seed Users and Projects first for foreign keys
-    const schemaOne = { User, Project };
-
-    await seed(db, schemaOne, { seed: 1 }).refine((f: any) => ({
+    await seed(db, { User, Project }).refine((functions) => ({
         User: {
             count: 5,
             columns: {
-                role: f.valuesFromArray({
+                role: functions.valuesFromArray({
                     values: ["Superadmin", "Admin", "System Lead", "Subsystem Lead", "Member"],
                     isUnique: true
                 })
@@ -25,8 +23,7 @@ async function seedData (db: ReturnType<typeof drizzle>) {
         Project: {
             count: 2,
             columns: {
-                name: f.companyName({}),
-                priority: f.valuesFromArray({
+                priority: functions.valuesFromArray({
                     values: ["High", "Low"],
                     isUnique: true
                 })
@@ -34,42 +31,37 @@ async function seedData (db: ReturnType<typeof drizzle>) {
         }
     }));
 
-    // get arrays of userIds and projectIds for foreign key references
-    const userId = await db
-        .select({
-            id: User.id
-        })
-        .from(User);
+    // get user and project ids and turn them into arrays of values instead of objects
+    const userId = await db.select({
+        id: User.id
+    }).from(User);
     const userIdArray = userId.map(u => u.id);
 
-    const projectId = await db
-        .select({
-            id: Project.id
-        })
-        .from(Project);
-    const projectIdArray = projectId.map(u => u.id);
+    const projectId = await db.select({
+        id: Project.id
+    }).from(Project);
+    const projectIdArray = projectId.map(p => p.id);
 
-    // Seed ProjectTasks and ProjectUsers
-    await seed(db, { ProjectTask }, { seed: 1 }).refine((f: any) => ({
+    // Seed ProjectTasks and ProjectUsers with foreign keys
+    await seed(db, { ProjectTask }).refine((functions) => ({
         ProjectTask: {
             count: 10,
             columns: {
-                name: f.city({ isUnique: true }),
-                projectId: f.valuesFromArray({
+                projectId: functions.valuesFromArray({
                     values: projectIdArray
                 }),
-                authorId: f.valuesFromArray({
+                authorId: functions.valuesFromArray({
                     values: userIdArray
                 }),
-                assigneeId: f.valuesFromArray({
+                assigneeId: functions.valuesFromArray({
                     values: userIdArray
                 })
             }
         }
     }));
 
-    // Manually seed ProjectUser many-to-many relationships to ensure users
-    // working on the tasks and projects are seeded users
+    // 5 users choose 2 creates 10 pairs to hook up to tasks and projects
+    // to make sure ProjectUser table is seeded with real users and projects instead of random ids that don't exist
     const projectUserPairs = [];
     for (const projId of projectIdArray) {
         for (const usrId of userIdArray) {
@@ -80,7 +72,7 @@ async function seedData (db: ReturnType<typeof drizzle>) {
     await db.insert(ProjectUser).values(projectUserPairs).execute();
 }
 
-// Load connection string from .env file
+// run the seed function
 const connectionString = process.env.DATABASE_URL;
 if (!connectionString) {
     throw new Error("DATABASE_URL is not defined in environment variables.");
