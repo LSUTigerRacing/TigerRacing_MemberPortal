@@ -37,10 +37,10 @@ namespace TRFSAE.MemberPortal.API.Models
         [Column("subsystem")]
         public Subsystem? Subsystem { get; set; }
 
-        [Column("created_at")]
+        [Column("createdAt")]
         public DateTime CreatedAt { get; set; }
 
-        [Column("updated_at")]
+        [Column("updatedAt")]
         public DateTime UpdatedAt { get; set; }
     }
 }
