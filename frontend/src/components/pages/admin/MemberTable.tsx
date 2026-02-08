@@ -186,65 +186,69 @@ export default function MemberTable ({
             </div>
 
             {/* Navigation of Pages Buttons */}
-            <hr className="mb-4" />
-            <Pagination>
-                <PaginationContent>
-                    <PaginationItem>
-                        <Tooltip>
-                            <TooltipTrigger>
-                                <PaginationLink onClick={() => table.firstPage()} className={!table.getCanPreviousPage() ? "pointer-events-none text-muted-foreground" : ""}>
-                                    <ChevronFirstIcon className="w-4 h-4" />
-                                </PaginationLink>
-                            </TooltipTrigger>
-                            <TooltipContent className={!table.getCanPreviousPage() ? "hidden" : ""}>First</TooltipContent>
-                        </Tooltip>
-                    </PaginationItem>
-                    <PaginationItem>
-                        <Tooltip>
-                            <TooltipTrigger>
-                                <PaginationLink onClick={() => table.previousPage()} className={!table.getCanPreviousPage() ? "pointer-events-none text-muted-foreground" : ""}>
-                                    <ChevronLeftIcon className="w-4 h-4" />
-                                </PaginationLink>
-                            </TooltipTrigger>
-                            <TooltipContent className={!table.getCanPreviousPage() ? "hidden" : ""}>Previous</TooltipContent>
-                        </Tooltip>
-                    </PaginationItem>
-                    <PaginationItem>
-                        <Select defaultValue={String(0)} aria-label="Select page" value={table.getState().pagination.pageIndex.toString()} onValueChange={i => table.setPageIndex(parseInt(i))}>
-                            <SelectTrigger id="select-page" className="w-fit whitespace-nowrap cursor-pointer" aria-label="Select page">
-                                <SelectValue placeholder="Select page" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {Array.from({ length: table.getPageCount() }).map((_, i) => (
-                                    <SelectItem key={i} value={i.toString()}>
-                                        Page {i + 1}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                    </PaginationItem>
-                    <PaginationItem>
-                        <Tooltip>
-                            <TooltipTrigger>
-                                <PaginationLink onClick={() => table.nextPage()} className={!table.getCanNextPage() ? "pointer-events-none text-muted-foreground" : ""}>
-                                    <ChevronRightIcon className="w-4 h-4" />
-                                </PaginationLink>
-                            </TooltipTrigger>
-                            <TooltipContent className={!table.getCanNextPage() ? "hidden" : ""}>Next</TooltipContent>
-                        </Tooltip>
-                    </PaginationItem>
-                    <PaginationItem>
-                        <Tooltip>
-                            <TooltipTrigger>
-                                <PaginationLink onClick={() => table.lastPage()} className={!table.getCanNextPage() ? "pointer-events-none text-muted-foreground" : ""}>
-                                    <ChevronLastIcon className="w-4 h-4" />
-                                </PaginationLink>
-                            </TooltipTrigger>
-                            <TooltipContent className={!table.getCanNextPage() ? "hidden" : ""}>Last</TooltipContent>
-                        </Tooltip>
-                    </PaginationItem>
-                </PaginationContent>
-            </Pagination>
+            {table.getRowModel().rows.length > 0 && (
+                <>
+                    <hr className="mb-4" />
+                    <Pagination>
+                        <PaginationContent>
+                            <PaginationItem>
+                                <Tooltip>
+                                    <TooltipTrigger>
+                                        <PaginationLink onClick={() => table.firstPage()} className={!table.getCanPreviousPage() ? "pointer-events-none text-muted-foreground" : ""}>
+                                            <ChevronFirstIcon className="w-4 h-4" />
+                                        </PaginationLink>
+                                    </TooltipTrigger>
+                                    <TooltipContent className={!table.getCanPreviousPage() ? "hidden" : ""}>First</TooltipContent>
+                                </Tooltip>
+                            </PaginationItem>
+                            <PaginationItem>
+                                <Tooltip>
+                                    <TooltipTrigger>
+                                        <PaginationLink onClick={() => table.previousPage()} className={!table.getCanPreviousPage() ? "pointer-events-none text-muted-foreground" : ""}>
+                                            <ChevronLeftIcon className="w-4 h-4" />
+                                        </PaginationLink>
+                                    </TooltipTrigger>
+                                    <TooltipContent className={!table.getCanPreviousPage() ? "hidden" : ""}>Previous</TooltipContent>
+                                </Tooltip>
+                            </PaginationItem>
+                            <PaginationItem>
+                                <Select defaultValue={String(0)} aria-label="Select page" value={table.getState().pagination.pageIndex.toString()} onValueChange={i => table.setPageIndex(parseInt(i))}>
+                                    <SelectTrigger id="select-page" className="w-fit whitespace-nowrap cursor-pointer" aria-label="Select page">
+                                        <SelectValue placeholder="Select page" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {Array.from({ length: table.getPageCount() }).map((_, i) => (
+                                            <SelectItem key={i} value={i.toString()}>
+                                                Page {i + 1}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </PaginationItem>
+                            <PaginationItem>
+                                <Tooltip>
+                                    <TooltipTrigger>
+                                        <PaginationLink onClick={() => table.nextPage()} className={!table.getCanNextPage() ? "pointer-events-none text-muted-foreground" : ""}>
+                                            <ChevronRightIcon className="w-4 h-4" />
+                                        </PaginationLink>
+                                    </TooltipTrigger>
+                                    <TooltipContent className={!table.getCanNextPage() ? "hidden" : ""}>Next</TooltipContent>
+                                </Tooltip>
+                            </PaginationItem>
+                            <PaginationItem>
+                                <Tooltip>
+                                    <TooltipTrigger>
+                                        <PaginationLink onClick={() => table.lastPage()} className={!table.getCanNextPage() ? "pointer-events-none text-muted-foreground" : ""}>
+                                            <ChevronLastIcon className="w-4 h-4" />
+                                        </PaginationLink>
+                                    </TooltipTrigger>
+                                    <TooltipContent className={!table.getCanNextPage() ? "hidden" : ""}>Last</TooltipContent>
+                                </Tooltip>
+                            </PaginationItem>
+                        </PaginationContent>
+                    </Pagination>
+                </>
+            )}
         </div>
     );
 }
