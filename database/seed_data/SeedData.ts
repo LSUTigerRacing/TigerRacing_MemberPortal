@@ -6,11 +6,11 @@ import { User } from "../src/models/User.ts";
 import { Project, ProjectTask, ProjectUser } from "../src/models/Project.ts";
 
 async function seedData (db: ReturnType<typeof drizzle>) {
-    // Reset the database 
+    // Reset the database
     await reset(db, { User, Project, ProjectTask, ProjectUser });
 
     // Seed Users and Projects first for foreign keys
-    await seed(db, { User, Project }).refine((functions) => ({
+    await seed(db, { User, Project }).refine(functions => ({
         User: {
             count: 5,
             columns: {
@@ -43,7 +43,7 @@ async function seedData (db: ReturnType<typeof drizzle>) {
     const projectIdArray = projectId.map(p => p.id);
 
     // Seed ProjectTasks and ProjectUsers with foreign keys
-    await seed(db, { ProjectTask }).refine((functions) => ({
+    await seed(db, { ProjectTask }).refine(functions => ({
         ProjectTask: {
             count: 10,
             columns: {
