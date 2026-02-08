@@ -39,6 +39,13 @@ namespace TRFSAE.MemberPortal.API.Controllers
       return Ok(user);
     }
 
+    [HttpPost]
+    public async Task<IActionResult> CreateUserAsync([FromBody] CreateUserDto model)
+    {
+      var taskResult = await _userService.CreateUserAsync(model);
+      return Ok(taskResult);
+    }
+
     [HttpPatch("{id}")]
     public async Task<IActionResult> UpdateUserByIdAsync(Guid id, UserUpdateDto model)
     {
