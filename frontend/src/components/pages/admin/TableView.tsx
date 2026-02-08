@@ -175,7 +175,7 @@ export default function MemberTable ({
                                 ))
                             )
                             : (
-                                <TableRow>
+                                <TableRow className="hover:bg-background">
                                     <TableCell colSpan={columns.length} className="h-24 text-center">
                                         No results.
                                     </TableCell>

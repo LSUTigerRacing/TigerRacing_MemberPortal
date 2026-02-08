@@ -1,8 +1,8 @@
 import { useEffect, useState, useMemo } from "react";
 
-import GalleryCard from "@/components/pages/admin/GalleryCard";
-import MemberTable from "@/components/pages/admin/MemberTable";
+import GalleryView from "@/components/pages/admin/GalleryView";
 import SearchBar from "@/components/pages/admin/SearchBar";
+import TableView from "../components/pages/admin/TableView";
 
 import type { User } from "@/lib/member-data-format/user";
 
@@ -122,21 +122,20 @@ export default function Admin () {
                         )
                         : view === "column"
                             ? (
-                                <MemberTable
+                                <TableView
                                     users={filteredMembers}
                                     onDeleteMember={handleDelete}
                                     onRowClick={handleRowClick}
                                 />
                             )
                             : (
-                                <GalleryCard
+                                <GalleryView
                                     users={filteredMembers}
                                     view={view}
                                     setView={setView}
                                     onDeleteMember={handleDelete}
                                     selectedMemberId={selectedMemberId}
                                 />
-
                             )
                 }
             </div>
