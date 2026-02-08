@@ -26,7 +26,7 @@ namespace TRFSAE.MemberPortal.API.Services
             string? search,
             bool? completedHazingForm,
             bool? paidMemberFee,
-            DateTime? gradDate,
+            int? gradDate,
             ShirtSize? shirtSize,
             Subsystem? subsystem
         )
@@ -125,7 +125,7 @@ namespace TRFSAE.MemberPortal.API.Services
                 StudentId = createDto.StudentId,
                 CompletedHazingForm = createDto.CompletedHazingForm,
                 PaidMemberFee = createDto.PaidMemberFee,
-                GradDate = createDto.GradDate.Value,
+                GradDate = createDto.GradDate,
                 ShirtSize = createDto.ShirtSize,
                 Subsystem = createDto.Subsystem,
                 CreatedAt = DateTime.UtcNow,

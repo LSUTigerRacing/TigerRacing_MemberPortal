@@ -17,7 +17,7 @@ namespace TRFSAE.MemberPortal.API.Controllers
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllUsers(string? search, bool? completedHazingForm, bool? paidMemberFee, DateTime? gradDate, ShirtSize? shirtSize, Subsystem? subsystem, int pageNumber = 1, int pageSize = 8)
+    public async Task<IActionResult> GetAllUsers(string? search, bool? completedHazingForm, bool? paidMemberFee, int? gradDate, ShirtSize? shirtSize, Subsystem? subsystem, int pageNumber = 1, int pageSize = 8)
     {
       var users = await _userService.GetAllUsersAsync(
         pageNumber,
