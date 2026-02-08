@@ -154,9 +154,12 @@ namespace TRFSAE.MemberPortal.API.Services
         {
             try
             {
-                var model = await _supabaseClient.From<UserModel>()
+                var response = await _supabaseClient
+                    .From<UserModel>()
                     .Where(u => u.Id == userID)
-                    .Single();
+                    .Get();
+                
+                var model = response.Models.FirstOrDefault();
 
                 if (model == null)
                 {
@@ -192,31 +195,33 @@ namespace TRFSAE.MemberPortal.API.Services
                 }
                 if (updateDto.ShirtSize.HasValue)
                 {
-                    model.ShirtSize = updateDto.ShirtSize;
+                    model.ShirtSize = updateDto.ShirtSize.Value;
                 }
                 if (updateDto.Subsystem.HasValue)
                 {
-                    model.Subsystem = updateDto.Subsystem;
+                    model.Subsystem = updateDto.Subsystem.Value;
                 }
                 model.UpdatedAt = DateTime.UtcNow;
 
-                var response = await _supabaseClient
+                var responseTwo = await _supabaseClient
                     .From<UserModel>()
                     .Where(u => u.Id == userID)
                     .Update(model);
 
+                var updatedUser = responseTwo.Models.FirstOrDefault();
+
                 return new UserResponseDto
                 {
                     UserId = userID,
-                    Name = model.Name,
-                    LSUEmail = model.Email,
-                    Role = model.Role,
-                    StudentId = model.StudentId,
-                    HazingStatus = model.CompletedHazingForm,
-                    FeeStatus = model.PaidMemberFee,
-                    GradDate = model.GradDate,
-                    ShirtSize = model.ShirtSize,
-                    Subsystem = model.Subsystem
+                    Name = updatedUser.Name,
+                    LSUEmail = updatedUser.Email,
+                    Role = updatedUser.Role,
+                    StudentId = updatedUser.StudentId,
+                    HazingStatus = updatedUser.CompletedHazingForm,
+                    FeeStatus = updatedUser.PaidMemberFee,
+                    GradDate = updatedUser.GradDate,
+                    ShirtSize = updatedUser.ShirtSize,
+                    Subsystem = updatedUser.Subsystem
 
                 };
             }
