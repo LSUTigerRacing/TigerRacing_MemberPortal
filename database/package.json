@@ -6,10 +6,13 @@
     "build": "bun --bun tsc --project tsconfig.drizzle.json",
     "build:ci": "bun --bun tsc",
     "db:generate": "bun --bun drizzle-kit generate --config drizzle/database/drizzle.config.js",
-    "db:push": "bun --bun drizzle-kit push --config drizzle/database/drizzle.config.js"
+    "db:push": "bun --bun drizzle-kit push --config drizzle/database/drizzle.config.js",
+    "db:seed": "bun --bun --env-file=./.env seed_data/SeedData.ts"
   },
   "dependencies": {
-    "drizzle-orm": "^0.44.7"
+    "drizzle-orm": "^0.44.7",
+    "drizzle-seed": "^0.3.1",
+    "postgres": "^3.4.8"
   },
   "devDependencies": {
     "@types/bun": "^1.3.3",
