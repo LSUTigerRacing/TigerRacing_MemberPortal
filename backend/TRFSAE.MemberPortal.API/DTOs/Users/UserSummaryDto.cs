@@ -9,14 +9,14 @@ public class UserSummaryDto
     public Guid Id { get; set; }
 
     [JsonPropertyName("name")]
-    public string Name { get; set; } = null!;
+    public required string Name { get; set; } = null!;
 
     [JsonPropertyName("email")]
-    public string Email { get; set; } = null!;
+    public required string Email { get; set; } = null!;
 
     [JsonPropertyName("gradDate")]
-    public int? GradDate { get; set; }
+    public required int GradDate { get; set; }
 
     [JsonPropertyName("subsystem")]
-    public Subsystem? Subsystem { get; set; }
+    public required Subsystem Subsystem { get; set; }
 }

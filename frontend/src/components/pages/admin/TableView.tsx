@@ -50,10 +50,12 @@ import {
 
 import UserDropdown from "@/components/pages/admin/UserDropdown";
 
+import type { API } from "@/lib/API";
+
 import type { TRAPI } from "../../../../../shared/typings/api";
 
 interface FilterMemberTableProps {
-    users: TRAPI.User[]
+    users: Awaited<ReturnType<API["fetchUsers"]>>["data"]
     deleteUser: (userId: string) => void
     onRowClick?: (rowId: string) => void
 }

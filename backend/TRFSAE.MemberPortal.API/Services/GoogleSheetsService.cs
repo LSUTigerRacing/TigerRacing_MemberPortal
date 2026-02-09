@@ -72,7 +72,7 @@ namespace TRFSAE.MemberPortal.API.Services
         public async Task<List<SheetsResponseDTO>> GetSupabase()
         {
             var result = await _supabaseClient
-                .From<PurchaseItemModel>()
+                .From<OrderItemModel>()
                 .Select("*")
                 .Order("created_at", Supabase.Postgrest.Constants.Ordering.Descending)
                 .Limit(1)
@@ -85,7 +85,7 @@ namespace TRFSAE.MemberPortal.API.Services
         public async Task ListenToSupabaseChangesAsync()
         {
             var channel = await _supabaseClient
-                .From<PurchaseItemModel>()
+                .From<OrderItemModel>()
                 .On(Supabase.Realtime.PostgresChanges.PostgresChangesOptions.ListenType.Inserts, async (sender, change) =>
                 {
                     var items = await GetSupabase();

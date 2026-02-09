@@ -1,33 +1,32 @@
+// using System.ComponentModel.DataAnnotations.Schema;
 using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
-using TRFSAE.MemberPortal.API.Enums;
 
 namespace TRFSAE.MemberPortal.API.Models
 {
-    [Table("project")]
-    public class ProjectModel : BaseModel
+    [Table("project_task")]
+    public class ProjectTaskModel : BaseModel
     {
-        [PrimaryKey("id", false)]
-        [Column("id")]
+        [PrimaryKey("id")]
         public Guid Id { get; set; }
+
+        [Column("projectId")]
+        public required Guid ProjectId { get; set; }
 
         [Column("authorId")]
         public required Guid AuthorId { get; set; }
 
+        [Column("assigneeId")]
+        public required Guid AssigneeId { get; set; }
+
         [Column("name")]
-        public required string Name { get; set; } = "Untitled";
+        public string Name { get; set; } = "Untitled";
 
         [Column("description")]
         public string? Description { get; set; }
 
-        [Column("subsystem")]
-        public required Subsystem Subsystem { get; set; }
-
-        [Column("priority")]
-        public required ProjectPriority Priority { get; set; }
-
-        [Column("startDate")]
-        public required DateTime StartDate { get; set; }
+        [Column("status")]
+        public required bool Status { get; set; } = false;
 
         [Column("deadline")]
         public required DateTime Deadline { get; set; }

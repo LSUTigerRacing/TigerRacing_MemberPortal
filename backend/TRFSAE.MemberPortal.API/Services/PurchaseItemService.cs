@@ -17,7 +17,7 @@ namespace TRFSAE.MemberPortal.API.Services
         public async Task<List<PurchaseItemResponseDto>> GetAllPurchaseItemsAsync(PurchaseItemSearchDto dto)
         {
             var response = await _supabaseClient
-        .From<PurchaseItemModel>()
+        .From<OrderItemModel>()
         .Get();
             return response.Models.Select(MapToDto).ToList();
         }
@@ -25,7 +25,7 @@ namespace TRFSAE.MemberPortal.API.Services
         public async Task<PurchaseItemResponseDto> GetPurchaseItemByIDAsync(Guid id)
         {
             var response = await _supabaseClient
-              .From<PurchaseItemModel>()
+              .From<OrderItemModel>()
               .Where(x => x.Id == id)
               .Single();
 
@@ -44,7 +44,7 @@ namespace TRFSAE.MemberPortal.API.Services
             if (newModel.CreatedAt == default) newModel.CreatedAt = DateTime.UtcNow;
 
             var insert = await _supabaseClient
-                .From<PurchaseItemModel>()
+                .From<OrderItemModel>()
                 .Insert(newModel);
 
             if (insert.Models is null || insert.Models.Count == 0)
@@ -64,7 +64,7 @@ namespace TRFSAE.MemberPortal.API.Services
             if (dto.UnitPrice > 0) updates["unit_price"] = dto.UnitPrice;
             if (dto.Quantity > 0) updates["quantity"] = dto.Quantity;
             if (!string.IsNullOrWhiteSpace(dto.Supplier)) updates["supplier"] = dto.Supplier;
-            if (dto.PurchaseStatus != default) updates["purchase_status"] = dto.PurchaseStatus.ToString();
+            if (dto.OrderStatus != default) updates["purchase_status"] = dto.OrderStatus.ToString();
             if (dto.Notes != null) updates["notes"] = dto.Notes;
             if (dto.NeededBy != null) updates["needed_by"] = dto.NeededBy;
             if (!string.IsNullOrWhiteSpace(dto.PoNumber)) updates["po_no"] = dto.PoNumber;
@@ -94,7 +94,7 @@ namespace TRFSAE.MemberPortal.API.Services
             try
             {
                 await _supabaseClient
-                  .From<PurchaseItemModel>()
+                  .From<OrderItemModel>()
                   .Where(x => x.Id == id)
                   .Delete();
                 return true;
@@ -105,7 +105,7 @@ namespace TRFSAE.MemberPortal.API.Services
             }
         }
 
-        private static PurchaseItemResponseDto MapToDto(PurchaseItemModel m)
+        private static PurchaseItemResponseDto MapToDto(OrderItemModel m)
         {
             return new PurchaseItemResponseDto
             {
@@ -117,7 +117,7 @@ namespace TRFSAE.MemberPortal.API.Services
                 UnitPrice = m.UnitPrice,
                 Quantity = m.Quantity,
                 Supplier = m.Supplier,
-                PurchaseStatus = m.PurchaseStatus,
+                OrderStatus = m.OrderStatus,
                 Notes = m.Notes,
                 CreatedAt = m.CreatedAt,
                 NeededBy = m.NeededBy,
@@ -130,9 +130,9 @@ namespace TRFSAE.MemberPortal.API.Services
             };
         }
 
-        private static PurchaseItemModel MapToModel(PurchaseItemCreateDto d)
+        private static OrderItemModel MapToModel(PurchaseItemCreateDto d)
         {
-            return new PurchaseItemModel
+            return new OrderItemModel
             {
                 Requester = d.Requester,
                 PartUrl = d.PartUrl,
@@ -141,7 +141,7 @@ namespace TRFSAE.MemberPortal.API.Services
                 UnitPrice = d.UnitPrice,
                 Quantity = d.Quantity,
                 Supplier = d.Supplier,
-                PurchaseStatus = d.PurchaseStatus,
+                OrderStatus = d.OrderStatus,
                 Notes = d.Notes,
                 NeededBy = d.NeededBy,
                 OrderActiveStatus = d.OrderActiveStatus,

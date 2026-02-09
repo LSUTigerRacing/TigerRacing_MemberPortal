@@ -29,10 +29,12 @@ import { Separator } from "@/components/ui/separator";
 
 import UserDropdown from "@/components/pages/admin/UserDropdown";
 
+import type { API } from "@/lib/API";
+
 import type { TRAPI } from "../../../../../shared/typings/api";
 
 interface GalleryViewProps {
-    users: TRAPI.User[]
+    users: Awaited<ReturnType<API["fetchUsers"]>>["data"]
     activeUser: TRAPI.User["id"] | null
 
     view: "column" | "gallery"

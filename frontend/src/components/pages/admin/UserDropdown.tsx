@@ -21,10 +21,10 @@ import {
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 
-import type { TRAPI } from "../../../../../shared/typings/api.js";
+import type { API } from "@/lib/API";
 
 interface UserDropdownProps {
-    user: TRAPI.User
+    user: Awaited<ReturnType<API["fetchUser"]>>["data"]
     deleteUser: (userId: string) => void
 }
 

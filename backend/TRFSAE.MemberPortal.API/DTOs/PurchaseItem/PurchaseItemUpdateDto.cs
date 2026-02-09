@@ -1,4 +1,5 @@
 using TRFSAE.MemberPortal.API.Models;
+using TRFSAE.MemberPortal.API.Enums;
 using System.Text.Json.Serialization;
 namespace TRFSAE.MemberPortal.API.DTOs
 {
@@ -13,7 +14,7 @@ namespace TRFSAE.MemberPortal.API.DTOs
         public string Supplier { get; set; } = string.Empty;
 
         [JsonConverter(typeof(JsonStringEnumConverter))]
-        public PurchaseStatus PurchaseStatus { get; set; }
+        public OrderStatus OrderStatus { get; set; }
 
         public string Notes { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; }

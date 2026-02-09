@@ -3,13 +3,15 @@ import { relations } from "drizzle-orm";
 
 import { User } from "./User.js";
 
-import { projectPriority, subsystems } from "./enums.js";
+import { projectPriority, projectStatus, subsystems } from "./enums.js";
+
+import { ProjectStatus } from "../../../shared/config/enums.js";
 
 export const Project = pgTable("project", t => ({
     id: t.uuid().primaryKey().defaultRandom(),
     authorId: t.uuid().notNull().references(() => User.id, { onDelete: "cascade" }),
 
-    name: t.text().notNull(),
+    title: t.text().notNull().default("Untitled"),
     description: t.text(),
     subsystem: subsystems().notNull(),
     priority: projectPriority().notNull(),
@@ -27,9 +29,9 @@ export const ProjectTask = pgTable("project_task", t => ({
     authorId: t.uuid().notNull().references(() => User.id, { onDelete: "cascade" }),
     assigneeId: t.uuid().references(() => User.id, { onDelete: "set null" }),
 
-    name: t.text().notNull(),
+    title: t.text().notNull().default("Untitled"),
     description: t.text(),
-    status: t.boolean().notNull().default(false),
+    status: projectStatus().notNull().default(ProjectStatus.Draft),
     deadline: t.timestamp({ withTimezone: true }).notNull(),
 
     createdAt: t.timestamp({ withTimezone: true }).notNull().defaultNow(),

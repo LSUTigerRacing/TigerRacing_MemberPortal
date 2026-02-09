@@ -1,53 +1,45 @@
 using System.Text.Json.Serialization;
 using TRFSAE.MemberPortal.API.Enums;
 
-namespace TRFSAE.MemberPortal.API.DTOs
+namespace TRFSAE.MemberPortal.API.DTOs;
+public class UserResponseDto
 {
-    public class UserResponseDto
-    {
-        [JsonPropertyName("id")]
-        public Guid UserId { get; set; }
+    [JsonPropertyName("id")]
+    public Guid UserId { get; set; }
 
-        [JsonPropertyName("name")]
-        public string Name { get; set; } = string.Empty;
+    [JsonPropertyName("name")]
+    public string Name { get; set; } = string.Empty;
 
-        [JsonPropertyName("email")]
-        public string PersonalEmail { get; set; } = string.Empty;
+    [JsonPropertyName("email")]
+    public string PersonalEmail { get; set; } = string.Empty;
 
-        [JsonPropertyName("lsu_email")]
-        public string LSUEmail { get; set; } = string.Empty;
+    [JsonPropertyName("sid")]
+    public int StudentId { get; set; }
 
-        [JsonPropertyName("eight_nine")]
-        public int EightNine { get; set; }
+    [JsonPropertyName("hazingStatus")]
+    public bool HazingStatus { get; set; }
 
-        [JsonPropertyName("hazing_status")]
-        public bool HazingStatus { get; set; }
+    [JsonPropertyName("feeStatus")]
+    public bool FeeStatus { get; set; }
 
-        [JsonPropertyName("fee_status")]
-        public bool FeeStatus { get; set; }
+    [JsonPropertyName("gradYear")]
+    public int GradYear { get; set; }
 
-        [JsonPropertyName("grad_date")]
-        public int GradDate { get; set; }
+    [JsonPropertyName("shirtSize")]
+    public ShirtSize? ShirtSize { get; set; }
 
-        [JsonPropertyName("shirt_size")]
-        public ShirtSize? ShirtSize { get; set; }
+    [JsonPropertyName("system")]
+    public string? System { get; set; }
 
-        [JsonPropertyName("system")]
-        public string? System { get; set; }
+    [JsonPropertyName("subsystem")]
+    public Subsystem? Subsystem { get; set; }
 
-        [JsonPropertyName("subsystem")]
-        public Subsystem? Subsystem { get; set; }
+    [JsonPropertyName("createdAt")]
+    public DateTime AccountCreationDate { get; set; }
 
-        [JsonPropertyName("created_at")]
-        public DateTime AccountCreationDate { get; set; }
+    [JsonPropertyName("updatedAt")]
+    public DateTime AccountLastUpdatedDate { get; set; }
 
-        [JsonPropertyName("updated_at")]
-        public DateTime AccountLastUpdatedDate { get; set; }
-
-        [JsonPropertyName("role")]
-        public Role? Role {get;set; }
-
-        [JsonPropertyName("studentId")]
-        public int? StudentId {get;set; }
-    }
+    [JsonPropertyName("role")]
+    public Role? Role {get;set; }
 }

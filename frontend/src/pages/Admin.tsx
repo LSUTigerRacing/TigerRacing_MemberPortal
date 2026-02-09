@@ -4,11 +4,9 @@ import GalleryView from "@/components/pages/admin/GalleryView";
 import SearchBar from "@/components/pages/admin/SearchBar";
 import TableView from "../components/pages/admin/TableView";
 
-import { getUsers, deleteUser } from "@/services/userService";
+import { API, api } from "@/lib/API";
 
 import { System, Subsystem } from "../../../shared/config/enums";
-
-import type { TRAPI } from "../../../shared/typings/api";
 
 export default function Admin () {
     const [view, setView] = useState<"column" | "gallery">("gallery");
@@ -21,7 +19,7 @@ export default function Admin () {
     const [searchValue, setSearchValue] = useState("");
 
     const [filteredCount, setFilteredCount] = useState(0);
-    const [users, setUsers] = useState<TRAPI.User[]>([]);
+    const [users, setUsers] = useState<Awaited<ReturnType<API["fetchUsers"]>>["data"]>([]);
     const [activeUser, setActiveUser] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -29,7 +27,6 @@ export default function Admin () {
     const filteredMembers = useMemo(() => {
         // Optimized for O(n) time, minimizes constant reference lookups.
         const searchVal = searchValue.toLowerCase();
-        console.log(searchVal);
         return (
             (
                 filters.systems.length > 0
@@ -52,7 +49,7 @@ export default function Admin () {
 
     async function handleDelete (userId: string) {
         try {
-            await deleteUser(userId, "confirm");
+            await api.deleteUser(userId);
 
             const updatedMembers = users.filter(user => user.id !== userId);
             setUsers(updatedMembers);
@@ -74,8 +71,8 @@ export default function Admin () {
             setLoading(true);
             setError(null);
 
-            const users = await getUsers();
-            if (users) setUsers(users);
+            const users = await api.fetchUsers();
+            if (users) setUsers(users.data);
         } catch (err) {
             console.error("Error fetching members: ", err);
             setError("Failed to load members. Please try again.");
@@ -109,14 +106,14 @@ export default function Admin () {
 
                 {loading
                     ? (
-                        <div className="bg-background w-full my-4 py-4 rounded-xl">
+                        <div className="bg-background w-full my-4 px-4 py-5 rounded-xl">
                             <h1>Loading members...</h1>
                             <div className="overflow-hidden"></div>
                         </div>
                     )
                     : error
                         ? (
-                            <div className="bg-background w-full my-4 py-4 rounded-xl">
+                            <div className="bg-background w-full my-4 px-4 py-5 rounded-xl">
                                 <h1>Error loading members. Please retry.</h1>
                                 <div className="overflow-hidden"></div>
                             </div>

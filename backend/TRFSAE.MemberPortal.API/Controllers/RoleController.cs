@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using TRFSAE.MemberPortal.API.Enums;
 using TRFSAE.MemberPortal.API.Models;
 using TRFSAE.MemberPortal.API.Interfaces;
 

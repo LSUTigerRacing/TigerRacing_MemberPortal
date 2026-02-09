@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-empty-object-type */
-import axios from "axios";
 import {
     CalendarClock,
     CalendarDays,
@@ -44,49 +41,34 @@ import {
 } from "@/components/ui/empty";
 import { Separator } from "@/components/ui/separator";
 
-interface Task {}
-interface Announcement {}
-interface Deadline {}
-interface Event {}
+import { api, type API } from "@/lib/API";
+import type { Unpacked } from "@/lib/utils";
 
-interface DashboardData {
-    displayName: string
-    initials: string
-    avatarURL: string
+type DashboardInfo = Awaited<ReturnType<API["fetchDashboardInfo"]>>["data"];
 
-    tasks: Task[]
-    announcements: Announcement[]
-    deadlines: Deadline[]
-    events: Event[]
-}
-
-/**
- * Fetch dashboard data.
- */
-async function getDashboardData (): Promise<DashboardData | undefined> {
-    const res = await axios.get<DashboardData>("/api/dashboard", { withCredentials: true }).catch(err => console.error(err));
-    return res?.data ?? undefined;
-}
-
-function TaskCard<T = { data: Task }> (props: T): ReactElement<T> {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function TaskCard<T = { data: Unpacked<DashboardInfo["tasks"]> }> (props: T): ReactElement<T> {
     return (
         <div></div>
     );
 }
 
-function AnnouncementCard<T = { data: Announcement }> (props: T): ReactElement<T> {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function AnnouncementCard<T = { data: Unpacked<DashboardInfo["announcements"]> }> (props: T): ReactElement<T> {
     return (
         <div></div>
     );
 }
 
-function DeadlineCard<T = { data: Deadline }> (props: T): ReactElement<T> {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function DeadlineCard<T = { data: Unpacked<never[]> }> (props: T): ReactElement<T> {
     return (
         <div></div>
     );
 }
 
-function EventCard<T = { data: Event }> (props: T): ReactElement<T> {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function EventCard<T = { data: Unpacked<DashboardInfo["events"]> }> (props: T): ReactElement<T> {
     return (
         <div></div>
     );
@@ -102,13 +84,12 @@ function SidebarButton (props: { title: string, icon: ForwardRefExoticComponent<
 };
 
 export default function Dashboard (): ReactElement {
-    const [data, setData] = useState<DashboardData | undefined>(undefined);
+    const [data, setData] = useState<DashboardInfo | undefined>(undefined);
 
     useEffect(() => {
-        (async function () {
-            const dashData = await getDashboardData();
-            setData(dashData);
-        })();
+        void api.fetchDashboardInfo()
+            .then(res => { console.log(res.status); console.log("HI"); setData(res.data); })
+            .catch(err => console.error(err));
     }, []);
 
     return (
@@ -149,12 +130,12 @@ export default function Dashboard (): ReactElement {
                     <Card className="bg-primary border-primary text-background rounded-sm lg:max-w-xs px-4 pt-8">
                         <CardContent className="flex flex-col items-center">
                             <Avatar className="mb-4 max-w-xs w-64 h-64">
-                                {data?.avatarURL
-                                    ? <AvatarImage src={data.avatarURL} alt="User profile picture" />
-                                    : <AvatarFallback className="bg-secondary text-primary text-8xl">{data?.initials ?? "CM"}</AvatarFallback>
+                                {data?.avatar
+                                    ? <AvatarImage src={data.avatar} alt="User profile picture" />
+                                    : <AvatarFallback className="bg-secondary text-primary text-8xl">{data?.name.split(" ").map(x => x.substring(0, 1)).join("") ?? "CM"}</AvatarFallback>
                                 }
                             </Avatar>
-                            <span className="mt-4 text-2xl">Hi, {data?.displayName ?? "Car McCarface"}!</span>
+                            <span className="mt-4 text-2xl">Hi, {data?.name ?? "Car McCarface"}!</span>
                         </CardContent>
                     </Card>
                     <Card className="bg-primary border-primary text-background rounded-sm grow">
@@ -220,8 +201,9 @@ export default function Dashboard (): ReactElement {
                             <Separator className="mt-1.75" />
                         </CardHeader>
                         <CardContent>
-                            {data?.deadlines.length
-                                ? data.deadlines.map((x, i) => <DeadlineCard key={i} data={x} />)
+                            {/* TODO: Replace this with something else. */}
+                            {[].length
+                                ? [].map((x, i) => <DeadlineCard key={i} data={x} />)
                                 : (
                                     <Empty>
                                         <EmptyHeader>

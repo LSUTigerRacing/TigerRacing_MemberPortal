@@ -5,13 +5,15 @@ import { User } from "./User.js";
 
 import { orderStatus, subsystems } from "./enums.js";
 
+import { OrderStatus } from "../../../shared/config/enums.js";
+
 export const Order = pgTable("order", t => ({
     id: t.uuid().primaryKey().defaultRandom(),
     requesterId: t.uuid().notNull().references(() => User.id),
 
     name: t.text().notNull(),
     subsystem: subsystems().notNull(),
-    status: orderStatus().notNull(),
+    status: orderStatus().notNull().default(OrderStatus.Pending),
     deadline: t.timestamp({ withTimezone: true }).notNull(),
     notes: t.text(),
 
@@ -34,7 +36,8 @@ export const OrderItem = pgTable("order_item", t => ({
 export const OrderReview = pgTable("order_review", t => ({
     userId: t.uuid().notNull().references(() => User.id, { onDelete: "cascade" }),
     orderId: t.uuid().notNull().references(() => Order.id, { onDelete: "cascade" }),
-    value: t.boolean().notNull()
+    value: t.boolean().notNull(),
+    createdAt: t.timestamp({ withTimezone: true }).notNull().defaultNow()
 }), t => [
     primaryKey({ columns: [t.userId, t.orderId] })
 ]);

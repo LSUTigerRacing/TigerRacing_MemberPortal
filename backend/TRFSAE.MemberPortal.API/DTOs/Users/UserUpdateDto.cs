@@ -1,22 +1,36 @@
 using Microsoft.EntityFrameworkCore.Query;
+using System.Text.Json.Serialization;
 using TRFSAE.MemberPortal.API.Enums;
 
-namespace TRFSAE.MemberPortal.API.DTOs
+namespace TRFSAE.MemberPortal.API.DTOs;
+public class UserUpdateDto
 {
-    public class UserUpdateDto
-    {
-        public string Name { get; set; } = string.Empty;
-        public string PersonalEmail { get; set; } = string.Empty;
-        public string LSUEmail { get; set; } = string.Empty;
-        public int? EightNine { get; set; }
-        public bool? HazingStatus { get; set; }
-        public bool? FeeStatus { get; set; }
-        public int GradDate { get; set; }
-        public ShirtSize? ShirtSize { get; set; }
-        public System System { get; set; } = string.Empty;
-        public Subsystem Subsystem { get; set; }
-        public Role? Role {get;set; }
-        public int? StudentId {get;set; }
-        
-    }
+    [JsonPropertyName("name")]
+    public string? Name { get; set; }
+
+    [JsonPropertyName("email")]
+    public string? Email { get; set; }
+
+    [JsonPropertyName("studentId")]
+    public int? StudentId { get; set; }
+
+    [JsonPropertyName("hazingStatus")]
+    public bool? HazingStatus { get; set; }
+
+    [JsonPropertyName("feeStatus")]
+    public bool? FeeStatus { get; set; }
+
+    [JsonPropertyName("gradYear")]
+    public int GradYear { get; set; }
+
+    [JsonPropertyName("shirtSize")]
+    public ShirtSize? ShirtSize { get; set; }
+
+    [JsonPropertyName("system")]
+    public TRSystem System { get; set; }
+
+    public Subsystem Subsystem { get; set; }
+
+    [JsonPropertyName("name")]
+    public Role? Role { get; set; }
 }

@@ -8,39 +8,42 @@ namespace TRFSAE.MemberPortal.API.Models
     public class UserModel : BaseModel
     {
         [PrimaryKey("id")]
-        public Guid Id { get; set; }
+        public required Guid Id { get; set; }
 
         [Column("name")]
-        public string Name { get; set; } = string.Empty;
+        public required string Name { get; set; }
 
         [Column("email")]
-        public string Email { get; set; } = string.Empty;
+        public required string Email { get; set; }
 
         [Column("role")]
-        public Role Role { get; set; }
+        public required Role Role { get; set; } = Role.Member;
 
-        [Column("studentId")]
-        public int StudentId { get; set; } = -1;
+        [Column("sid")]
+        public required int StudentId { get; set; }
 
-        [Column("completedHazingForm")]
-        public bool CompletedHazingForm { get; set; }
-
-        [Column("paidMemberFee")]
-        public bool PaidMemberFee { get; set; }
-
-        [Column("gradDate")]
-        public int? GradDate { get; set; }
-
-        [Column("shirtSize")]
-        public ShirtSize? ShirtSize { get; set; }
+        [Column("system")]
+        public required TRSystem System { get; set; }
 
         [Column("subsystem")]
-        public Subsystem? Subsystem { get; set; }
+        public required Subsystem Subsystem { get; set; }
+
+        [Column("shirtSize")]
+        public required ShirtSize? ShirtSize { get; set; }
+
+        [Column("hazingStatus")]
+        public required bool HazingStatus { get; set; } = false;
+
+        [Column("feeStatus")]
+        public required bool FeeStatus { get; set; } = false;
+
+        [Column("gradYear")]
+        public required int GradYear { get; set; }
 
         [Column("createdAt")]
-        public DateTime CreatedAt { get; set; }
+        public required DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         [Column("updatedAt")]
-        public DateTime UpdatedAt { get; set; }
+        public required DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     }
 }

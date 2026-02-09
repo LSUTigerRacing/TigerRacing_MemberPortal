@@ -5,7 +5,7 @@ using Newtonsoft.Json.Converters;
 namespace TRFSAE.MemberPortal.API.Enums;
 
 [JsonConverter(typeof(StringEnumConverter))]
-public enum System
+public enum TRSystem
 {
     Chassis,
     Powertrain,

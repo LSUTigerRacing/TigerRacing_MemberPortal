@@ -3,11 +3,43 @@
  * Note: PostgreSQL requires that all enum members are of type string.
  */
 
-export enum System {
-    Chassis = "Chassis",
-    Powertrain = "Powertrain",
-    Software = "Software",
-    Business = "Business"
+export enum OrderStatus {
+    Pending = "Pending",
+    Denied = "Denied",
+    Approved = "Approved",
+    Delivering = "Delivering",
+    Delivered = "Delivered",
+    Claimed = "Claimed"
+}
+
+export enum ProjectPriority {
+    Low = "Low",
+    Medium = "Medium",
+    High = "High"
+}
+
+export enum ProjectStatus {
+    Draft = "Draft",
+    Active = "Active",
+    OnHold = "On Hold",
+    Completed = "Completed"
+}
+
+export enum Role {
+    Superadmin = "Superadmin",
+    Admin = "Admin",
+    SystemLead = "System Lead",
+    SubsystemLead = "Subsystem Lead",
+    Member = "Member"
+}
+
+export enum ShirtSize {
+    XS = "Extra Small",
+    S = "Small",
+    M = "Medium",
+    L = "Large",
+    XL = "Extra Large",
+    XXL = "Extra Extra Large"
 }
 
 export enum Subsystem {
@@ -34,34 +66,9 @@ export enum Subsystem {
     Finance = "Finance"
 }
 
-export enum ShirtSize {
-    XS = "Extra Small",
-    S = "Small",
-    M = "Medium",
-    L = "Large",
-    XL = "Extra Large",
-    XXL = "Extra Extra Large"
-}
-
-export enum Role {
-    SuperAdmin = "Superadmin",
-    Admin = "Admin",
-    SystemLead = "System Lead",
-    SubsystemLead = "Subsystem Lead",
-    Member = "Member"
-}
-
-export enum ProjectPriority {
-    Low = "Low",
-    Medium = "Medium",
-    High = "High"
-}
-
-export enum OrderStatus {
-    Pending = "pending",
-    Denied = "denied",
-    Approved = "approved",
-    Delivering = "delivering",
-    Delivered = "delivered",
-    Claimed = "claimed"
+export enum System {
+    Chassis = "Chassis",
+    Powertrain = "Powertrain",
+    Software = "Software",
+    Business = "Business"
 }

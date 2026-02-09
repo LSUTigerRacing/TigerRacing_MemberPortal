@@ -1,4 +1,5 @@
 using TRFSAE.MemberPortal.API.DTOs;
+using TRFSAE.MemberPortal.API.Enums;
 using TRFSAE.MemberPortal.API.Interfaces;
 using TRFSAE.MemberPortal.API.Models;
 using Supabase;

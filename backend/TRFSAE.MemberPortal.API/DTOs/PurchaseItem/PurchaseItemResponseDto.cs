@@ -1,5 +1,5 @@
 using System.Text.Json.Serialization;
-using TRFSAE.MemberPortal.API.Models;
+using TRFSAE.MemberPortal.API.Enums;
 namespace TRFSAE.MemberPortal.API.DTOs
 {
     public class PurchaseItemResponseDto
@@ -29,7 +29,7 @@ namespace TRFSAE.MemberPortal.API.DTOs
         public string Supplier { get; set; } = string.Empty;
 
         [JsonPropertyName("status")]
-        public PurchaseStatus PurchaseStatus { get; set; }
+        public OrderStatus OrderStatus { get; set; }
 
         [JsonPropertyName("notes")]
         public string Notes { get; set; } = string.Empty;

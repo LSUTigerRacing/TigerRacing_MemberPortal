@@ -5,6 +5,7 @@ public class CreateUserResponse
 {
     [JsonPropertyName("id")]
     public Guid ProjectId { get; set; }
+
     [JsonPropertyName("location")]
     public string Location { get; set; } = string.Empty;
 }
