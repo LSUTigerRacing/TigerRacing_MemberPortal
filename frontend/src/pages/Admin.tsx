@@ -4,14 +4,14 @@ import GalleryView from "@/components/pages/admin/GalleryView";
 import SearchBar from "@/components/pages/admin/SearchBar";
 import TableView from "../components/pages/admin/TableView";
 
-import type { User } from "@/lib/member-data-format/user";
-
 import { getUsers, deleteUser } from "@/services/userService";
 
 import { System, Subsystem } from "../../../shared/config/enums";
 
+import type { TRAPI } from "../../../shared/typings/api";
+
 export default function Admin () {
-    const [view, setView] = useState<"column" | "gallery">("column");
+    const [view, setView] = useState<"column" | "gallery">("gallery");
     const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
     const [filters, setFilters] = useState({
         systems: [] as System[],
@@ -21,14 +21,15 @@ export default function Admin () {
     const [searchValue, setSearchValue] = useState("");
 
     const [filteredCount, setFilteredCount] = useState(0);
-    const [users, setUsers] = useState<User[]>([]);
-    const [selectedMemberId, setSelectedMemberId] = useState<string | null>(null);
+    const [users, setUsers] = useState<TRAPI.User[]>([]);
+    const [activeUser, setActiveUser] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     const filteredMembers = useMemo(() => {
         // Optimized for O(n) time, minimizes constant reference lookups.
         const searchVal = searchValue.toLowerCase();
+        console.log(searchVal);
         return (
             (
                 filters.systems.length > 0
@@ -39,7 +40,7 @@ export default function Admin () {
                     user.name.toLowerCase().includes(searchVal)
                     && (!filters.systems.length || !filters.systems.includes(user.system))
                     && (!filters.subsystems.length || !filters.subsystems.includes(user.subsystem))
-                    && (!filters.years.length || !filters.years.includes(user.gradDate))
+                    && (!filters.years.length || !filters.years.includes(user.gradYear))
                 ))
                 : users.filter(user => user.name.toLowerCase().includes(searchVal))
         ).sort((a, b) => (
@@ -65,7 +66,7 @@ export default function Admin () {
 
     function handleRowClick (rowId: string) {
         setView("gallery");
-        setSelectedMemberId(rowId);
+        setActiveUser(rowId);
     }
 
     async function fetchMembers () {
@@ -124,17 +125,17 @@ export default function Admin () {
                             ? (
                                 <TableView
                                     users={filteredMembers}
-                                    onDeleteMember={handleDelete}
+                                    deleteUser={handleDelete}
                                     onRowClick={handleRowClick}
                                 />
                             )
                             : (
                                 <GalleryView
                                     users={filteredMembers}
+                                    activeUser={activeUser}
                                     view={view}
                                     setView={setView}
-                                    onDeleteMember={handleDelete}
-                                    selectedMemberId={selectedMemberId}
+                                    deleteUser={handleDelete}
                                 />
                             )
                 }

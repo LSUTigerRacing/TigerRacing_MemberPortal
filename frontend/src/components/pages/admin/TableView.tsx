@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
 import {
     ChevronFirstIcon,
     ChevronLastIcon,
     ChevronLeftIcon,
     ChevronRightIcon
 } from "lucide-react";
+import { useState } from "react";
 import {
     flexRender,
     getCoreRowModel,
@@ -48,19 +48,19 @@ import {
     TooltipTrigger
 } from "@/components/ui/tooltip";
 
-import MemberDropdown from "@/components/pages/admin/MemberDropdown";
+import UserDropdown from "@/components/pages/admin/UserDropdown";
 
-import type { User } from "@/lib/member-data-format/user";
+import type { TRAPI } from "../../../../../shared/typings/api";
 
 interface FilterMemberTableProps {
-    users: User[]
-    onDeleteMember: (userId: string) => void
+    users: TRAPI.User[]
+    deleteUser: (userId: string) => void
     onRowClick?: (rowId: string) => void
 }
 
-export default function MemberTable ({
+export default function TableView ({
     users,
-    onDeleteMember,
+    deleteUser,
     onRowClick
 }: FilterMemberTableProps) {
     const [sorting, setSorting] = useState<SortingState>([]);
@@ -72,7 +72,7 @@ export default function MemberTable ({
         pageSize: 8
     });
 
-    const columns: ColumnDef<User>[] = [
+    const columns: ColumnDef<TRAPI.User>[] = [
         {
             accessorKey: "name",
             header: () => <div className="text-center text-xl">Name</div>,
@@ -103,7 +103,7 @@ export default function MemberTable ({
             enableHiding: false,
             header: () => null,
             cell: ({ row }) => (
-                <MemberDropdown member={row.original} onDeleteMember={onDeleteMember} />
+                <UserDropdown user={row.original} deleteUser={deleteUser} />
             )
         }
     ];

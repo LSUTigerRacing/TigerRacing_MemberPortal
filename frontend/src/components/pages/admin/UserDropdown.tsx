@@ -21,21 +21,20 @@ import {
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 
-import type { User } from "@/lib/member-data-format/user";
+import type { TRAPI } from "../../../../../shared/typings/api.js";
 
-interface MemberDropdownProps {
-    member: User
-    onDeleteMember: (memberId: string) => void
+interface UserDropdownProps {
+    user: TRAPI.User
+    deleteUser: (userId: string) => void
 }
 
-export default function MemberDropdown ({ member, onDeleteMember }: MemberDropdownProps): ReactElement {
+export default function UserDropdown ({ user, deleteUser }: UserDropdownProps): ReactElement {
     const [open, setOpen] = useState(false);
-
     return (
         <>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <Button variant="outline" className="h-8 w-8 p-0 hover:bg-primary hover:text-white hover:border-primary">
+                    <Button variant="ghost" className="h-8 w-8 p-0 hover:bg-primary hover:text-white hover:border-primary">
                         <span className="sr-only">Open menu</span>
                         <MoreHorizontal />
                     </Button>
@@ -55,16 +54,16 @@ export default function MemberDropdown ({ member, onDeleteMember }: MemberDropdo
                 <AlertDialogContent>
                     <AlertDialogHeader>
                         <AlertDialogTitle className="font-manrope h1 text-center">
-                            Are you absolutely sure you want to delete {member.name}?
+                            Are you absolutely sure you want to delete {user.name}?
                         </AlertDialogTitle>
                         <AlertDialogDescription className="font-sora text-gray-600 text-center">
-                            This action cannot be undone. This will permanently delete {member.name}'s
+                            This action cannot be undone. This will permanently delete {user.name}'s
                             account and remove their data from the servers.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter className="items-center font-sora">
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction onClick={() => onDeleteMember(member.id)}>
+                        <AlertDialogAction onClick={() => deleteUser(user.id)}>
                             Continue
                         </AlertDialogAction>
                     </AlertDialogFooter>

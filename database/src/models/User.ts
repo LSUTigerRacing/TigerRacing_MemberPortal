@@ -4,7 +4,7 @@ import { relations } from "drizzle-orm";
 import { Order, OrderReview } from "./Order.js";
 import { ProjectTask, ProjectUser } from "./Project.js";
 
-import { roles, shirtSizes, subsystems } from "./enums.js";
+import { roles, shirtSizes, subsystems, systems } from "./enums.js";
 
 import { Role } from "../../../shared/config/enums.js";
 
@@ -17,12 +17,14 @@ export const User = pgTable("user", t => ({
     /**
      * This is the student's 89 number.
      */
-    studentId: t.integer().notNull(),
+    sid: t.integer().notNull(),
+    system: systems(),
     subsystem: subsystems(),
+
     shirtSize: shirtSizes(),
-    completedHazingForm: t.boolean().notNull().default(false),
-    paidMemberFee: t.boolean().notNull().default(false),
-    gradDate: t.integer().notNull(),
+    hazingStatus: t.boolean().notNull().default(false),
+    feeStatus: t.boolean().notNull().default(false),
+    gradYear: t.integer().notNull(),
 
     createdAt: t.timestamp({ withTimezone: true }).notNull().defaultNow(),
     updatedAt: t.timestamp({ withTimezone: true }).notNull().defaultNow()

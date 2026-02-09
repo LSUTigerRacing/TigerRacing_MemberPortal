@@ -3,14 +3,14 @@ import {
     type SetStateAction
 } from "react";
 
-import type { User } from "@/lib/member-data-format/user";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Separator } from "@/components/ui/separator";
 
 import { config } from "../../../../../shared/config/config";
 import { System, Subsystem } from "../../../../../shared/config/enums";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
+import type { TRAPI } from "../../../../../shared/typings/api";
 
 const CURRENT_YEAR = new Date().getFullYear();
 
@@ -55,7 +55,7 @@ const FilterDropdown = ({
         }));
     };
 
-    const toggleYear = (gradYear: User["gradDate"]) => {
+    const toggleYear = (gradYear: TRAPI.User["gradYear"]) => {
         setFilters(prev => ({
             ...prev,
             years: prev.years.includes(gradYear)
@@ -96,7 +96,7 @@ const FilterDropdown = ({
             <div className="flex justify-between">
                 <span className="text-xs text-muted-foreground">{filteredCount} results</span>
                 <Button
-                    className="bg-red-500 hover:bg-red-600"
+                    variant="destructive"
                     onClick={() => setFilters({ systems: [], subsystems: [], years: [] })}
                     disabled={filters.subsystems.length === 0 && filters.systems.length === 0 && filters.years.length === 0}
                 >

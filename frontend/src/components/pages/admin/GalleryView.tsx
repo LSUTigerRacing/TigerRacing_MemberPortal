@@ -4,11 +4,19 @@ import {
     type Dispatch,
     type SetStateAction
 } from "react";
-import { ListTodoIcon, ArrowLeftFromLine } from "lucide-react";
+import { ArrowLeftFromLine } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle
+} from "@/components/ui/card";
 import {
     Carousel,
     CarouselContent,
@@ -17,178 +25,111 @@ import {
     CarouselPrevious,
     type CarouselApi
 } from "@/components/ui/carousel";
+import { Separator } from "@/components/ui/separator";
 
-import MemberDropdown from "@/components/pages/admin/MemberDropdown";
+import UserDropdown from "@/components/pages/admin/UserDropdown";
 
-import type { User } from "@/lib/member-data-format/user";
+import type { TRAPI } from "../../../../../shared/typings/api";
 
-interface FilterMemberCarouselProps {
-    users: User[]
-    onDeleteMember: (memberId: string) => void
-    selectedMemberId: string | null
+interface GalleryViewProps {
+    users: TRAPI.User[]
+    activeUser: TRAPI.User["id"] | null
+
     view: "column" | "gallery"
     setView: Dispatch<SetStateAction<"column" | "gallery">>
+
+    deleteUser: (id: TRAPI.User["id"]) => void
 }
 
-export default function CarouselDemo ({
+export default function GalleryView ({
     users,
-    onDeleteMember,
-    selectedMemberId,
-    view,
-    setView
-}: FilterMemberCarouselProps) {
-    const [carouselApi, setCarouselApi] = useState<CarouselApi>();
-
+    activeUser,
+    setView,
+    deleteUser
+}: GalleryViewProps) {
+    const [carouselAPI, setCarouselAPI] = useState<CarouselApi>();
     useEffect(() => {
-        if (!carouselApi || !selectedMemberId) return;
+        if (!carouselAPI || !activeUser) return;
 
-        const selectedIndex = users.findIndex(user => user.id === selectedMemberId);
-
-        if (selectedIndex !== -1) {
-            carouselApi.scrollTo(selectedIndex, true); // true stopped it from doing the crazy scroll thing
-        }
-    }, [carouselApi, selectedMemberId, users]);
+        const i = users.findIndex(user => user.id === activeUser);
+        if (i !== -1) carouselAPI.scrollTo(i, true);
+    }, [carouselAPI, activeUser, users]);
 
     return (
-        <Carousel
-            className="max-h-screen max-w-3xl mx-auto flex flex-column justify-self-center-safe mt-6 p-0"
-            setApi={setCarouselApi}
-        >
+        <div className="flex flex-col justify-center mt-3 sm:flex-row">
             <Button
                 size="icon"
                 variant="ghost"
                 className="text-muted-foreground w-10 h-10 rounded-full shadow-none"
+                onClick={() => setView("column")}
                 aria-label="Back to column view"
-                onClick={() =>
-                    view === "gallery" ? setView("column") : setView("gallery")}
             >
-                <ArrowLeftFromLine className="scale-115 text-red-500" aria-hidden />
+                <ArrowLeftFromLine className="scale-115 text-red-500" />
             </Button>
-            <CarouselContent>
-                {users.map(user => (
-                    <CarouselItem key={user.id}>
-                        <div className="flex justify-between p-1 max-w-full gap-2">
-                            <Card className="w-full h-full bg-background rounded-2xl">
-                                <CardContent className="flex flex-col w-full p-5">
-                                    {/* Avatar and Member Info Section */}
-                                    <div className="flex mb-4">
-                                        {/* Avatar Section */}
-                                        <div className="flex max-h-full text-4xl">
-                                            <Avatar className="h-15 w-15">
-                                                <AvatarImage
-                                                    src="https://github.com/shadcn.png"
-                                                    alt="@shadcn"
-                                                />
-                                                <AvatarFallback>CN</AvatarFallback>
-                                            </Avatar>
+            <Carousel className="w-3/4 xl:w-1/2" setApi={setCarouselAPI}>
+                <CarouselContent>
+                    {users.map((user, i) => (
+                        <CarouselItem key={i}>
+                            <div className="p-2">
+                                <Card>
+                                    <CardHeader>
+                                        <div className="flex flex-col items-center justify-between xl:flex-row xl:items-start">
+                                            <div className="flex flex-col lg:flex-row items-center">
+                                                <div className="aspect-square me-4">
+                                                    <Avatar className="h-32 w-32">
+                                                        <AvatarImage
+                                                            src="https://github.com/shadcn.png"
+                                                            alt="@shadcn"
+                                                        />
+                                                        <AvatarFallback>CM</AvatarFallback>
+                                                    </Avatar>
+                                                </div>
+                                                <div>
+                                                    <CardTitle className="text-2xl">{user.name}</CardTitle>
+                                                    <CardDescription className="flex flex-col items-center mt-4 xl:mt-1 xl:flex-row xl:items-start font-manrope gap-1">
+                                                        <Badge className="bg-accent text-black">Class of {user.gradYear}</Badge>
+                                                        <Badge className="bg-accent text-black">{user.system}</Badge>
+                                                        <Badge className="bg-accent text-black">{user.subsystem}</Badge>
+                                                    </CardDescription>
+                                                </div>
+                                            </div>
+                                            <UserDropdown user={user} deleteUser={deleteUser} />
                                         </div>
-
-                                        {/* Container for Name and Details */}
-                                        <div className="flex flex-col">
-                                            {/* Container for Name and More Icon */}
-                                            <div className="flex flex-row gap-3">
-                                                <div className="ml-4 font-manrope font-semibold text-2xl text-foreground pb-2">
-                                                    {user.name}
-                                                </div>
-                                                <MemberDropdown member={user} onDeleteMember={onDeleteMember} />
+                                    </CardHeader>
+                                    <CardContent>
+                                        <div className="flex flex-col xl:grid xl:grid-cols-3 gap-3">
+                                            <span className="text-center">Info</span>
+                                            <span className="text-center">Projects</span>
+                                            <span className="text-center">Other</span>
+                                            <Separator className="my-2" />
+                                            <Separator className="my-2" />
+                                            <Separator className="my-2" />
+                                            <div className="flex flex-col gap-2">
+                                                <Badge className="bg-accent text-black"><strong>Joined:</strong> {new Date(user.createdAt).toLocaleDateString()}</Badge>
+                                                <Badge className="bg-accent text-black"><strong>Hazing Form:</strong> {user.hazingStatus ? "Completed" : "Incomplete"}</Badge>
+                                                <Badge className="bg-accent text-black"><strong>Fees:</strong> {user.feeStatus ? "Paid" : "Unpaid"}</Badge>
+                                                <Badge className="bg-accent text-black"><strong>Shirt Size:</strong> {user.shirtSize}</Badge>
                                             </div>
-
-                                            {/* Details Section */}
-                                            <div className="flex gap-20">
-                                                <div className="ml-4 font-sora text-gray-600">
-                                                    {user.email}
-                                                </div>
-                                                <div className="ml-4 font-sora text-gray-600">
-                                                    {user.system}
-                                                </div>
-                                                <div className="ml-4 font-sora text-gray-600">
-                                                    {user.gradDate}
-                                                </div>
+                                            <div className="flex flex-col gap-2 items-center">
+                                                <span className="text-xs">Coming Soon!</span>
                                             </div>
-                                        </div>
-                                    </div>
-
-                                    {/* Three Column Info Section */}
-                                    <div className="flex gap-x-20 w-full mb-4">
-                                        {/* Info Section */}
-                                        <div className="flex flex-col flex-1">
-                                            <div className="border-b border-black inline-block pt-4 font-manrope text-center font-semibold text-2xl text-foreground p-2">
-                                                Info
-                                            </div>
-                                            <div className="p-3 space-y-2 flex flex-wrap justify-center">
-                                                <Button className="px-3 py-2 w-[200px] h-fit font-sora rounded-full bg-primary text-white whitespace-break-spaces wrap-break-word">
-                                                    Subsystem: {user.subsystem}
-                                                </Button>
-                                                <Button className="px-3 w-[200px] py-2 font-sora rounded-full bg-primary text-white">
-                                                    Student ID: {user.sid}
-                                                </Button>
-                                                <Button className="px-3 w-[200px] py-2 font-sora rounded-full bg-primary text-white">
-                                                    Hazing: {user.hazingStatus}
-                                                </Button>
-                                                <Button className="px-3 w-[200px] py-2 font-sora rounded-full bg-primary text-white">
-                                                    Fees: {user.feeStatus}
-                                                </Button>
-                                                <Button className="px-3 w-[200px] py-2 font-sora rounded-full bg-primary text-white">
-                                                    T-Shirt Size: {user.shirtSize}
-                                                </Button>
-                                                <Button className="px-3 w-[200px] py-2 font-sora rounded-full bg-primary text-white">
-                                                    Account Created: {user.createdAt}
-                                                </Button>
-                                                <Button className="px-3 w-[200px] py-2 font-sora rounded-full bg-primary text-white">
-                                                    Account Last Updated: {user.updatedAt}
-                                                </Button>
+                                            <div className="flex flex-col gap-2">
+                                                <span className="text-xs">Within every relationship there is the oppressed and the oppressor. The oppressor is that whom "others" others.</span>
                                             </div>
                                         </div>
-
-                                        {/* Tasks Section */}
-                                        <div className="flex flex-col flex-1">
-                                            {/* Tasks Header */}
-                                            <div className="border-b border-black inline-block pt-4 font-manrope text-center font-semibold text-2xl text-foreground p-2">
-                                                Tasks
-                                            </div>
-
-                                            {/* Tasks Information */}
-                                            <div className="flex p-2 max-w-full gap-4">
-                                                <div className="w-4 h-4">
-                                                    <ListTodoIcon className="w-5 h-5" />
-                                                </div>
-                                                <div className="text-sora text-sm">
-                                                    Create ToDo List on Saturday, October 32nd
-                                                </div>
-                                            </div>
-
-                                            <div className="flex p-2 max-w-full gap-4">
-                                                <div className="w-4 h-4">
-                                                    <ListTodoIcon className="w-5 h-5" />
-                                                </div>
-                                                <div className="text-sora text-sm">
-                                                    Create member portal
-                                                </div>
-                                            </div>
-
-                                            <div className="flex p-2 max-w-full gap-4">
-                                                <div className="w-4 h-4">
-                                                    <ListTodoIcon className="w-5 h-5" />
-                                                </div>
-                                                <div className="text-sora text-sm">Create thingy</div>
-                                            </div>
-                                        </div>
-
-                                        {/* Other Section */}
-                                        <div className="flex flex-col flex-1">
-                                            <div className="border-b border-black pt-4 font-manrope text-center font-semibold text-2xl text-foreground p-2">
-                                                Other
-                                            </div>
-                                        </div>
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        </div>
-                    </CarouselItem>
-                ))}
-            </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
-        </Carousel>
+                                    </CardContent>
+                                    <Separator />
+                                    <CardFooter>
+                                        <span className="text-xs text-gray-400">Last updated: {new Date(user.updatedAt).toLocaleDateString()}</span>
+                                    </CardFooter>
+                                </Card>
+                            </div>
+                        </CarouselItem>
+                    ))}
+                </CarouselContent>
+                <CarouselPrevious />
+                <CarouselNext />
+            </Carousel>
+        </div>
     );
 }

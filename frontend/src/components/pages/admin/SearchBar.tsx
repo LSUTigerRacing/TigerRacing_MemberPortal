@@ -51,7 +51,6 @@ export interface SearchBarProps {
 export default function SearchBar (props: SearchBarProps): ReactElement<SearchBarProps> {
     const id = useId();
 
-    const [searchValue, setSearchValue] = useState("");
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -101,9 +100,9 @@ export default function SearchBar (props: SearchBarProps): ReactElement<SearchBa
                             className="peer w-full max-w-xl ps-8 pe-2"
                             placeholder="Search for members..."
                             type="search"
-                            value={searchValue}
-                            onChange={e => setSearchValue(e.target.value)}
-                            onFocus={() => searchValue && setIsDropdownOpen(true)}
+                            value={props.searchValue}
+                            onChange={e => props.setSearchValue(e.target.value)}
+                            onFocus={() => props.searchValue && setIsDropdownOpen(true)}
                             autoComplete="off"
                         />
                         <div className="text-muted-foreground/80 pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-2 peer-disabled:opacity-50">

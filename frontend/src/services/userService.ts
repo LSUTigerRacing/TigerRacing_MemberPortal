@@ -1,5 +1,6 @@
 import axios, { AxiosError } from "axios";
-import type { User, UserSearchDto, UserUpdateDto } from "@/lib/member-data-format/user.ts";
+
+import type { TRAPI } from "../../../shared/typings/api";
 
 const api = axios.create({
     baseURL: "/api",
@@ -10,9 +11,9 @@ const api = axios.create({
     withCredentials: true
 });
 
-export const getUsers = async (searchDto?: UserSearchDto): Promise<User[] | undefined> => {
+export const getUsers = async (searchDto?: TRAPI.FetchUser): Promise<TRAPI.User[] | undefined> => {
     try {
-        const response = await api.get<User[]>("/user", {
+        const response = await api.get<TRAPI.User[]>("/user", {
             params: searchDto
         });
         return response.data;
@@ -21,18 +22,18 @@ export const getUsers = async (searchDto?: UserSearchDto): Promise<User[] | unde
     }
 };
 
-export const getUserById = async (id: string): Promise<User | undefined> => {
+export const getUserById = async (id: string): Promise<TRAPI.User | undefined> => {
     try {
-        const response = await api.get<User>(`/user/${id}`);
+        const response = await api.get<TRAPI.User>(`/user/${id}`);
         return response.data;
     } catch (error) {
         handleApiError(error);
     }
 };
 
-export const updateUser = async (id: string, userData: UserUpdateDto): Promise<User | undefined> => {
+export const updateUser = async (id: string, userData: TRAPI.UpdateUser): Promise<TRAPI.User | undefined> => {
     try {
-        const response = await api.patch<User>(`/user/${id}`, userData);
+        const response = await api.patch<TRAPI.User>(`/user/${id}`, userData);
         return response.data;
     } catch (error) {
         handleApiError(error);
