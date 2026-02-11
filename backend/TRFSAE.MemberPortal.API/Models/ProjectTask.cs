@@ -11,29 +11,29 @@ public class ProjectTaskModel : BaseModel
     public Guid Id { get; set; }
 
     [Column("projectId")]
-    public required Guid ProjectId { get; set; }
+    public Guid ProjectId { get; set; }
 
     [Column("authorId")]
-    public required Guid AuthorId { get; set; }
+    public Guid AuthorId { get; set; }
 
     [Column("assigneeId")]
-    public required Guid AssigneeId { get; set; }
+    public Guid AssigneeId { get; set; }
 
-    [Column("name")]
-    public string Name { get; set; } = "Untitled";
+    [Column("title")]
+    public string Title { get; set; } = "Untitled";
 
     [Column("description")]
     public string? Description { get; set; }
 
     [Column("status")]
-    public required bool Status { get; set; } = false;
+    public bool Status { get; set; } = false;
 
     [Column("deadline")]
-    public required DateTime Deadline { get; set; }
+    public DateTime Deadline { get; set; }
 
     [Column("createdAt")]
-    public required DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     [Column("updatedAt")]
-    public required DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 }

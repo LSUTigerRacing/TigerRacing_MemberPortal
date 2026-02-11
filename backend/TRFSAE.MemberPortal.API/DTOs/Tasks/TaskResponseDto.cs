@@ -5,10 +5,10 @@ namespace TRFSAE.MemberPortal.API.DTOs;
 public class TaskResponseDto
 {
     [JsonPropertyName("id")]
-    public Guid TaskId { get; set; }
+    public Guid Id { get; set; }
 
-    [JsonPropertyName("name")]
-    public required string TaskName { get; set; }
+    [JsonPropertyName("title")]
+    public required string Title { get; set; }
 
     [JsonPropertyName("assigner")]
     public string? Assigner { get; set; }

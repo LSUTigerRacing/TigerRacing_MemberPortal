@@ -17,8 +17,8 @@ public class TaskService : ITaskService
     public async Task<TaskResponseDto> GetTasksByIdAsync(Guid id)
     {
         var response = await _supabaseClient
-        .From<TaskModel>()
-        .Where(x => x.TaskId == id)
+        .From<ProjectTaskModel>()
+        .Where(x => x.Id == id)
         .Single();
 
         if (response == null)
@@ -28,8 +28,8 @@ public class TaskService : ITaskService
 
         var taskResponse = new TaskResponseDto
         {
-            TaskId = response.TaskId,
-            TaskName = response.TaskName
+            Id = response.Id,
+            Title = response.Title
         };
 
         return taskResponse;
@@ -39,7 +39,7 @@ public class TaskService : ITaskService
     public async Task<List<TaskResponseDto>> GetAllTasksAsync(TaskSearchDto searchDto)
     {
         var response = await _supabaseClient
-        .From<TaskModel>()
+        .From<ProjectTaskModel>()
         .Get() ?? throw new Exception("No tasks found");
 
         return new List<TaskResponseDto>();
@@ -48,23 +48,22 @@ public class TaskService : ITaskService
 
     public async Task<TaskResponseDto> CreateTaskAsync(CreateTaskDto createDto)
     {
-        var newTask = new TaskModel
+        var newTask = new ProjectTaskModel
         {
-            TaskId = Guid.NewGuid(),
-            TaskName = createDto.TaskName,
-            CompletionStatus = createDto.CompletionStatus,
-            DueDate = createDto.DueDate
+            Id = Guid.NewGuid(),
+            Title = createDto.Title,
+            Deadline = createDto.Deadline
         };
 
         var response = await _supabaseClient
-        .From<TaskModel>()
+        .From<ProjectTaskModel>()
         .Insert(newTask);
 
 
         return new TaskResponseDto
         {
-            TaskId = newTask.TaskId,
-            TaskName = newTask.TaskName
+            Id = newTask.Id,
+            Title = newTask.Title
         };
     }
 }
