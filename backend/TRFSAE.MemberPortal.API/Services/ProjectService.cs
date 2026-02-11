@@ -22,7 +22,7 @@ public class ProjectService : IProjectService
         if (!string.IsNullOrEmpty(search))
         {
             query = (Supabase.Interfaces.ISupabaseTable<ProjectModel, Supabase.Realtime.RealtimeChannel>)
-            query.Where(p => p.Name == search);
+            query.Where(p => p.Title == search);
         }
 
         if (priority != null)
@@ -46,7 +46,7 @@ public class ProjectService : IProjectService
         var projectSummaries = response.Models.Select(p => new ProjectSummaryDto
         {
             ProjectId = p.Id,
-            Name = p.Name,
+            Title = p.Title,
             Deadline = p.Deadline,
             Priority = p.Priority
         });
@@ -71,7 +71,7 @@ public class ProjectService : IProjectService
         {
             Id = project.Id,
             AuthorId = project.AuthorId,
-            Name = project.Name,
+            Title = project.Title,
             Description = project.Description,
             Subsystem = project.Subsystem,
             Priority = project.Priority,
@@ -92,7 +92,7 @@ public class ProjectService : IProjectService
         {
             Id = projectId,
             AuthorId = new Guid("d168954f-f68c-479a-9740-a9034cb44edb"), // temp until JWT is setup
-            Name = createDto.Name,
+            Title = createDto.Title,
             Description = createDto.Description,
             Subsystem = createDto.Subsystem,
             Priority = createDto.Priority,
@@ -135,9 +135,9 @@ public class ProjectService : IProjectService
                 return false;
             }
 
-            if (!string.IsNullOrEmpty(updateDto.Name))
+            if (!string.IsNullOrEmpty(updateDto.Title))
             {
-                model.Name = updateDto.Name;
+                model.Title = updateDto.Title;
             }
             if (!string.IsNullOrEmpty(updateDto.Description))
             {
@@ -178,14 +178,14 @@ public class ProjectService : IProjectService
     {
         try
         {
-            var userProject = new UserProjectModel
+            var userProject = new ProjectUserModel
             {
                 UserId = userId,
                 ProjectId = projectId
             };
 
             var response = await _supabaseClient
-                .From<UserProjectModel>()
+                .From<ProjectUserModel>()
                 .Insert(userProject);
 
             return true;
@@ -202,7 +202,7 @@ public class ProjectService : IProjectService
         try
         {
             await _supabaseClient
-                .From<UserProjectModel>()
+                .From<ProjectUserModel>()
                 .Where(pm => pm.UserId == userId && pm.ProjectId == projectId)
                 .Delete();
             return true;
@@ -217,7 +217,7 @@ public class ProjectService : IProjectService
     public async Task<IEnumerable<Guid>> GetAllProjectUsersAsync(Guid projectId)
     {
         var response = await _supabaseClient
-            .From<UserProjectModel>()
+            .From<ProjectUserModel>()
             .Select("userId")
             .Where(up => up.ProjectId == projectId)
             .Get();

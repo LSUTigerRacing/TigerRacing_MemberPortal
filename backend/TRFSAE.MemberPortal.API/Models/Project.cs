@@ -12,29 +12,29 @@ public class ProjectModel : BaseModel
     public Guid Id { get; set; }
 
     [Column("authorId")]
-    public required Guid AuthorId { get; set; }
+    public Guid AuthorId { get; set; }
 
-    [Column("name")]
-    public required string Name { get; set; } = "Untitled";
+    [Column("title")]
+    public string Title { get; set; } = "Untitled";
 
     [Column("description")]
     public string? Description { get; set; }
 
     [Column("subsystem")]
-    public required Subsystem Subsystem { get; set; }
+    public Subsystem Subsystem { get; set; }
 
     [Column("priority")]
-    public required ProjectPriority Priority { get; set; }
+    public ProjectPriority Priority { get; set; }
 
     [Column("startDate")]
-    public required DateTime StartDate { get; set; }
+    public DateTime StartDate { get; set; }
 
     [Column("deadline")]
-    public required DateTime Deadline { get; set; }
+    public DateTime Deadline { get; set; }
 
     [Column("createdAt")]
-    public required DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     [Column("updatedAt")]
-    public required DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 }

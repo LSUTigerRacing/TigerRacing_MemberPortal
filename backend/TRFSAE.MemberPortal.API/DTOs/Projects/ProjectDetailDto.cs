@@ -11,8 +11,8 @@ public class ProjectDetailDto
     [JsonPropertyName("authorId")]
     public Guid AuthorId { get; set; }
 
-    [JsonPropertyName("name")]
-    public string Name { get; set; } = "Untitled Project";
+    [JsonPropertyName("title")]
+    public string Title { get; set; } = "Untitled";
 
     [JsonPropertyName("description")]
     public string Description { get; set; } = string.Empty;

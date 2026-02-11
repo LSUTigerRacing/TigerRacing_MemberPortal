@@ -8,8 +8,8 @@ public class ProjectSummaryDto
     [JsonPropertyName("id")]
     public Guid ProjectId { get; set; }
 
-    [JsonPropertyName("name")]
-    public string Name { get; set; } = null!;
+    [JsonPropertyName("title")]
+    public string Title { get; set; } = null!;
 
     [JsonPropertyName("due_date")]
     public DateTime Deadline { get; set; }
