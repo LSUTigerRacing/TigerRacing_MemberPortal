@@ -24,7 +24,7 @@ public class TaskService : ITaskService
         if (response == null)
         {
             throw new Exception("Task not found");
-        }   
+        }
 
         var taskResponse = new TaskResponseDto
         {

@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore.Query;
 using TRFSAE.MemberPortal.API.Enums;
 
 namespace TRFSAE.MemberPortal.API.DTOs;
+
 public class UserSearchDto
 {
     public string? Name { get; set; }

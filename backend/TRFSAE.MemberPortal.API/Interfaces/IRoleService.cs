@@ -1,7 +1,7 @@
 using TRFSAE.MemberPortal.API.Models;
+using TRFSAE.MemberPortal.API.Enums;
 
 namespace TRFSAE.MemberPortal.API.Interfaces;
-using TRFSAE.MemberPortal.API.Enums;
 
 public interface IRoleService
 {

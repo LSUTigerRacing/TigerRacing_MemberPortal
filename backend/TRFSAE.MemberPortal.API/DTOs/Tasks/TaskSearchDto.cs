@@ -8,5 +8,4 @@ public class TaskSearchDto
     public string? TaskName { get; set; }
     public bool CompletionStatus { get; set; }
     public DateTime DueDate { get; set; }
-
 }

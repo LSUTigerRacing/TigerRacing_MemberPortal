@@ -2,6 +2,7 @@ using System.Text.Json.Serialization;
 using TRFSAE.MemberPortal.API.Enums;
 
 namespace TRFSAE.MemberPortal.API.DTOs;
+
 public class UserResponseDto
 {
     [JsonPropertyName("id")]
@@ -41,5 +42,5 @@ public class UserResponseDto
     public DateTime AccountLastUpdatedDate { get; set; }
 
     [JsonPropertyName("role")]
-    public Role? Role {get;set; }
+    public Role? Role { get; set; }
 }

@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 using TRFSAE.MemberPortal.API.Enums;
 
 namespace TRFSAE.MemberPortal.API.DTOs;
+
 public class UserUpdateDto
 {
     [JsonPropertyName("name")]

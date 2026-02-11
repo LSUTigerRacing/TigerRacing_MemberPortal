@@ -1,6 +1,8 @@
 namespace TRFSAE.MemberPortal.API.DTOs;
-public class UserRoleDto {
+
+public class UserRoleDto
+{
     public Guid RoleID { get; set; }
-    public Guid UserID {get; set; }
+    public Guid UserID { get; set; }
     public DateTime AssignedTime { get; set; }
 }

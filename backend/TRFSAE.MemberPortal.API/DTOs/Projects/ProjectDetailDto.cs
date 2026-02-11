@@ -25,7 +25,7 @@ public class ProjectDetailDto
 
     [JsonPropertyName("startDate")]
     public DateTime StartDate { get; set; }
-    
+
     [JsonPropertyName("deadline")]
     public DateTime Deadline { get; set; }
 

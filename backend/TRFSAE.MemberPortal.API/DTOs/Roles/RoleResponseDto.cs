@@ -11,4 +11,3 @@ public class RoleResponseDto
     [JsonPropertyName("permissions")]
     public Dictionary<string, object>? Permissions { get; set; }
 }
-

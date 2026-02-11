@@ -1,7 +1,7 @@
 using System.Text.Json;
 using TRFSAE.MemberPortal.API.DTOs;
-namespace TRFSAE.MemberPortal.API.Interfaces;
 
+namespace TRFSAE.MemberPortal.API.Interfaces;
 
 public interface ITaskService
 {

@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+
 namespace TRFSAE.MemberPortal.API.DTOs;
 
 public class TaskResponseDto

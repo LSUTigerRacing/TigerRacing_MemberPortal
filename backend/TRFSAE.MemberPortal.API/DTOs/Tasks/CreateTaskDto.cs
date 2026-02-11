@@ -6,5 +6,4 @@ public class CreateTaskDto
     public bool CompletionStatus { get; set; }
     public DateTime DueDate { get; set; }
     public DateTime StartDate { get; set; }
-
 }

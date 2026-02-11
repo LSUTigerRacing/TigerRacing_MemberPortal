@@ -133,7 +133,7 @@ public class ProjectService : IProjectService
             {
                 Console.WriteLine("Project not found");
                 return false;
-            }    
+            }
 
             if (!string.IsNullOrEmpty(updateDto.Name))
             {

@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using TRFSAE.MemberPortal.API.DTOs;
 using TRFSAE.MemberPortal.API.Interfaces;
 
+namespace TRFSAE.MemberPortal.API.Controllers;
+
 [ApiController]
 [Route("api/projects/tasks")]
 
