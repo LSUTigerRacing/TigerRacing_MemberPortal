@@ -230,6 +230,7 @@ export namespace TRAPI {
         updatedAt: string
     }
 
+    // eslint-disable-next-line @stylistic/type-generic-spacing
     type ProjectUser = Pick<User, "id" | "name" | "email" /* | "avatar" */>;
 
     interface DashboardInfo {
