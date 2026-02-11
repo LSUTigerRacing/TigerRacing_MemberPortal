@@ -12,7 +12,7 @@ public class UserResponseDto
     public string Name { get; set; } = string.Empty;
 
     [JsonPropertyName("email")]
-    public string PersonalEmail { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
 
     [JsonPropertyName("sid")]
     public int StudentId { get; set; }
@@ -30,7 +30,7 @@ public class UserResponseDto
     public ShirtSize? ShirtSize { get; set; }
 
     [JsonPropertyName("system")]
-    public string? System { get; set; }
+    public TRSystem? System { get; set; }
 
     [JsonPropertyName("subsystem")]
     public Subsystem? Subsystem { get; set; }

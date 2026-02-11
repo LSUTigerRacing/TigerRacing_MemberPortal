@@ -8,41 +8,41 @@ namespace TRFSAE.MemberPortal.API.Models;
 public class UserModel : BaseModel
 {
     [PrimaryKey("id")]
-    public required Guid Id { get; set; }
+    public  Guid Id { get; set; }
 
     [Column("name")]
-    public required string Name { get; set; }
+    public string Name { get; set; } = null!;
 
     [Column("email")]
-    public required string Email { get; set; }
+    public string Email { get; set; } = null!;
 
     [Column("role")]
-    public required Role Role { get; set; } = Role.Member;
+    public Role Role { get; set; } = Role.Member;
 
     [Column("sid")]
-    public required int StudentId { get; set; }
+    public int StudentId { get; set; }
 
     [Column("system")]
-    public required TRSystem System { get; set; }
+    public TRSystem System { get; set; }
 
     [Column("subsystem")]
-    public required Subsystem Subsystem { get; set; }
+    public Subsystem Subsystem { get; set; }
 
     [Column("shirtSize")]
-    public required ShirtSize? ShirtSize { get; set; }
+    public ShirtSize? ShirtSize { get; set; }
 
     [Column("hazingStatus")]
-    public required bool HazingStatus { get; set; } = false;
+    public bool HazingStatus { get; set; } = false;
 
     [Column("feeStatus")]
-    public required bool FeeStatus { get; set; } = false;
+    public bool FeeStatus { get; set; } = false;
 
     [Column("gradYear")]
-    public required int GradYear { get; set; }
+    public int GradYear { get; set; }
 
     [Column("createdAt")]
-    public required DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     [Column("updatedAt")]
-    public required DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 }

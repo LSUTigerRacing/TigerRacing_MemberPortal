@@ -14,8 +14,8 @@ public class UserDetailDto
     [JsonPropertyName("email")]
     public string Email { get; set; } = null!;
 
-    [JsonPropertyName("gradDate")]
-    public int? GradDate { get; set; }
+    [JsonPropertyName("gradYear")]
+    public int GradYear { get; set; }
 
     [JsonPropertyName("subsystem")]
     public Subsystem? Subsystem { get; set; }

@@ -22,15 +22,15 @@ public class UserUpdateDto
     public bool? FeeStatus { get; set; }
 
     [JsonPropertyName("gradYear")]
-    public int GradYear { get; set; }
+    public int? GradYear { get; set; }
 
     [JsonPropertyName("shirtSize")]
     public ShirtSize? ShirtSize { get; set; }
 
     [JsonPropertyName("system")]
-    public TRSystem System { get; set; }
+    public TRSystem? System { get; set; }
 
-    public Subsystem Subsystem { get; set; }
+    public Subsystem? Subsystem { get; set; }
 
     [JsonPropertyName("name")]
     public Role? Role { get; set; }

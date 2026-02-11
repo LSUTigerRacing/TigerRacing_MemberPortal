@@ -23,9 +23,9 @@ public class UserService : IUserService
         int pageNumber,
         int pageSize,
         string? search,
-        bool? completedHazingForm,
-        bool? paidMemberFee,
-        int? gradDate,
+        bool? hazingStatus,
+        bool? feeStatus,
+        int? gradYear,
         ShirtSize? shirtSize,
         Subsystem? subsystem
     )
@@ -38,22 +38,22 @@ public class UserService : IUserService
             query.Where(u => u.Name == search);
         }
 
-        if (completedHazingForm != null)
+        if (hazingStatus != null)
         {
             query = (Supabase.Interfaces.ISupabaseTable<UserModel, Supabase.Realtime.RealtimeChannel>)
-            query.Where(u => u.CompletedHazingForm == completedHazingForm);
+            query.Where(u => u.HazingStatus == hazingStatus);
         }
 
-        if (paidMemberFee != null)
+        if (feeStatus != null)
         {
             query = (Supabase.Interfaces.ISupabaseTable<UserModel, Supabase.Realtime.RealtimeChannel>)
-            query.Where(u => u.PaidMemberFee == paidMemberFee);
+            query.Where(u => u.FeeStatus == feeStatus);
         }
 
-        if (gradDate != null)
+        if (gradYear != null)
         {
             query = (Supabase.Interfaces.ISupabaseTable<UserModel, Supabase.Realtime.RealtimeChannel>)
-            query.Where(u => u.GradDate == gradDate);
+            query.Where(u => u.GradYear == gradYear);
         }
 
         if (shirtSize != null)
@@ -79,7 +79,7 @@ public class UserService : IUserService
             Id = u.Id,
             Name = u.Name,
             Email = u.Email,
-            GradDate = u.GradDate,
+            GradYear = u.GradYear,
             Subsystem = u.Subsystem
         });
 
@@ -104,7 +104,7 @@ public class UserService : IUserService
             Id = response.Id,
             Name = response.Name,
             Email = response.Email,
-            GradDate = response.GradDate,
+            GradYear = response.GradYear,
             Subsystem = response.Subsystem
         };
 
@@ -122,9 +122,9 @@ public class UserService : IUserService
             Email = createDto.Email,
             Role = createDto.Role,
             StudentId = createDto.StudentId,
-            CompletedHazingForm = createDto.CompletedHazingForm,
-            PaidMemberFee = createDto.PaidMemberFee,
-            GradDate = createDto.GradDate,
+            HazingStatus = createDto.HazingStatus,
+            FeeStatus = createDto.FeeStatus,
+            GradYear = createDto.GradYear,
             ShirtSize = createDto.ShirtSize,
             Subsystem = createDto.Subsystem,
             CreatedAt = DateTime.UtcNow,
@@ -168,9 +168,9 @@ public class UserService : IUserService
             {
                 model.Name = updateDto.Name;
             }
-            if (!string.IsNullOrEmpty(updateDto.LSUEmail))
+            if (!string.IsNullOrEmpty(updateDto.Email))
             {
-                model.Email = updateDto.LSUEmail;
+                model.Email = updateDto.Email;
             }
             if (updateDto.Role.HasValue)
             {
@@ -182,15 +182,15 @@ public class UserService : IUserService
             }
             if (updateDto.HazingStatus.HasValue)
             {
-                model.CompletedHazingForm = updateDto.HazingStatus.Value;
+                model.HazingStatus= updateDto.HazingStatus.Value;
             }
             if (updateDto.FeeStatus.HasValue)
             {
-                model.PaidMemberFee = updateDto.FeeStatus.Value;
+                model.FeeStatus = updateDto.FeeStatus.Value;
             }
-            if (updateDto.GradDate.HasValue)
+            if (updateDto.GradYear.HasValue)
             {
-                model.GradDate = updateDto.GradDate.Value;
+                model.GradYear = updateDto.GradYear.Value;
             }
             if (updateDto.ShirtSize.HasValue)
             {
@@ -202,23 +202,23 @@ public class UserService : IUserService
             }
             model.UpdatedAt = DateTime.UtcNow;
 
-            var responseTwo = await _supabaseClient
+            var updateResponse = await _supabaseClient
                 .From<UserModel>()
                 .Where(u => u.Id == userID)
                 .Update(model);
 
-            var updatedUser = responseTwo.Models.FirstOrDefault();
+            var updatedUser = updateResponse.Models.FirstOrDefault();
 
             return new UserResponseDto
             {
                 UserId = userID,
                 Name = updatedUser.Name,
-                LSUEmail = updatedUser.Email,
+                Email = updatedUser.Email,
                 Role = updatedUser.Role,
                 StudentId = updatedUser.StudentId,
-                HazingStatus = updatedUser.CompletedHazingForm,
-                FeeStatus = updatedUser.PaidMemberFee,
-                GradDate = updatedUser.GradDate,
+                HazingStatus = updatedUser.HazingStatus,
+                FeeStatus = updatedUser.FeeStatus,
+                GradYear = updatedUser.GradYear,
                 ShirtSize = updatedUser.ShirtSize,
                 Subsystem = updatedUser.Subsystem
 
