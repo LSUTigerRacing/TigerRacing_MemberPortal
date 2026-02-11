@@ -6,7 +6,7 @@ using Supabase;
 namespace TRFSAE.MemberPortal.API.Controllers
 {
     [ApiController]
-    [Route("api/purchase-item")]
+    [Route("api/orders")]
     public class PurchaseItemController : ControllerBase
     {
         private readonly IPurchaseItemService _purchaseItemService;
@@ -16,21 +16,21 @@ namespace TRFSAE.MemberPortal.API.Controllers
             _purchaseItemService = purchaseItemService;
         }
 
-        [HttpGet]
+        [HttpGet("list")]
         public async Task<IActionResult> GetAllPurchaseItemsAsync([FromQuery] PurchaseItemSearchDto? dto)
         {
             var result = await _purchaseItemService.GetAllPurchaseItemsAsync(dto);
             return Ok(result);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetPurchaseItemByIDAsync(Guid id)
+        [HttpGet("fetch")]
+        public async Task<IActionResult> GetPurchaseItemByIDAsync([FromQuery] Guid id)
         {
             var item = await _purchaseItemService.GetPurchaseItemByIDAsync(id);
             return item is null ? NotFound() : Ok(item);
         }
 
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<IActionResult> CreatePurchaseItemAsync(PurchaseItemCreateDto dto)
         {
             var created = await _purchaseItemService.CreatePurchaseItemAsync(dto);
@@ -38,15 +38,15 @@ namespace TRFSAE.MemberPortal.API.Controllers
         }
 
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdatePurchaseItemByIDAsync(Guid id, PurchaseItemUpdateDto dto)
+        [HttpPut("update")]
+        public async Task<IActionResult> UpdatePurchaseItemByIDAsync([FromQuery] Guid id, PurchaseItemUpdateDto dto)
         {
             var updated = await _purchaseItemService.UpdatePurchaseItemByIDAsync(id, dto);
             return updated is null ? NotFound() : Ok(updated);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePurchaseItemAsync(Guid id, string confirmationString)
+        [HttpDelete("delete")]
+        public async Task<IActionResult> DeletePurchaseItemAsync([FromQuery] Guid id, string confirmationString)
         {
             var deleted = await _purchaseItemService.DeletePurchaseItemAsync(id, confirmationString);
             return deleted ? NoContent() : NotFound();

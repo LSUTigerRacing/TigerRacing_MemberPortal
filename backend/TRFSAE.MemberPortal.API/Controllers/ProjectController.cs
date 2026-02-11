@@ -6,7 +6,7 @@ using TRFSAE.MemberPortal.API.Enums;
 namespace TRFSAE.MemberPortal.API.Controllers;
 
 [ApiController]
-[Route("api/project")]
+[Route("api/projects")]
 public class ProjectController : ControllerBase
 {
     private readonly IProjectService _ProjectService;
@@ -15,33 +15,41 @@ public class ProjectController : ControllerBase
         _ProjectService = projectService;
     }
 
-    [HttpGet]
+    [HttpGet("list")]
     public async Task<IActionResult> GetAllProjects(string? search, ProjectPriority? priority, Subsystem? subsystem, int pageNumber = 1, int pageSize = 8)
     {
         var projects = await _ProjectService.GetAllProjectsAsync(pageNumber, pageSize, search, priority, subsystem);
         return Ok(projects);
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetProjectById(Guid id)
+    [HttpGet("fetch")]
+    public async Task<IActionResult> GetProjectById([FromQuery] Guid id)
     {
         var projects = await _ProjectService.GetProjectByIdAsync(id);
         return Ok(projects);
     }
 
-    [HttpPost]
+    [HttpPost("create")]
     public async Task<IActionResult> CreateNewProject(CreateProjectDto createDto)
     {
         var project = await _ProjectService.CreateNewProjectAsync(createDto);
         return Ok(project);
     }
 
-    [HttpPatch("{id}")]
-    public async Task<IActionResult> UpdateProject(Guid id, UpdateProjectDto updateDto)
+    [HttpPatch("update")]
+    public async Task<IActionResult> UpdateProject([FromQuery] Guid id, UpdateProjectDto updateDto)
     {
         var projects = await _ProjectService.UpdateProjectAsync(id, updateDto);
         return Ok(projects);
     }
+
+    [HttpDelete("delete")]
+    public async Task<IActionResult> DeleteProject([FromQuery] Guid id)
+    {
+        // var projects = await _ProjectService.DeleteProjectAsync(id);
+        return Ok();
+    }
+
 
     [HttpGet("{projectId}/users")]
     public async Task<IActionResult> GetProjectUsers(Guid projectId)

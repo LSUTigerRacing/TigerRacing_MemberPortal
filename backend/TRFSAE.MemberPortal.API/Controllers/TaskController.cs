@@ -3,7 +3,7 @@ using TRFSAE.MemberPortal.API.DTOs;
 using TRFSAE.MemberPortal.API.Interfaces;
 
 [ApiController]
-[Route("api/task")]
+[Route("api/projects/tasks")]
 
 public class TaskController : ControllerBase
 {
@@ -13,15 +13,15 @@ public class TaskController : ControllerBase
         _TaskService = taskService;
     }
 
-    [HttpGet]
+    [HttpGet("list")]
     public async Task<IActionResult> GetAllTasks(TaskSearchDto searchDto)
     {
         var tasks = await _TaskService.GetAllTasksAsync(searchDto);
         return Ok(tasks);
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetTaskById(Guid id)
+    [HttpGet("fetch")]
+    public async Task<IActionResult> GetTaskById([FromQuery] Guid id)
     {
         var task = await _TaskService.GetTasksByIdAsync(id);
 
@@ -33,11 +33,24 @@ public class TaskController : ControllerBase
         return Ok(task);
     }
 
-    [HttpPost]
-    public async Task<IActionResult> CreateTask(CreateTaskDto createDto)
+    [HttpPost("create")]
+    public async Task<IActionResult> CreateTask([FromQuery] Guid id, CreateTaskDto createDto)
     {
         var task = await _TaskService.CreateTaskAsync(createDto);
         return Ok(task);
+    }
+
+    [HttpPatch("update")]
+    public async Task<IActionResult> UpdateTask([FromQuery] Guid id, CreateTaskDto createDto)
+    {
+        return Ok();
+    }
+
+
+    [HttpPost("delete")]
+    public async Task<IActionResult> DeleteTask([FromQuery] Guid id)
+    {
+        return Ok();
     }
 
 }

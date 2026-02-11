@@ -6,7 +6,7 @@ using TRFSAE.MemberPortal.API.Interfaces;
 namespace TRFSAE.MemberPortal.API.Controllers 
 {
   [ApiController]
-  [Route("api/user")]
+  [Route("api/users")]
   public class UserController : ControllerBase
   {
     private readonly IUserService _userService;
@@ -16,7 +16,7 @@ namespace TRFSAE.MemberPortal.API.Controllers
       _userService = userService;
     }
 
-    [HttpGet]
+    [HttpGet("list")]
     public async Task<IActionResult> GetAllUsers(string? search, bool? completedHazingForm, bool? paidMemberFee, int? gradDate, ShirtSize? shirtSize, Subsystem? subsystem, int pageNumber = 1, int pageSize = 8)
     {
       var users = await _userService.GetAllUsersAsync(
@@ -32,29 +32,29 @@ namespace TRFSAE.MemberPortal.API.Controllers
     }
 
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetUserByIDAsync(Guid id)
+    [HttpGet("fetch")]
+    public async Task<IActionResult> GetUserByIDAsync([FromQuery] Guid id)
     {
       var user = await _userService.GetUserByIDAsync(id);
       return Ok(user);
     }
 
-    [HttpPost]
-    public async Task<IActionResult> CreateUserAsync([FromBody] CreateUserDto model)
+    [HttpPost("create")]
+    public async Task<IActionResult> CreateUserAsync(CreateUserDto model)
     {
       var taskResult = await _userService.CreateUserAsync(model);
       return Ok(taskResult);
     }
 
-    [HttpPatch("{id}")]
-    public async Task<IActionResult> UpdateUserByIdAsync(Guid id, UserUpdateDto model)
+    [HttpPatch("update")]
+    public async Task<IActionResult> UpdateUserByIdAsync([FromQuery] Guid id, UserUpdateDto model)
     {
       var taskResult = await _userService.UpdateUserByIdAsync(id, model);
       return Ok(taskResult);
     }
 
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteUserAsync(Guid id, string confirmationString)
+    [HttpDelete("delete")]
+    public async Task<IActionResult> DeleteUserAsync([FromQuery] Guid id, string confirmationString)
     {
       var taskResult = await _userService.DeleteUserAsync(id, confirmationString);
       return Ok(taskResult);
