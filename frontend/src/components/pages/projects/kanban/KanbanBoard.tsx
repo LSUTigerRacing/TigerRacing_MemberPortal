@@ -163,21 +163,23 @@ export function KanbanBoard ({ columns, setColumns, tasks, setTasks }: KanbanBoa
                     </SortableContext>
                     <div className="flex">
                         <DialogTrigger asChild>
-                            {columns.length === 0 ? (
-                            // Initial button
-                                <Button
-                                    variant="outline"
-                                    className="h-full w-72 sm:w-80 lg:w-96 p-4 cursor-pointer"
-                                >
-                                    <Plus />
-                                    Create Column
-                                </Button>
-                            ) : (
-                            // After first column
-                                <Button variant="outline" size="icon" className="ml-4 cursor-pointer">
-                                    <Plus />
-                                </Button>
-                            )}
+                            {columns.length === 0
+                                ? (
+                                // Initial button
+                                    <Button
+                                        variant="outline"
+                                        className="h-full w-72 sm:w-80 lg:w-96 p-4 cursor-pointer"
+                                    >
+                                        <Plus />
+                                        Create Column
+                                    </Button>
+                                )
+                                : (
+                                // After first column
+                                    <Button variant="outline" size="icon" className="ml-4 cursor-pointer">
+                                        <Plus />
+                                    </Button>
+                                )}
                         </DialogTrigger>
                         <Button variant="outline" className="ml-4 cursor-pointer" onClick={resetToDefaultData}>
                             Reset to Dummy Data
@@ -274,7 +276,9 @@ export function KanbanBoard ({ columns, setColumns, tasks, setTasks }: KanbanBoa
                     <TaskCard
                         task={activeTask}
                         column={columns.find(c => c.id === activeTask.columnId) as Column}
+                        // eslint-disable-next-line @typescript-eslint/no-empty-function
                         deleteTask={() => {}}
+                        // eslint-disable-next-line @typescript-eslint/no-empty-function
                         setEditingTask={() => {}}
                     />
                 )}
