@@ -10,7 +10,7 @@ import {
     TableRow
 } from "@/components/ui/table";
 import { useMemo, useState } from "react";
-import { ChevronDown, ChevronRight, Plus } from "lucide-react";
+import { ChevronDown, ChevronRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import type { Column, Id, Task } from "./KanbanBoard.js";
 import { TaskSheet } from "./TaskSheet.js";
