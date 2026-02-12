@@ -32,6 +32,6 @@ public class UserUpdateDto
 
     public Subsystem? Subsystem { get; set; }
 
-    [JsonPropertyName("name")]
+    [JsonPropertyName("role")]
     public Role? Role { get; set; }
 }
