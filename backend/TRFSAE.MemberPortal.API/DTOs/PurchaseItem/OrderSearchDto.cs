@@ -3,7 +3,7 @@ using TRFSAE.MemberPortal.API.Enums;
 
 namespace TRFSAE.MemberPortal.API.DTOs;
 
-public class PurchaseItemSearchDto
+public class OrderSearchDto
 {
     public string? PartName { get; set; }
     public int ManufacturerPtNo { get; set; }

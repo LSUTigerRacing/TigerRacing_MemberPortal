@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace TRFSAE.MemberPortal.API.DTOs;
 
-public class PurchaseItemCreateDto
+public class OrderUpdateDto
 {
     public Guid Requester { get; set; }
     public string PartUrl { get; set; } = string.Empty;
@@ -18,10 +18,12 @@ public class PurchaseItemCreateDto
     public OrderStatus OrderStatus { get; set; }
 
     public string Notes { get; set; } = string.Empty;
+    public DateTime CreatedAt { get; set; }
     public DateTime? NeededBy { get; set; }
     public string PoNumber { get; set; } = string.Empty;
+    public DateTime? OrderDate { get; set; }
+    public DateTime? OrderReceivedDate { get; set; }
     public string OrderActiveStatus { get; set; } = string.Empty;
-    public Guid RequestId { get; set; }
+    public Guid? RequestId { get; set; }
     public bool[]? Approvals { get; set; }
 }
-

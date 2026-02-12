@@ -9,22 +9,22 @@ namespace TRFSAE.MemberPortal.API.Models;
 public class OrderModel : BaseModel
 {
     [PrimaryKey("id", false)]
-    public required Guid Id { get; set; }
+    public Guid Id { get; set; }
 
     [Column("requesterId")]
-    public required Guid RequesterId { get; set; }
+    public Guid RequesterId { get; set; }
 
     [Column("name")]
-    public required string Name { get; set; }
+    public string Name { get; set; } = null!;
 
     [Column("subsystem")]
-    public required Subsystem Subsystem { get; set; }
+    public Subsystem Subsystem { get; set; }
 
     [Column("status")]
-    public required OrderStatus Status { get; set; } = OrderStatus.Pending;
+    public OrderStatus Status { get; set; } = OrderStatus.Pending;
 
     [Column("deadline")]
-    public required DateTime Deadline { get; set; }
+    public DateTime Deadline { get; set; }
 
     [Column("notes")]
     public string? Notes { get; set; }

@@ -3,13 +3,13 @@ using TRFSAE.MemberPortal.API.Enums;
 
 namespace TRFSAE.MemberPortal.API.DTOs;
 
-public class PurchaseItemResponseDto
+public class OrderResponseDto
 {
     [JsonPropertyName("id")]
     public Guid Id { get; set; }
 
-    [JsonPropertyName("requester")]
-    public Guid Requester { get; set; }
+    [JsonPropertyName("requesterId")]
+    public Guid RequesterId { get; set; }
 
     [JsonPropertyName("part_url")]
     public string PartUrl { get; set; } = string.Empty;
