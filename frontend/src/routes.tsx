@@ -7,9 +7,10 @@ const Home = lazy(() => import("./pages/Home.tsx"));
 // Private pages.
 const Admin = lazy(() => import("./pages/Admin.tsx"));
 const Dashboard = lazy(() => import("./pages/Dashboard.tsx"));
-const Kanban = lazy(() => import("./pages/Kanban.tsx"));
 const Orders = lazy(() => import("./pages/Orders.tsx"));
-const Projects = lazy(() => import("./pages/Projects.tsx"));
+const ProjectDashboard = lazy(() => import("./pages/ProjectDashboard.tsx"));
+const ProjectKanban = lazy(() => import("./pages/ProjectKanban.tsx"));
+const Kanban = lazy(() => import("./pages/KanbanOld.tsx"));
 
 export const AppRoutes = () => {
     return (
@@ -23,8 +24,9 @@ export const AppRoutes = () => {
                     <Route path="/admin" element={<Admin />} />
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/orders" element={<Orders />} />
-                    <Route path="/projects" element={<Projects />} />
-                    <Route path="/projects/:id" element={<Kanban />} />
+                    <Route path="/projects" element={<ProjectDashboard />} />
+                    <Route path="/projects/:id" element={<ProjectKanban />} />
+                    <Route path="/projects2/:id" element={<Kanban />} />
 
                     {/* 404 Redirect */}
                     <Route path="*" element={<Navigate to="/" replace />} />

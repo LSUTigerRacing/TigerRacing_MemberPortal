@@ -16,7 +16,7 @@ import {
 
 import { ProjectCard, type Project } from "@/components/pages/projects/dashboard/ProjectCard";
 
-export default function Projects () {
+export default function ProjectDashboard () {
     // Projects Data
     const [projects, setProjects] = useState<Project[]>([
         {
