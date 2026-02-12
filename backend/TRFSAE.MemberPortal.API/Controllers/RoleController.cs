@@ -6,7 +6,7 @@ using TRFSAE.MemberPortal.API.Interfaces;
 namespace TRFSAE.MemberPortal.API.Controllers;
 
 [ApiController]
-[Route("api/user/{id}/role")]
+[Route("api/user/role")]
 public class RoleController : ControllerBase
 {
     private readonly IRoleService _roleService;
@@ -15,22 +15,22 @@ public class RoleController : ControllerBase
         _roleService = roleService;
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetUserRole(Guid id)
+    [HttpGet("fetch")]
+    public async Task<IActionResult> GetUserRole([FromQuery] Guid id)
     {
         var role = await _roleService.GetUserRoleAsync(id);
         return Ok(role);
     }
 
-    [HttpPut("{id}")]
-    public async Task<IActionResult> AssignRoleToUser(Guid id, Role role)
+    [HttpPut("update")]
+    public async Task<IActionResult> AssignRoleToUser([FromQuery] Guid id, Role role)
     {
         await _roleService.AssignRoleToUserAsync(id, role);
         return Ok(new { message = $"Change role to {role}" });
     }
 
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> RemoveUserRole(Guid id)
+    [HttpDelete("delete")]
+    public async Task<IActionResult> RemoveUserRole([FromQuery] Guid id)
     {
         await _roleService.RemoveUserRoleAsync(id);
         return Ok(new { message = "Change role to Member" });
