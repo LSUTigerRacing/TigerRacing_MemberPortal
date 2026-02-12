@@ -30,6 +30,7 @@ public class UserUpdateDto
     [JsonPropertyName("system")]
     public TRSystem? System { get; set; }
 
+    [JsonPropertyName("subsystem")]
     public Subsystem? Subsystem { get; set; }
 
     [JsonPropertyName("role")]
