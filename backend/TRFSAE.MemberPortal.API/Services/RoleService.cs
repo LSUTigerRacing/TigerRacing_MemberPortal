@@ -17,30 +17,30 @@ public class RoleService : IRoleService
         _supabaseClient = supabaseClient;
     }
 
-    public async Task<string> GetUserRoleAsync(Guid id)
+    public async Task<Role> GetUserRoleAsync(Guid id)
     {
         var user = await _supabaseClient
             .From<UserModel>()
-            .Where(x => x.UserId == id)
+            .Where(x => x.Id == id)
             .Single();
 
-        return user.role;
+        return user.Role;
     }
 
     public async Task<bool> AssignRoleToUserAsync(Guid id, Role role)
     {
         var user = await _supabaseClient
          .From<UserModel>()
-         .Where(x => x.UserId == id)
+         .Where(x => x.Id == id)
          .Single();
 
-        user.role = role switch
+        user.Role = role switch
         {
-            Role.SuperAdmin => "Superadmin",
-            Role.Admin => "Admin",
-            Role.SystemLead => "System Lead",
-            Role.SubsystemLead => "Subsystem Lead",
-            _ => "Member"
+            Role.SuperAdmin => Role.SuperAdmin,
+            Role.Admin => Role.Admin,
+            Role.SystemLead => Role.SystemLead,
+            Role.SubsystemLead => Role.SubsystemLead,
+            _ => Role.Member
         };
 
         await user.Update<UserModel>();
