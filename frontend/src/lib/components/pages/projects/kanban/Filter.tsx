@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/command";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { Check, Tag, User, ListFilter, Calendar, Hash, X } from "lucide-react";
-import type { Column, Task } from "./KanbanBoard";
+import type { Column, Task } from "./KanbanBoard.js";
 import { useState, useMemo } from "react";
 import { Button } from "../../../ui/button";
 import { cn } from "@/lib/utils";

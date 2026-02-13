@@ -17,7 +17,7 @@ export default defineConfig(({ mode }) => {
     const serverOptions: ServerOptions = {
         port: 3000,
         strictPort: true,
-        host: "127.0.0.1",
+        host: "0.0.0.0",
         proxy: {
             "/api": {
                 target: "http://127.0.0.1:5096",

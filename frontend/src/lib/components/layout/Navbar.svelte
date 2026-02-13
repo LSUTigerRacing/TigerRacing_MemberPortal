@@ -51,7 +51,7 @@
     let userName = $state("Car McCarface");
     let userAvatar = $state(null);
     let userEmail = $state("cmccarface1@lsu.edu");
-    let notificationCount = $state(0);
+    let notificationCount = $state(1);
 
     // temp
     const isMobile = false;
@@ -63,13 +63,16 @@
             {#if isMobile}
                 <Popover>
                     <PopoverTrigger>
-                        <Button
-                            class="group h-9 w-9 hover:bg-accent hover:text-accent-foreground"
-                            variant="ghost"
-                            size="icon"
-                        >
-                            <HamburgerIcon />
-                        </Button>
+                        {#snippet child({ props })}
+                            <Button
+                                {...props}
+                                class="group h-9 w-9 hover:bg-accent hover:text-accent-foreground"
+                                variant="ghost"
+                                size="icon"
+                            >
+                                <HamburgerIcon />
+                            </Button>
+                        {/snippet}
                     </PopoverTrigger>
                     <PopoverContent align="start" class="w-64 p-1">
                         <NavigationMenuRoot class="max-w-none">
@@ -127,15 +130,17 @@
             <div class="flex items-center gap-2">
                 <DropdownMenu>
                     <DropdownMenuTrigger>
-                        <Button variant="ghost" size="icon" class="h-9 w-9 relative">
-                            <BellIcon class="h-4 w-4" />
-                            {#if notificationCount > 0}
-                                <Badge class="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs">
-                                    {notificationCount > 9 ? "9+" : notificationCount}
-                                </Badge>
-                            {/if}
-                            <span class="sr-only">Notifications</span>
-                        </Button>
+                        {#snippet child({ props })}
+                            <Button {...props} variant="ghost" size="icon" class="h-9 w-9 relative">
+                                <BellIcon class="h-4 w-4" />
+                                {#if notificationCount > 0}
+                                    <Badge class="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs">
+                                        {notificationCount > 9 ? "9+" : notificationCount}
+                                    </Badge>
+                                {/if}
+                                <span class="sr-only">Notifications</span>
+                            </Button>
+                        {/snippet}
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" class="w-80">
                         <DropdownMenuLabel>Notifications</DropdownMenuLabel>
@@ -155,16 +160,18 @@
             </div>
             <DropdownMenu>
                 <DropdownMenuTrigger>
-                    <Button variant="ghost" class="h-9 px-2 py-0 hover:bg-accent hover:text-accent-foreground">
-                        <Avatar class="h-7 w-7">
-                            <AvatarImage src={userAvatar} alt={userName} />
-                            <AvatarFallback class="text-xs">
-                                {userName.split(" ").map(n => n[0]).join("")}
-                            </AvatarFallback>
-                        </Avatar>
-                        <ChevronDownIcon class="h-3 w-3 ml-1" />
-                        <span class="sr-only">User menu</span>
-                    </Button>
+                    {#snippet child({ props })}
+                        <Button {...props} variant="ghost" class="h-9 px-2 py-0 hover:bg-accent hover:text-accent-foreground">
+                            <Avatar class="h-7 w-7">
+                                <AvatarImage src={userAvatar} alt={userName} />
+                                <AvatarFallback class="text-xs">
+                                    {userName.split(" ").map(n => n[0]).join("")}
+                                </AvatarFallback>
+                            </Avatar>
+                            <ChevronDownIcon class="h-3 w-3 ml-1" />
+                            <span class="sr-only">User menu</span>
+                        </Button>
+                    {/snippet}
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" class="w-56">
                     <DropdownMenuLabel>

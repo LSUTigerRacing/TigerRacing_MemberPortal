@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Navbar from "../components/layout/Navbar.svelte";
+    import Navbar from "$lib/components/layout/Navbar.svelte";
 
     import "../lib/css/index.css";
 
@@ -7,6 +7,4 @@
 </script>
 
 <Navbar />
-<main class="font-sans">
-    {@render children()}
-</main>
+{@render children()}

@@ -3,7 +3,7 @@
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import type { Column, Task } from "./KanbanBoard";
+import type { Column, Task } from "./KanbanBoard.js";
 import { Badge } from "../../../ui/badge";
 import { Avatar, AvatarFallback } from "../../../ui/avatar";
 import { Separator } from "@/components/ui/separator";
