@@ -9,6 +9,7 @@ const Admin = lazy(() => import("./pages/Admin.tsx"));
 const Dashboard = lazy(() => import("./pages/Dashboard.tsx"));
 const Orders = lazy(() => import("./pages/Orders.tsx"));
 const Projects = lazy(() => import("./pages/Projects.tsx"));
+const Tasks = lazy(() => import("./pages/Kanban.tsx"));
 
 export const AppRoutes = () => {
     return (
@@ -23,6 +24,7 @@ export const AppRoutes = () => {
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/orders" element={<Orders />} />
                     <Route path="/projects" element={<Projects />} />
+                    <Route path="/tasks" element={<Tasks />} />
 
                     {/* 404 Redirect */}
                     <Route path="*" element={<Navigate to="/" replace />} />
