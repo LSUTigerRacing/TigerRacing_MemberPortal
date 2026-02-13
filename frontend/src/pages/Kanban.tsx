@@ -26,6 +26,14 @@ export default function MemberTabs() {
   const [overallSelectedEndDates, setOverallSelectedEndDates] = useState<string[]>([]);
   const [overallSelectedLabels, setOverallSelectedLabels] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState("my-task");
+  const [myTaskFilters, setMyTaskFilters] = useState({
+    statuses: [] as string[],
+    assignees: [] as string[],
+    priorities: [] as string[],
+    labels: [] as string[],
+    startDates: [] as string[],
+    endDates: [] as string[],
+  });
 
   const [tasks, setTasks] = useState<Task[]>(() => {
     const savedData = localStorage.getItem("myTaskData");
@@ -64,21 +72,39 @@ export default function MemberTabs() {
   }, [activeTab]);
 
   const filteredTasks = tasks.filter((task) => {
-    if (selectedColumnId && task.columnId !== selectedColumnId) return false;
-    if (selectedAssignee && !task.assignees?.includes(selectedAssignee)) return false;
-    if (selectedPriority && task.priority !== selectedPriority) return false;
+    if (
+      myTaskFilters.statuses.length > 0 &&
+      !myTaskFilters.statuses.includes(String(task.columnId))
+    )
+      return false;
 
-    if (selectedStartDate) {
+    if (
+      myTaskFilters.assignees.length > 0 &&
+      !task.assignees?.some((a) => myTaskFilters.assignees.includes(a))
+    )
+      return false;
+
+    if (
+      myTaskFilters.priorities.length > 0 &&
+      !myTaskFilters.priorities.includes(task.priority ?? "")
+    )
+      return false;
+
+    if (myTaskFilters.startDates.length > 0) {
       const formatted = task.startDate ? new Date(task.startDate).toLocaleDateString("en-US") : "";
-      if (formatted !== selectedStartDate) return false;
+      if (!myTaskFilters.startDates.includes(formatted)) return false;
     }
 
-    if (selectedEndDate) {
+    if (myTaskFilters.endDates.length > 0) {
       const formatted = task.endDate ? new Date(task.endDate).toLocaleDateString("en-US") : "";
-      if (formatted !== selectedEndDate) return false;
+      if (!myTaskFilters.endDates.includes(formatted)) return false;
     }
 
-    if (selectedLabel && !task.tags?.includes(selectedLabel)) return false;
+    if (
+      myTaskFilters.labels.length > 0 &&
+      !task.tags?.some((tag) => myTaskFilters.labels.includes(tag))
+    )
+      return false;
 
     return true;
   });
@@ -120,18 +146,14 @@ export default function MemberTabs() {
   });
 
   return (
-    <div className="h-screen flex flex-col">
+    <div className="flex h-[calc(100dvh-67px)] xl:h-screen flex-col">
       <div className="w-full px-4 pt-3 pb-1 flex xl:mt-16.75">
         <h1 className="text-2xl font-semibold tracking-tight mb-3">Project Title</h1>
         <div className="ml-auto flex items-center">
           <LearnMore />
         </div>
       </div>
-      <Tabs
-        value={activeTab}
-        onValueChange={setActiveTab}
-        className="flex-1 flex flex-col min-h-0"
-      >
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col min-h-0">
         <TabsList className="justify-start grid grid-cols-2 sm:gap-2 sm:pl-5 bg-transparent">
           <TabsTrigger
             value="my-task"
@@ -149,23 +171,38 @@ export default function MemberTabs() {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="my-task" className="flex-1 mt-0 bg-white p-0 min-h-0">
-          <div className="p-5 gap-8 justify-center flex text-gray-500 h-auto bg-white sm:bg-red-500 md:bg-blue-500 lg:bg-green-500">
-            <MyTask
-              columns={columns}
-              tasks={tasks}
-              onColumnSelect={setSelectedColumnId}
-              onAssigneeSelect={setSelectedAssignee}
-              onPrioritySelect={setSelectedPriority}
-              onStartDateSelect={setSelectedStartDate}
-              onEndDateSelect={setSelectedEndDate}
-              onLabelSelect={setSelectedLabel}
-              selectedColumnId={selectedColumnId}
-              selectedAssignee={selectedAssignee}
-              selectedPriority={selectedPriority}
-              selectedStartDate={selectedStartDate}
-              selectedEndDate={selectedEndDate}
-              selectedLabel={selectedLabel}
-            />
+          <div className="p-5 sm:gap-8 justify-center flex flex-col sm:flex-row text-gray-500 h-auto bg-white">
+            <div className="sm:hidden">
+              <FilterCommandBar
+                columns={columns}
+                tasks={tasks}
+                filters={myTaskFilters}
+                updateFilters={(key, next) => {
+                  setMyTaskFilters((prev) => ({
+                    ...prev,
+                    [key]: next,
+                  }));
+                }}
+              />
+            </div>
+            <div className="hidden sm:block">
+              <MyTask
+                columns={columns}
+                tasks={tasks}
+                onColumnSelect={setSelectedColumnId}
+                onAssigneeSelect={setSelectedAssignee}
+                onPrioritySelect={setSelectedPriority}
+                onStartDateSelect={setSelectedStartDate}
+                onEndDateSelect={setSelectedEndDate}
+                onLabelSelect={setSelectedLabel}
+                selectedColumnId={selectedColumnId}
+                selectedAssignee={selectedAssignee}
+                selectedPriority={selectedPriority}
+                selectedStartDate={selectedStartDate}
+                selectedEndDate={selectedEndDate}
+                selectedLabel={selectedLabel}
+              />
+            </div>
             <div className="flex flex-col w-full">
               <TaskTable
                 columns={columns}

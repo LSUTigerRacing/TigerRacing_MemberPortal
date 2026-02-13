@@ -219,7 +219,7 @@ export function ColumnContainer({
   ]);
 
   return (
-    <Card ref={setNodeRef} className="flex flex-col w-72 sm:w-80 lg:w-96 flex-shrink-0 p-0 pt-4 h-full bg-white border-5">
+    <Card ref={setNodeRef} className="flex flex-col w-72 sm:w-80 lg:w-96 flex-shrink-0 p-0 pt-4 h-full bg-white">
       {/* Column Header with drag listeners attached  */}
       <div className="flex justify-between">
         <div className="flex items-start gap-2">

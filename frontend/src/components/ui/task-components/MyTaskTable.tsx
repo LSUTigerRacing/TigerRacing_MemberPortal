@@ -210,21 +210,21 @@ export function TaskTable({
                   <TableRow className="bg-gray-50 hover:bg-gray-50">
                     <TableHead className="w-12 text-center font-semibold">#</TableHead>
                     <TableHead>
-                      <div className="flex items-center gap-2">Title</div>
+                      <div className="flex items-center gap-2 pl-2">Title</div>
                     </TableHead>
                     <TableHead>
                       <div className="flex items-center gap-2">Priority</div>
                     </TableHead>
-                    <TableHead>
+                    <TableHead className="hidden sm:table-cell">
                       <div className="flex items-center gap-2">Label</div>
                     </TableHead>
-                    <TableHead>
+                    <TableHead className="hidden sm:table-cell">
                       <div className="flex items-center gap-2">Start date</div>
                     </TableHead>
                     <TableHead>
                       <div className="flex items-center gap-2">Due date</div>
                     </TableHead>
-                    <TableHead>
+                    <TableHead className="hidden sm:table-cell">
                       <div className="flex items-center gap-2">Status</div>
                     </TableHead>
                   </TableRow>
@@ -240,14 +240,14 @@ export function TaskTable({
                           <TableCell className="font-medium">
                             <TaskSheet task={task} column={column} truncate />
                           </TableCell>
-                          <TableCell>
+                          <TableCell className="border">
                             {task.priority && (
                               <Badge className={priorityStyles[task.priority]}>
                                 {task.priority}
                               </Badge>
                             )}
                           </TableCell>
-                          <TableCell>
+                          <TableCell className="hidden sm:table-cell">
                             {task.tags && task.tags.length > 0 ? (
                               <div className="flex flex-wrap gap-1 mt-2">
                                 {task.tags.slice(0, 3).map((tagValue) => {
@@ -272,9 +272,9 @@ export function TaskTable({
                               <p className="text-sm">To Be Determined</p>
                             )}
                           </TableCell>
-                          <TableCell>{formatDate(task.startDate)}</TableCell>
-                          <TableCell>{formatDate(task.endDate)}</TableCell>
-                          <TableCell>
+                          <TableCell className="hidden sm:table-cell">{formatDate(task.startDate)}</TableCell>
+                          <TableCell className="border">{formatDate(task.endDate)}</TableCell>
+                          <TableCell className="hidden sm:table-cell">
                             <Badge className={`${column.color} text-white`}>{column.title}</Badge>
                           </TableCell>
                         </TableRow>
@@ -282,7 +282,7 @@ export function TaskTable({
                     </>
                   ) : (
                     <TableRow>
-                      <TableCell colSpan={7} className="text-center text-gray-400 py-8">
+                      <TableCell colSpan={4} className="text-center text-gray-400 py-8 sm:col-span-7">
                         No tasks in this column
                       </TableCell>
                     </TableRow>

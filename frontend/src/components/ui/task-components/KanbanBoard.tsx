@@ -32,7 +32,7 @@ import {
 import { SortableContext, arrayMove } from "@dnd-kit/sortable";
 import { TaskCard } from "./TaskCard";
 import { dummyColumns, dummyTasks } from "@/lib/dummyData/dummyTasks";
-import { Popover, PopoverContent, PopoverTrigger } from "../shadcn-components/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 const buttonColors = [
   "bg-gray-600",

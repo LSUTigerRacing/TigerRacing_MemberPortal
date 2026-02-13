@@ -30,7 +30,6 @@ interface Props {
 }
 
 export function TaskCard({ column, task, deleteTask, setEditingTask }: Props) {
-  const [mouseIsOver, setMouseIsOver] = useState(false);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   const { setNodeRef, attributes, listeners, transform, transition, isDragging } = useSortable({
@@ -53,21 +52,13 @@ export function TaskCard({ column, task, deleteTask, setEditingTask }: Props) {
 
   return (
     <Card
-      className={cardClassName}
+      className={`${cardClassName} group`}
       ref={setNodeRef}
       style={style}
       {...attributes}
       {...(!isSheetOpen && !isDragging && listeners)}
     >
-      <div
-        className="flex overflow-visible"
-        onMouseEnter={() => {
-          if (!isDragging) setMouseIsOver(true);
-        }}
-        onMouseLeave={() => {
-          setMouseIsOver(false);
-        }}
-      >
+      <div className="flex overflow-visible">
         {task.priority && (
           <div
             className={`absolute left-0 top-0 h-full w-2 rounded-l-xl ${
@@ -84,9 +75,7 @@ export function TaskCard({ column, task, deleteTask, setEditingTask }: Props) {
               <DropdownMenuTrigger asChild className="bg-white">
                 <Button
                   variant="ghost"
-                  className={`w-10 h-3 rounded-full cursor-pointer ${
-                    mouseIsOver ? "opacity-100" : "opacity-0"
-                  }`}
+                  className="w-8 h-3 rounded-full cursor-pointer opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
                 >
                   <Ellipsis />
                 </Button>
