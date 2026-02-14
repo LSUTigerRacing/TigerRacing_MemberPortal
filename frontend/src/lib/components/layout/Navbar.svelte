@@ -57,7 +57,7 @@
     const isMobile = $derived(isMobileInstance.current);
 </script>
 
-<header class="xl:fixed top-0 z-50 w-full border-b-3 shadow-2xl border-primary bg-background px-4 md:px-6 **:no-underline">
+<header class="xl:fixed top-0 z-50 w-full border-b-3 shadow-md border-primary bg-background px-4 md:px-6 **:no-underline">
     <div class="flex h-16 items-center justify-between gap-4">
         <div class="flex items-center gap-2">
             {#if isMobile}

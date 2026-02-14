@@ -61,7 +61,7 @@ export class API extends Axios {
     /**
      * Fetch all projects.
      */
-    fetchProjects = async () => await this.get<Array<Pick<TRAPI.Project, "title" | "status"> & { progress: number }>>("/projects/list");
+    fetchProjects = async () => await this.get<Array<Pick<TRAPI.Project, "id" | "title" | "priority" | "status" | "deadline"> & { users: Array<TRAPI.ProjectUser["name"]>, progress: number }>>("/projects/list");
 
     /**
      * Fetch a specific project.
