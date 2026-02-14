@@ -5,8 +5,8 @@
 
     import { ViewMode, SortOrder, type AdminProps } from "$lib/components/pages/admin/types";
 
-    let viewMode = $state(ViewMode.List as ViewMode);
-    let sortOrder = $state(SortOrder.Ascending as SortOrder);
+    let viewMode = $state<ViewMode>(ViewMode.List);
+    let sortOrder = $state<SortOrder>(SortOrder.Ascending);
 
     let filters = $state({
         systems: [],
@@ -16,7 +16,7 @@
     } as AdminProps["filters"]);
 
     let users = $state.raw([] as AdminProps["users"]);
-    let activeUser = $state(-1);
+    let activeUser = $state("");
 
     const searchVal = $derived(filters.name.toLowerCase());
     const filteredUsers = $derived((
@@ -51,9 +51,9 @@
         />
 
         {#if viewMode === ViewMode.Gallery}
-            <GalleryView users={filteredUsers} activeUser={activeUser} viewMode={viewMode} />
+            <GalleryView bind:viewMode={viewMode} bind:activeUser={activeUser} users={filteredUsers} />
         {:else}
-            <ListView users={filteredUsers} activeUser={activeUser} />
+            <ListView bind:activeUser={activeUser} users={filteredUsers} />
         {/if}
     </div>
 </div>

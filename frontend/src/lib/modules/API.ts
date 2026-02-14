@@ -1,6 +1,6 @@
 import { Axios, type AxiosResponse } from "axios";
 
-import type { TRAPI } from "../../../shared/typings/api.js";
+import type { TRAPI } from "../../../../shared/typings/api.js";
 
 type MutableDocument<T extends Record<"id" | "createdAt" | "updatedAt", string>> = Omit<T, "id" | "createdAt" | "updatedAt">;
 

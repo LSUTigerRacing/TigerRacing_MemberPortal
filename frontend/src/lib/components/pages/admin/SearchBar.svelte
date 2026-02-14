@@ -15,7 +15,6 @@
     import { Input } from "$lib/components/ui/input";
 
     import FilterDropdown from "./FilterDropdown.svelte";
-
     import { ViewMode, type AdminProps } from "./types";
 
     let {

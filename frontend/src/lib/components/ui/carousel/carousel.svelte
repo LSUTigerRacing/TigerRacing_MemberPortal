@@ -11,6 +11,7 @@
         ref = $bindable(null),
         opts = {},
         plugins = [],
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
         setApi = () => {},
         orientation = "horizontal",
         class: className,
@@ -18,6 +19,7 @@
         ...restProps
     }: WithElementRef<CarouselProps> = $props();
 
+    // svelte-ignore state_referenced_locally
     let carouselState = $state<EmblaContext>({
         api: undefined,
         scrollPrev,

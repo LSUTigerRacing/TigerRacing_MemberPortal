@@ -1,6 +1,7 @@
-import type { API } from "$lib/API";
+import type { API } from "$lib/modules/API";
 
 import { Subsystem, System } from "../../../../../../shared/config/enums";
+import type { Unpacked } from "$lib/utils";
 
 export enum ViewMode {
     Gallery,
@@ -25,6 +26,6 @@ export interface AdminProps {
         name: string
     }
     users: Awaited<ReturnType<API["fetchUsers"]>>["data"]
-    activeUser: number
+    activeUser: Unpacked<AdminProps["users"]>["id"]
     filteredCount: number
 }
