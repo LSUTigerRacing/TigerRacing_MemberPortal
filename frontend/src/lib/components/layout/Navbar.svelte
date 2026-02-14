@@ -53,8 +53,8 @@
     let userEmail = $state("cmccarface1@lsu.edu");
     let notificationCount = $state(1);
 
-    // temp
-    const isMobile = false;
+    const isMobileInstance = new IsMobile();
+    const isMobile = $derived(isMobileInstance.current);
 </script>
 
 <header class="xl:fixed top-0 z-50 w-full border-b-3 shadow-2xl border-primary bg-background px-4 md:px-6 **:no-underline">
