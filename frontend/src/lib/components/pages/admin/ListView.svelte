@@ -155,7 +155,7 @@
     });
 </script>
 
-<div class="bg-background w-full my-4 py-4 rounded-xl">
+<div class="bg-background w-full my-4 py-4 rounded-sm">
     <div class="overflow-hidden">
         <Table>
             <TableHeader>

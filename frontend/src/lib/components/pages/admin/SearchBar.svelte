@@ -26,7 +26,7 @@
 
 </script>
 
-<div class="bg-background rounded-xl border-b px-4 md:px-6 **:no-underline">
+<div class="bg-background rounded-sm border-b px-4 md:px-6 **:no-underline">
     <div class="flex h-16 items-center justify-between gap-4">
         <!-- Left side -->
         <div class="flex flex-1 items-center gap-2">
