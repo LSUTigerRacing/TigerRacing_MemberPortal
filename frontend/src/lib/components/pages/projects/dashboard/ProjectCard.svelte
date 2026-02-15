@@ -19,7 +19,13 @@
 
     import { ProjectPriority, ProjectStatus } from "../../../../../../../shared/config/enums";
 
-    const { project }: { project: Unpacked<Awaited<ReturnType<API["fetchProjects"]>>["data"]> } = $props();
+    const {
+        project,
+        animate
+    }: {
+        project: Unpacked<Awaited<ReturnType<API["fetchProjects"]>>["data"]>
+        animate: boolean
+    } = $props();
 
     /* eslint-disable svelte/indent */
     let statusColor = $derived(
@@ -62,7 +68,7 @@
             <span class="text-xs text-gray-500">Progress</span>
             <span class="text-sm text-primary font-bold">{project.progress}%</span>
         </div>
-        <Progress value={project.progress} />
+        <Progress value={animate ? project.progress : 0} />
         <div class="flex justify-between items-center mt-4">
             <div class="*:data-[slot=avatar]:ring-background flex -space-x-2 *:data-[slot=avatar]:ring-2">
                 {#each project.users as user, i (i)}

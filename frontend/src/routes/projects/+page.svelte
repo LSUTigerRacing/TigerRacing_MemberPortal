@@ -1,8 +1,23 @@
 <script lang="ts">
     import Plus from "@lucide/svelte/icons/plus";
+    import Folder from "@lucide/svelte/icons/folder";
 
-    import { Button, buttonVariants } from "$lib/components/ui/button";
+    import { onMount } from "svelte";
+
+    import { buttonVariants } from "$lib/components/ui/button";
+    import {
+        Card,
+        CardContent,
+        CardHeader
+    } from "$lib/components/ui/card";
     import { Dialog, DialogTrigger } from "$lib/components/ui/dialog";
+    import {
+        Empty,
+        EmptyDescription,
+        EmptyHeader,
+        EmptyMedia,
+        EmptyTitle
+    } from "$lib/components/ui/empty";
     import {
         Select,
         SelectContent,
@@ -13,20 +28,21 @@
 
     import NewProjectModal from "$lib/components/pages/projects/dashboard/NewProjectModal.svelte";
     import ProjectCard from "$lib/components/pages/projects/dashboard/ProjectCard.svelte";
+    import type { NewProjectProps } from "$lib/components/pages/projects/dashboard/types";
 
     import { API } from "$lib/modules/API";
 
     import { ProjectPriority, ProjectStatus } from "../../../../shared/config/enums";
 
-    const projects = $state<Awaited<ReturnType<API["fetchProjects"]>>["data"]>([
+    const projects = $state.raw<Awaited<ReturnType<API["fetchProjects"]>>["data"]>([
         {
             id: "1",
             title: "Project 1",
             priority: ProjectPriority.High,
             status: ProjectStatus.Draft,
             deadline: "Dec 1, 2025",
-            users: ["TD", "CT", "RL"],
-            progress: 67
+            users: ["T D", "C T", "R L"],
+            progress: 25
         },
         {
             id: "2",
@@ -34,7 +50,7 @@
             priority: ProjectPriority.Medium,
             status: ProjectStatus.OnHold,
             deadline: "Dec 2, 2025",
-            users: ["TD", "CT", "RL"],
+            users: ["T D", "C T", "R L"],
             progress: 67
         },
         {
@@ -43,8 +59,8 @@
             priority: ProjectPriority.Low,
             status: ProjectStatus.Active,
             deadline: "Dec 2, 2025",
-            users: ["TD", "CT", "RL"],
-            progress: 67
+            users: ["T D", "C T", "R L"],
+            progress: 93
         },
         {
             id: "4",
@@ -52,19 +68,61 @@
             priority: ProjectPriority.High,
             status: ProjectStatus.Completed,
             deadline: "Dec 2, 2025",
-            users: ["TD", "CT", "RL"],
-            progress: 67
+            users: ["T D", "C T", "R L"],
+            progress: 55
         }
     ]);
+
+    let animateProgress = $state(false);
 
     let filters = $state<{
         priority: ProjectPriority | "All Priorities"
         status: ProjectStatus | "All Status"
-        name: string
+        title: string
     }>({
         priority: "All Priorities",
         status: "All Status",
-        name: ""
+        title: ""
+    });
+
+    let newProjectData = $state<NewProjectProps>({
+        title: "",
+        description: "",
+        subsystem: undefined,
+        status: ProjectStatus.Draft,
+        priority: ProjectPriority.Medium,
+        memberEmail: "",
+        members: [],
+        page: 1,
+        error: undefined
+    });
+
+    // TODO: Use fuse.js for name matching.
+    const filteredProjects = $derived(
+        projects.filter(project => (
+            (filters.priority === "All Priorities" || project.priority === filters.priority)
+            && (filters.status === "All Status" || project.status === filters.status)
+            && (!filters.title || project.title.toLowerCase().includes(filters.title.toLowerCase()))
+        ))
+    );
+
+    function resetNewProjectData (): void {
+        newProjectData = {
+            title: "",
+            description: "",
+            subsystem: undefined,
+            status: ProjectStatus.Draft,
+            priority: ProjectPriority.Medium,
+            memberEmail: "",
+            members: [],
+            page: 1,
+            error: undefined
+        };
+    }
+
+    onMount(() => {
+        const timer = setTimeout(() => animateProgress = true);
+        return () => clearTimeout(timer);
     });
 
 </script>
@@ -74,7 +132,7 @@
         <div class="lg:flex justify-between items-center">
             <h1 class="text-2xl font-bold">Projects</h1>
             <div class="flex flex-col lg:flex-row gap-2 mt-2 lg:mt-0">
-                <Input class="lg:w-[300px]!" type="text" placeholder="Search projects..." bind:value={filters.name} autocomplete="off" />
+                <Input class="lg:w-[300px]!" type="text" placeholder="Search projects..." bind:value={filters.title} autocomplete="off" />
                 <Select type="single" name="status-select" bind:value={filters.status}>
                     <SelectTrigger class="w-full lg:w-[180px] bg-background">{filters.status}</SelectTrigger>
                     <SelectContent>
@@ -93,17 +151,46 @@
                         {/each}
                     </SelectContent>
                 </Select>
-                <DialogTrigger class={buttonVariants()}>
+                <DialogTrigger class={buttonVariants()} onclick={resetNewProjectData}>
                     <Plus strokeWidth="3px" />
                     New Project
                 </DialogTrigger>
             </div>
         </div>
-        <div class="grid grid-cols-1 gap-3 mt-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-            {#each projects as project (project.id)}
-                <ProjectCard project={project} />
-            {/each}
+        <div class:grid={filteredProjects.length > 0} class="grid grid-cols-1 gap-3 mt-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+            {#if filteredProjects.length > 0}
+                {#each filteredProjects as project (project.id)}
+                    <ProjectCard project={project} animate={animateProgress} />
+                {/each}
+            {:else}
+                <Card class="bg-background border-background text-background rounded-sm w-full">
+                    <CardHeader class="flex flex-col items-center"></CardHeader>
+                    <CardContent>
+                        <div class="p-8 rounded-sm bg-background">
+                            <Empty>
+                                <EmptyHeader>
+                                    <EmptyMedia variant="icon" class="bg-accent">
+                                        <Folder />
+                                    </EmptyMedia>
+                                    <EmptyTitle class="text-foreground">No Results</EmptyTitle>
+                                    <EmptyDescription>
+                                        {
+                                            /* eslint-disable svelte/indent */
+                                            filters.priority === "All Priorities"
+                                            && filters.status === "All Status"
+                                            && filters.title === ""
+                                            /* eslint-enable svelte/indent */
+                                                ? "Create a project to get started!"
+                                                : "We couldn't find any projects with that criteria."
+                                        }
+                                    </EmptyDescription>
+                                </EmptyHeader>
+                            </Empty>
+                        </div>
+                    </CardContent>
+                </Card>
+            {/if}
         </div>
-        <NewProjectModal />
+        <NewProjectModal bind:data={newProjectData} />
     </Dialog>
 </div>
