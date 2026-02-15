@@ -1,19 +1,16 @@
 <script lang="ts">
-    import {
-        BellIcon,
-        ChevronDownIcon,
-        FileText,
-        Folder,
-        Gauge,
-        GraduationCap,
-        HamburgerIcon,
-        LogOut,
-        Mail,
-        Settings,
-        ShoppingCart,
-        User,
-        UserCog
-    } from "@lucide/svelte";
+    import Bell from "@lucide/svelte/icons/bell";
+    import ChevronDown from "@lucide/svelte/icons/chevron-down";
+    import FileText from "@lucide/svelte/icons/file-text";
+    import Folder from "@lucide/svelte/icons/folder";
+    import Gauge from "@lucide/svelte/icons/gauge";
+    import GraduationCap from "@lucide/svelte/icons/graduation-cap";
+    import Hamburger from "@lucide/svelte/icons/hamburger";
+    import Mail from "@lucide/svelte/icons/mail";
+    import Settings from "@lucide/svelte/icons/settings";
+    import ShoppingCart from "@lucide/svelte/icons/shopping-cart";
+    import User from "@lucide/svelte/icons/user";
+    import UserCog from "@lucide/svelte/icons/user-cog";
 
     import { Avatar, AvatarFallback, AvatarImage } from "$lib/components/ui/avatar";
     import { Badge } from "$lib/components/ui/badge";
@@ -70,7 +67,7 @@
                                 variant="ghost"
                                 size="icon"
                             >
-                                <HamburgerIcon />
+                                <Hamburger />
                             </Button>
                         {/snippet}
                     </PopoverTrigger>
@@ -132,7 +129,7 @@
                     <DropdownMenuTrigger>
                         {#snippet child({ props })}
                             <Button {...props} variant="ghost" size="icon" class="h-9 w-9 relative">
-                                <BellIcon class="h-4 w-4" />
+                                <Bell class="h-4 w-4" />
                                 {#if notificationCount > 0}
                                     <Badge class="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs">
                                         {notificationCount > 9 ? "9+" : notificationCount}
@@ -168,7 +165,7 @@
                                     {userName.split(" ").map(n => n[0]).join("")}
                                 </AvatarFallback>
                             </Avatar>
-                            <ChevronDownIcon class="h-3 w-3 ml-1" />
+                            <ChevronDown class="h-3 w-3 ml-1" />
                             <span class="sr-only">User menu</span>
                         </Button>
                     {/snippet}

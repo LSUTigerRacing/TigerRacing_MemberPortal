@@ -1,11 +1,9 @@
 <script lang="ts">
 
-    import {
-        ChevronFirstIcon,
-        ChevronLastIcon,
-        ChevronLeftIcon,
-        ChevronRightIcon
-    } from "@lucide/svelte";
+    import ChevronFirstIcon from "@lucide/svelte/icons/chevron-first";
+    import ChevronLastIcon from "@lucide/svelte/icons/chevron-last";
+    import ChevronLeftIcon from "@lucide/svelte/icons/chevron-left";
+    import ChevronRightIcon from "@lucide/svelte/icons/chevron-right";
     import {
         getCoreRowModel,
         getFilteredRowModel,

@@ -1,21 +1,19 @@
 <script lang="ts">
-    import {
-        CalendarClock,
-        CalendarDays,
-        CircleUser,
-        ClipboardList,
-        Clock,
-        FileText,
-        Folder,
-        GraduationCap,
-        ListChecks,
-        Mail,
-        Megaphone,
-        Presentation,
-        Settings,
-        ShoppingCart,
-        UserCog
-    } from "@lucide/svelte";
+    import CalendarClock from "@lucide/svelte/icons/calendar-clock";
+    import CalendarDays from "@lucide/svelte/icons/calendar-days";
+    import CircleUser from "@lucide/svelte/icons/circle-user";
+    import ClipboardList from "@lucide/svelte/icons/clipboard-list";
+    import Clock from "@lucide/svelte/icons/clock";
+    import FileText from "@lucide/svelte/icons/file-text";
+    import Folder from "@lucide/svelte/icons/folder";
+    import GraduationCap from "@lucide/svelte/icons/graduation-cap";
+    import ListChecks from "@lucide/svelte/icons/list-checks";
+    import Mail from "@lucide/svelte/icons/mail";
+    import Megaphone from "@lucide/svelte/icons/megaphone";
+    import Presentation from "@lucide/svelte/icons/presentation";
+    import Settings from "@lucide/svelte/icons/settings";
+    import ShoppingCart from "@lucide/svelte/icons/shopping-cart";
+    import UserCog from "@lucide/svelte/icons/user-cog";
 
     import { Avatar, AvatarFallback, AvatarImage } from "$lib/components/ui/avatar";
     import {
