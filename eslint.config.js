@@ -101,11 +101,10 @@ export default defineConfig(
             }
         },
         rules: {
+            "no-useless-assignment": "off",
             "@typescript-eslint/no-unused-vars": "off",
             "@typescript-eslint/explicit-function-return-type": "off",
             "@stylistic/indent": "off",
-
-            // Svelte
             "svelte/indent":
              ["warn", {
                  indent: 4,

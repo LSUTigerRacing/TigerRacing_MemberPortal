@@ -6,6 +6,7 @@
     import Gauge from "@lucide/svelte/icons/gauge";
     import GraduationCap from "@lucide/svelte/icons/graduation-cap";
     import Hamburger from "@lucide/svelte/icons/hamburger";
+    import LogOut from "@lucide/svelte/icons/log-out";
     import Mail from "@lucide/svelte/icons/mail";
     import Settings from "@lucide/svelte/icons/settings";
     import ShoppingCart from "@lucide/svelte/icons/shopping-cart";
