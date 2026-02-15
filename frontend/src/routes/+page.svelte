@@ -18,6 +18,6 @@
     <div class="flex flex-col md:flex-row justify-center items-center gap-2">
         <SplashButton text="Dashboard" url="/dashboard" />
         <SplashButton text="Wiki" url="https://wiki.formulalsu.org" />
-        <SplashButton text="Apply" url="https://formulalsu.org/apply" />
+        <SplashButton text="Apply" url="https://formulalsu.org/join" />
     </div>
 </div>

@@ -54,7 +54,7 @@
         },
         {
             title: "Join Us",
-            href: "https://formulalsu.org/apply"
+            href: "https://formulalsu.org/join"
         }
     ];
 
