@@ -11,6 +11,7 @@
     } from "$lib/components/ui/select";
     import { Input } from "$lib/components/ui/input";
 
+    import NewProjectModal from "$lib/components/pages/projects/dashboard/NewProjectModal.svelte";
     import ProjectCard from "$lib/components/pages/projects/dashboard/ProjectCard.svelte";
 
     import { API } from "$lib/modules/API";
@@ -103,5 +104,6 @@
                 <ProjectCard project={project} />
             {/each}
         </div>
+        <NewProjectModal />
     </Dialog>
 </div>

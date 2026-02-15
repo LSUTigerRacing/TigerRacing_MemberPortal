@@ -4,7 +4,6 @@
     import CircleUser from "@lucide/svelte/icons/circle-user";
     import ClipboardList from "@lucide/svelte/icons/clipboard-list";
     import Clock from "@lucide/svelte/icons/clock";
-    import FileText from "@lucide/svelte/icons/file-text";
     import Folder from "@lucide/svelte/icons/folder";
     import GraduationCap from "@lucide/svelte/icons/graduation-cap";
     import ListChecks from "@lucide/svelte/icons/list-checks";
@@ -70,8 +69,7 @@
         </CardHeader>
         <CardContent class="h-full">
             <div class="flex flex-col gap-2 h-full">
-                <SidebarButton title="Wiki" url="/wiki" icon={GraduationCap} />
-                <SidebarButton title="Documentation" url="/docs" icon={FileText} />
+                <SidebarButton title="Wiki" url="https://wiki.formulalsu.org" icon={GraduationCap} />
                 <div class="grow"></div>
                 <SidebarButton title="Admin" url="/admin" icon={UserCog} />
             </div>
@@ -84,10 +82,8 @@
             <Card class="bg-primary border-primary text-background rounded-sm lg:max-w-xs px-4 pt-8">
                 <CardContent class="flex flex-col items-center">
                     <Avatar class="mb-4 max-w-xs w-64 h-64">
-                        {#if data.avatar}
-                            <AvatarImage src={data.avatar} alt="User profile picture" />
-                            <AvatarFallback class="bg-secondary text-primary text-8xl">{data.name.split(" ").map(x => x.substring(0, 1)).join("") ?? "CM"}</AvatarFallback>
-                        {/if}
+                        <AvatarImage src={data.avatar} alt="User profile picture" />
+                        <AvatarFallback class="bg-secondary text-primary text-8xl">{data.name.split(" ").map(x => x.substring(0, 1)).join("") ?? "CM"}</AvatarFallback>
                     </Avatar>
                     <span class="mt-4 text-2xl">Hi, {data.name ?? "Car McCarface"}!</span>
                 </CardContent>

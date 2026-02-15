@@ -1,7 +1,6 @@
 <script lang="ts">
     import Bell from "@lucide/svelte/icons/bell";
     import ChevronDown from "@lucide/svelte/icons/chevron-down";
-    import FileText from "@lucide/svelte/icons/file-text";
     import Folder from "@lucide/svelte/icons/folder";
     import Gauge from "@lucide/svelte/icons/gauge";
     import GraduationCap from "@lucide/svelte/icons/graduation-cap";
@@ -44,7 +43,20 @@
         href?: string
     }
 
-    const NavigationLinks: NavbarItem[] = [];
+    const NavigationLinks: NavbarItem[] = [
+        {
+            title: "About",
+            href: "https://formulalsu.org"
+        },
+        {
+            title: "Wiki",
+            href: "https://wiki.formulalsu.org"
+        },
+        {
+            title: "Join Us",
+            href: "https://formulalsu.org/apply"
+        }
+    ];
 
     let userName = $state("Car McCarface");
     let userAvatar = $state(null);
@@ -213,10 +225,6 @@
                     <DropdownMenuItem onclick={() => window.open("/wiki", "_self")}>
                         <GraduationCap />
                         Wiki
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onclick={() => window.open("/docs", "_self")}>
-                        <FileText />
-                        Documentation
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onclick={() => window.open("/logout", "_self")}>

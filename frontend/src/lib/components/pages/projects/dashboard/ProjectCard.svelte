@@ -68,7 +68,7 @@
                 {#each project.users as user, i (i)}
                     <Avatar class="size-8">
                         <AvatarImage alt={user} />
-                        <AvatarFallback class="text-xs font-semibold">{user.split(" ").slice(0, 1).join("")}</AvatarFallback>
+                        <AvatarFallback class="text-xs font-semibold">{user.split(" ").map(x => x.substring(0, 1)).join("")}</AvatarFallback>
                     </Avatar>
                 {/each}
             </div>

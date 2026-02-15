@@ -17,7 +17,7 @@
     <img src={Logo} alt="TigerRacing splash logo" class="size-max mb-10 px-10" />
     <div class="flex flex-col md:flex-row justify-center items-center gap-2">
         <SplashButton text="Dashboard" url="/dashboard" />
-        <SplashButton text="Wiki" url="/wiki" />
-        <SplashButton text="Projects" url="/projects" />
+        <SplashButton text="Wiki" url="https://wiki.formulalsu.org" />
+        <SplashButton text="Apply" url="https://formulalsu.org/apply" />
     </div>
 </div>
