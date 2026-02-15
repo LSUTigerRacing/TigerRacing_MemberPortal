@@ -28,7 +28,7 @@
 
     import NewProjectModal from "$lib/components/pages/projects/dashboard/NewProjectModal.svelte";
     import ProjectCard from "$lib/components/pages/projects/dashboard/ProjectCard.svelte";
-    import type { NewProjectProps } from "$lib/components/pages/projects/dashboard/types";
+    import { initialNewProjectData } from "$lib/components/pages/projects/dashboard/helpers";
 
     import { API } from "$lib/modules/API";
 
@@ -85,40 +85,18 @@
         title: ""
     });
 
-    let newProjectData = $state<NewProjectProps>({
-        title: "",
-        description: "",
-        subsystem: undefined,
-        status: ProjectStatus.Draft,
-        priority: ProjectPriority.Medium,
-        memberEmail: "",
-        members: [],
-        page: 1,
-        error: undefined
-    });
+    let newProjectData = $state(initialNewProjectData);
+    let newProjectModalOpen = $state(false);
 
     // TODO: Use fuse.js for name matching.
+    const titleFilter = $derived(filters.title.toLowerCase());
     const filteredProjects = $derived(
         projects.filter(project => (
             (filters.priority === "All Priorities" || project.priority === filters.priority)
             && (filters.status === "All Status" || project.status === filters.status)
-            && (!filters.title || project.title.toLowerCase().includes(filters.title.toLowerCase()))
+            && (!filters.title || project.title.toLowerCase().includes(titleFilter))
         ))
     );
-
-    function resetNewProjectData (): void {
-        newProjectData = {
-            title: "",
-            description: "",
-            subsystem: undefined,
-            status: ProjectStatus.Draft,
-            priority: ProjectPriority.Medium,
-            memberEmail: "",
-            members: [],
-            page: 1,
-            error: undefined
-        };
-    }
 
     onMount(() => {
         const timer = setTimeout(() => animateProgress = true);
@@ -128,7 +106,7 @@
 </script>
 
 <div class="xl:mt-16.75 px-8 pt-6">
-    <Dialog>
+    <Dialog open={newProjectModalOpen}>
         <div class="lg:flex justify-between items-center">
             <h1 class="text-2xl font-bold">Projects</h1>
             <div class="flex flex-col lg:flex-row gap-2 mt-2 lg:mt-0">
@@ -151,7 +129,7 @@
                         {/each}
                     </SelectContent>
                 </Select>
-                <DialogTrigger class={buttonVariants()} onclick={resetNewProjectData}>
+                <DialogTrigger class={buttonVariants()} onclick={() => newProjectData = initialNewProjectData}>
                     <Plus strokeWidth="3px" />
                     New Project
                 </DialogTrigger>
@@ -191,6 +169,6 @@
                 </Card>
             {/if}
         </div>
-        <NewProjectModal bind:data={newProjectData} />
+        <NewProjectModal bind:data={newProjectData} bind:newProjectModalOpen />
     </Dialog>
 </div>

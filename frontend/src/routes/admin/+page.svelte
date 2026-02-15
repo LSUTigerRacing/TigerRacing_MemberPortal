@@ -18,25 +18,20 @@
     let users = $state.raw([] as AdminProps["users"]);
     let activeUser = $state("");
 
-    const searchVal = $derived(filters.name.toLowerCase());
-    const filteredUsers = $derived((
-        (
-            filters.systems.length > 0
-            || filters.subsystems.length > 0
-            || filters.years.length > 0
-        )
-            ? users.filter(user => (
-                user.name.toLowerCase().includes(searchVal)
-                && (!filters.systems.length || !filters.systems.includes(user.system))
+    const nameFilter = $derived(filters.name.toLowerCase());
+    const filteredUsers = $derived(
+        users.filter(user => (
+                (!filters.systems.length || !filters.systems.includes(user.system))
                 && (!filters.subsystems.length || !filters.subsystems.includes(user.subsystem))
                 && (!filters.years.length || !filters.years.includes(user.gradYear))
-            ))
-            : users.filter(user => user.name.toLowerCase().includes(searchVal))
-    ).sort((a, b) => (
-        sortOrder === SortOrder.Ascending
-            ? a.name.localeCompare(b.name)
-            : b.name.localeCompare(a.name)
-    )));
+                && (!filters.name || user.name.toLowerCase().includes(nameFilter))
+            )
+        ).sort((a, b) => (
+            sortOrder === SortOrder.Ascending
+                ? a.name.localeCompare(b.name)
+                : b.name.localeCompare(a.name)
+        ))
+    );
 
     const filteredCount = $derived(filteredUsers.length);
 </script>

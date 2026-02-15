@@ -5,8 +5,8 @@ import type { TRAPI } from "../../../../shared/typings/api.js";
 type MutableDocument<T extends Record<"id" | "createdAt" | "updatedAt", string>> = Omit<T, "id" | "createdAt" | "updatedAt">;
 
 // Types that are too long to inline.
-type CreateProjectBody = Pick<TRAPI.Project, "title" | "subsystem" | "status" | "deadline">
-    & Partial<Pick<TRAPI.Project, "description" | "priority" | "startDate">
+type CreateProjectBody = Pick<TRAPI.Project, "title" | "subsystem" | "status" | "startDate" | "deadline">
+    & Partial<Pick<TRAPI.Project, "description" | "priority">
     & { author: TRAPI.User["email"], users: Array<TRAPI.User["email"]> }>;
 
 /**
