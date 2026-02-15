@@ -1,7 +1,7 @@
 <script lang="ts">
     import SplashButton from "$lib/components/pages/home/SplashButton.svelte";
 
-    import HeroBg from "$lib/img/backgrounds/hero_bg.png";
+    import Hero from "$lib/img/backgrounds/hero.png";
     import Logo from "$lib/img/logos/logo_white.png";
 </script>
 
@@ -9,7 +9,7 @@
 <h1 class="hidden">Home</h1>
 
 <!-- Backdrop -->
-<div class="fixed w-screen h-screen overflow-hidden bg-cover" style="background-image: url({HeroBg});"></div>
+<div class="fixed w-screen h-screen overflow-hidden bg-cover" style="background-image: url({Hero});"></div>
 <div class="fixed bg-[#00000060] backdrop-blur-xs w-screen h-screen"></div>
 
 <!-- Buttons -->

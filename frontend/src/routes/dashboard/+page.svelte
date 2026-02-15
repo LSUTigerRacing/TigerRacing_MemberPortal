@@ -51,7 +51,7 @@
     <h1 class="hidden">Dashboard</h1>
 
     <!-- Sidebar -->
-    <Card class="w-full xl:max-w-xs h-screen rounded-none bg-accent shadow-none gap-2">
+    <Card class="w-full xl:max-w-xs xl:dvh rounded-none bg-accent shadow-none gap-2">
         <CardHeader class="xl:mt-16.75">
             <CardTitle>Dashboard</CardTitle>
         </CardHeader>
