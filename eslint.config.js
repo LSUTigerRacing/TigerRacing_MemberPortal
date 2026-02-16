@@ -1,66 +1,37 @@
 // @ts-check
 import { defineConfig, globalIgnores } from "eslint/config";
+import svelteConfig from "./frontend/svelte.config.js";
 
 import tseslint from "typescript-eslint";
 import js from "@eslint/js";
-import jsxA11y from "eslint-plugin-jsx-a11y";
-import react from "eslint-plugin-react";
+import svelte from "eslint-plugin-svelte";
 import stylistic from "@stylistic/eslint-plugin";
-import reactHooks from "eslint-plugin-react-hooks";
 
 import globals from "globals";
 
 export default defineConfig(
     globalIgnores([
         "**/node_modules",
+        "**/build",
+        "**/.svelte-kit",
         "**/dist",
         "**/drizzle"
     ]),
     js.configs.recommended,
     ...tseslint.configs.recommended,
     ...tseslint.configs.stylistic,
-    reactHooks.configs.flat.recommended,
+    ...svelte.configs.recommended,
     stylistic.configs.customize({
         indent: 4,
         semi: true,
         commaDangle: "never"
     }),
     {
-        files: ["**/*.tsx"],
-        plugins: {
-            react
-        },
-        languageOptions: {
-            parserOptions: react.configs.recommended.parserOptions,
-            globals: {
-                ...globals.browser
-            }
-        },
-        rules: {
-            ...react.configs["jsx-runtime"].rules
-        },
-        settings: {
-            react: {
-                version: "detect"
-            }
-        }
-    },
-    {
-        files: ["**/*.tsx"],
-        ...jsxA11y.flatConfigs.recommended,
-        languageOptions: {
-            ...jsxA11y.flatConfigs.recommended.languageOptions,
-            globals: {
-                ...globals.browser
-            }
-        }
-    },
-    {
         languageOptions: {
             parserOptions: {
                 projectService: true,
-                tsconfigRootDir: import.meta.dirname,
-                warnOnUnsupportedTypeScriptVersion: false
+                warnOnUnsupportedTypeScriptVersion: false,
+                extraFileExtensions: [".svelte"]
             },
             globals: {
                 ...globals.browser,
@@ -108,7 +79,39 @@ export default defineConfig(
             "@typescript-eslint/no-non-null-asserted-optional-chain": "off",
             "@typescript-eslint/array-type": "off",
             "jsx-a11y/no-static-element-interactions": "off",
-            "jsx-a11y/click-events-have-key-events": "off"
+            "jsx-a11y/click-events-have-key-events": "off",
+
+            // Svelte
+            "svelte/indent": "off"
+        }
+    },
+    {
+        files: ["**/*.svelte", "**/*.svelte.ts"],
+        languageOptions: {
+            parserOptions: {
+                projectService: true,
+                warnOnUnsupportedTypeScriptVersion: false,
+                extraFileExtensions: [".svelte"],
+                parser: tseslint.parser,
+                svelteConfig
+            },
+            globals: {
+                ...globals.browser,
+                ...globals.node
+            }
+        },
+        rules: {
+            "no-useless-assignment": "off",
+            "@typescript-eslint/no-unused-vars": "off",
+            "@typescript-eslint/explicit-function-return-type": "off",
+            "@stylistic/indent": "off",
+            "svelte/indent":
+             ["warn", {
+                 indent: 4,
+                 ignoredNodes: [],
+                 switchCase: 1,
+                 alignAttributesVertically: false
+             }]
         }
     }
 );
