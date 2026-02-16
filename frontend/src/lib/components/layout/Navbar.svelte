@@ -35,7 +35,7 @@
         PopoverTrigger
     } from "$lib/components/ui/popover";
 
-    import LogoImg from "$lib/img/logos/logo.png";
+    import LogoImg from "$lib/img/logos/logo.webp";
     import { IsMobile } from "$lib/hooks/is-mobile.svelte";
 
     interface NavbarItem {

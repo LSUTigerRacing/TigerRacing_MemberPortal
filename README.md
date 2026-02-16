@@ -1,5 +1,5 @@
 <div align="center">
-    <img src="./frontend/src/lib/img/logos/logo.png" alt="TigerRacing Logo" style="height:200px">
+    <img src="./frontend/src/lib/img/logos/logo.webp" alt="TigerRacing Logo" style="height:200px">
 </div>
 <hr />
 <div align="center">

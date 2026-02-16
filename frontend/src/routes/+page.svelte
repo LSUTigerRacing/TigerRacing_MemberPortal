@@ -1,8 +1,8 @@
 <script lang="ts">
     import SplashButton from "$lib/components/pages/home/SplashButton.svelte";
 
-    import Hero from "$lib/img/backgrounds/hero.png";
-    import Logo from "$lib/img/logos/logo_white.png";
+    import Hero from "$lib/img/backgrounds/hero.webp";
+    import Logo from "$lib/img/logos/logo_white.webp";
 </script>
 
 <!-- for accessibility scoring on homepage -->
@@ -16,7 +16,7 @@
 <div class="fixed flex flex-col justify-center items-center w-screen h-screen">
     <img src={Logo} alt="TigerRacing splash logo" class="size-max mb-10 px-10" />
     <div class="flex flex-col md:flex-row justify-center items-center gap-2">
-        <SplashButton text="Dashboard" url="/dashboard" />
+        <SplashButton text="Log In" url="/login" />
         <SplashButton text="Wiki" url="https://wiki.formulalsu.org" />
         <SplashButton text="Apply" url="https://formulalsu.org/join" />
     </div>
