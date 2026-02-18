@@ -8,8 +8,8 @@ namespace TRFSAE.MemberPortal.API.Interfaces;
 
 public interface IAuthService
 {
-    Boolean ValidateSupabaseToken(); 
-    Task<UserModel?> GetUserFromToken();
-    Task SyncUserToDatabase(); 
+    bool ValidateSupabaseToken(string token);
+    Task<UserModel?> GetUserFromToken(string token);
+    Task SyncUserToDatabase(string token);
 
 }

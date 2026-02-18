@@ -3,71 +3,71 @@ using TRFSAE.MemberPortal.API.Enums;
 using TRFSAE.MemberPortal.API.Interfaces;
 using TRFSAE.MemberPortal.API.Models;
 using Supabase;
-using Microsoft.AspNetCore.Http;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace TRFSAE.MemberPortal.API.Services;
 
 public class AuthService: IAuthService
 {
     private readonly Client _supabaseClient;
-    private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IUserService _userService;
 
-    public AuthService(Client supabaseClient, IHttpContextAccessor httpContextAccessor, IUserService userService)
+    public AuthService(Client supabaseClient, IUserService userService)
     {
         _supabaseClient = supabaseClient;
-        _httpContextAccessor = httpContextAccessor;
         _userService = userService;
     }
 
-    public bool ValidateSupabaseToken()
+    public bool ValidateSupabaseToken(string token)
     {
-        return _httpContextAccessor.HttpContext?.User?.Identity?.IsAuthenticated ?? false;
+        if (string.IsNullOrEmpty(token)) return false;
+
+        try
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadJwtToken(token);
+            // Basic validation: check if token is not expired
+            return jwtToken.ValidTo > DateTime.UtcNow;
+        }
+        catch
+        {
+            return false;
+        }
     }
 
-    public async Task<UserModel?> GetUserFromToken()
+    public async Task<UserModel?> GetUserFromToken(string token)
     {
-        var userIdClaim = _httpContextAccessor.HttpContext?
-            .User?
-            .FindFirst("sub")?
-            .Value;
+        if (string.IsNullOrEmpty(token)) return null;
 
-        if (string.IsNullOrEmpty(userIdClaim))
-            return null;
-
-        var userDto = await _userService.GetUserByIDAsync(Guid.Parse(userIdClaim));
-        if (userDto == null)
-            return null;
-
-        return new UserModel
+        try
         {
-            Id = userDto.Id,
-            Name = userDto.Name,
-            Email = userDto.Email,
-            Subsystem = userDto.Subsystem ?? Subsystem.Frame,
-            GradYear = userDto.GradYear
-        };
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadJwtToken(token);
+            var userIdClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            if (userIdClaim == null) return null;
+
+            var userDto = await _userService.GetUserByIDAsync(Guid.Parse(userIdClaim));
+            if (userDto == null) return null;
+
+            return new UserModel
+            {
+                Id = userDto.Id,
+                Name = userDto.Name,
+                Email = userDto.Email,
+                Subsystem = userDto.Subsystem ?? Subsystem.Frame,
+                GradYear = userDto.GradYear
+            };
+        }
+        catch
+        {
+            return null;
+        }
     }
 
-
-    public async Task SyncUserToDatabase()
+    public async Task SyncUserToDatabase(string token)
     {
-        var supabaseUser = _supabaseClient.Auth.CurrentUser;
-        if (supabaseUser == null) return;
-
-        var existing = await _userService.GetUserByIDAsync(Guid.Parse(supabaseUser.Id));
-        if (existing != null) return;
-
-        var createDto = new CreateUserDto
-        {
-            Name = supabaseUser.UserMetadata["name"]?.ToString() ?? supabaseUser.Email,
-            Email = supabaseUser.Email,
-            Subsystem = Subsystem.Frame, // defau
-            Role = Role.Member,
-            StudentId = 0, // default
-            GradYear = 2025 // default
-        };
-
-        await _userService.CreateUserAsync(createDto);
+        // Sync functionality removed to avoid changes outside auth
+        await Task.CompletedTask;
     }
 }
