@@ -31,5 +31,10 @@ obj/
 
 # Node.js
 node_modules/
+build/
 dist/
 drizzle/
+.svelte-kit/
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+tsconfig.tsbuildinfo

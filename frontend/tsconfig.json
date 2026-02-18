@@ -1,14 +1,36 @@
 {
+  "extends": "./.svelte-kit/tsconfig.json",
   "compilerOptions": {
-    "composite": true,
-    "rootDir": "../",
-    "paths": {
-      "@/*": ["./src/*"]
-    }
+    "lib": ["ESNext", "DOM"],
+    "module": "ESNext",
+    "target": "ESNext",
+
+    "moduleResolution": "Bundler",
+
+    "strict": true,
+    "strictNullChecks": true,
+    "alwaysStrict": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "noEmit": false,
+
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "composite": true
   },
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.svelte",
+    "../shared/",
+    "svelte-kit/ambient.d.ts",
+    "svelte-kit/non-ambient.d.ts",
+    "svelte-kit/types/**/$types.d.ts",
+    "vite.config.ts",
+    "vite/*.ts",
+    "global.d.ts"
   ],
-  "files": []
+  "exclude": ["node_modules"]
 }
