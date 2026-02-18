@@ -64,16 +64,10 @@
 
     async function createProject (): Promise<void> {
         data.error = "";
-
-        // This and all subsequent NNAs in this function are because we can assume that
-        // all form fields are filled out by the time the submit button is clicked.
-        if (data.startDate > data.dueDate!) {
-            data.error = "The start date cannot be after the due date!";
-            return;
-        }
-
         data.loading = true;
 
+        // All subsequent NNAs in this function are because we can assume that
+        // all form fields are filled out by the time the submit button is clicked.
         await api.createProject({
             title: data.title,
             subsystem: data.subsystem!,
@@ -256,7 +250,7 @@
             </Button>
             <Button
                 onclick={createProject}
-                disabled={!data.dueDate}
+                disabled={!data.dueDate || data.dueDate.toDate(getLocalTimeZone()).valueOf() < data.startDate.toDate(getLocalTimeZone()).valueOf()}
             >Create Project</Button>
         {/if}
     </DialogFooter>

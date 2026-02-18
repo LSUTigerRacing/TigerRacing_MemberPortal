@@ -219,12 +219,12 @@ export namespace TRAPI {
     interface ProjectTask {
         id: string
         author: string
-        assignee: string
+        assignees?: string[]
 
         title: string
         description?: string
         status: boolean
-        deadline: string
+        deadline?: string
 
         createdAt: string
         updatedAt: string

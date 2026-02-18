@@ -15,7 +15,8 @@
 
     const data = $state({
         title: "MP - General",
-        tab: KanbanTabs.Overview
+        tab: KanbanTabs.MyTasks,
+        filter: ""
     });
 </script>
 <div class="xl:mt-16.75 px-8 pt-4">
@@ -27,11 +28,11 @@
             {/each}
         </TabsList>
         <TabsContent value={KanbanTabs.Overview}>
-            <Filter />
+            <Filter {data} />
             <KanbanBoard />
         </TabsContent>
         <TabsContent value={KanbanTabs.MyTasks}>
-            <Filter />
+            <Filter {data} />
             <MyTasks />
         </TabsContent>
     </Tabs>
