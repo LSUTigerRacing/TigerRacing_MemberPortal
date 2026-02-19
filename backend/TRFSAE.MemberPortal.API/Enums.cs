@@ -69,6 +69,15 @@ public enum ProjectPriority
 }
 
 [JsonConverter(typeof(StringEnumConverter))]
+public enum ProjectStatus
+{
+    Draft,
+    Active,
+    OnHold,
+    Completed
+}
+
+[JsonConverter(typeof(StringEnumConverter))]
 public enum OrderStatus
 {
     Pending,
