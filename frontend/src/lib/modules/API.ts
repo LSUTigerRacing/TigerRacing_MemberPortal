@@ -9,6 +9,9 @@ type CreateProjectBody = Pick<TRAPI.Project, "title" | "subsystem" | "status" | 
     & Partial<Pick<TRAPI.Project, "description" | "priority">
     & { author: TRAPI.User["email"], users: Array<TRAPI.User["email"]> }>;
 
+type CreateProjectTaskBody = Pick<TRAPI.ProjectTask, "title" | "status">
+    & Partial<Pick<TRAPI.ProjectTask, "description" | "assignees" | "deadline">>;
+
 /**
  * Interface to interact with the TigerRacing API.
  */
@@ -100,7 +103,7 @@ export class API extends Axios {
      * @param data Task creation data.
      * @todo Replace `status` with some category-like instance variable that represents the column the task is currently located in. Also find a better endpoint.
      */
-    createProjectTask = async (id: TRAPI.Project["id"], data: Pick<TRAPI.ProjectTask, "title" | "status">) => await this.post<boolean, AxiosResponse<boolean>, Pick<TRAPI.ProjectTask, "title" | "status">>(`/projects/tasks/create?id=${id}`, data);
+    createProjectTask = async (id: TRAPI.Project["id"], data: CreateProjectTaskBody) => await this.post<boolean, AxiosResponse<boolean>, CreateProjectTaskBody>(`/projects/tasks/create?id=${id}`, data);
 
     /**
      * Update a given project task.
