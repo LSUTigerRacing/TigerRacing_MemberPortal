@@ -8,6 +8,7 @@
     "preview": "bun --bun vite preview"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.97.0",
     "axios": "^1.13.5",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

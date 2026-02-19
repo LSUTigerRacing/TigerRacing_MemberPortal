@@ -6,7 +6,19 @@
 
     import Logo from "$lib/img/logos/logo_white.webp";
     import LoginBg from "$lib/img/backgrounds/login.webp";
-    import Microsoft from "$lib/img/logos/microsoft.svg";
+    import { supabase } from "$lib/supabase";
+
+    async function signInWithGoogle() {
+        const { error } = await supabase.auth.signInWithOAuth({
+            provider: 'google',
+            options: {
+                redirectTo: `${window.location.origin}/dashboard`
+            }
+        });
+        if (error) {
+            console.error('Error signing in with Google:', error);
+        }
+    }
 </script>
 
 <div id="login-container" class="w-dvw h-dvh">
@@ -16,10 +28,9 @@
                 <div class="flex flex-col justify-around items-center mt-30">
                     <div class="flex flex-col gap-6">
                         <img src={Logo} alt="TigerRacing logo" />
-                        <a class="{buttonVariants({ variant: "ghost" })} bg-background text-muted-foreground font-black! text-2xl! p-8! hover:bg-primary hover:text-background active:bg-foreground active:scale-95" href={resolve("/api/auth/microsoft", {})}>
-                            <img src={Microsoft} alt="Microsoft logo" />
-                            Sign in with Microsoft
-                        </a>
+                        <button class="{buttonVariants({ variant: "ghost" })} bg-background text-muted-foreground font-black! text-2xl! p-8! hover:bg-primary hover:text-background active:bg-foreground active:scale-95" on:click={signInWithGoogle}>
+                            Sign in with Google
+                        </button>
                         <span class="text-sm text-muted text-center">
                             Don't have an account?
                             <a class="text-sm font-black transition-colors hover:text-secondary" href="https://formulalsu.org/join">Apply now!</a>
