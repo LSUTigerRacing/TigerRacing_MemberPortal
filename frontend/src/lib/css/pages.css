@@ -1,0 +1,4 @@
+/* Custom CSS for certain pages that cannot be done through Svelte's coped CSS (i.e. a component). */
+.login-input::placeholder {
+    color: var(--color-background);
+}

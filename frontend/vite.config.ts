@@ -1,16 +1,17 @@
 import { defineConfig, type ServerOptions, type UserConfig } from "vite";
 import { resolve } from "path";
 
-import react from "@vitejs/plugin-react";
+import { sveltekit } from "@sveltejs/kit/vite";
 import tailwindcss from "@tailwindcss/vite";
+import devtoolsJson from "vite-plugin-devtools-json";
 import { ViteImageOptimizer } from "vite-plugin-image-optimizer";
 
 export default defineConfig(({ mode }) => {
     const isDev = mode === "development";
 
     const plugins: UserConfig["plugins"] = [
-        react(),
-        tailwindcss()
+        tailwindcss(),
+        sveltekit()
     ];
 
     const serverOptions: ServerOptions = {
@@ -26,21 +27,14 @@ export default defineConfig(({ mode }) => {
         }
     };
 
-    if (!isDev) plugins.push(ViteImageOptimizer({ logStats: true }));
+    plugins.push(isDev
+        ? devtoolsJson()
+        : ViteImageOptimizer({ logStats: true })
+    );
 
     return {
         build: {
-            cssMinify: "lightningcss",
-            rollupOptions: {
-                onwarn: (warning, defaultHandler) => {
-                    /**
-                     * Vite 5+ throws a warning whenever a file invokes a module level directive.
-                     * As "use client" is specifically supported in React, we are free to suppress these warnings to improve DX.
-                     */
-                    if (warning.code === "SOURCEMAP_ERROR" && warning.message.includes("sourcemap")) return;
-                    defaultHandler(warning);
-                }
-            }
+            cssMinify: "lightningcss"
         },
 
         server: serverOptions,
@@ -56,7 +50,7 @@ export default defineConfig(({ mode }) => {
 
         resolve: {
             alias: {
-                "@": resolve(import.meta.dirname, "./src")
+                $lib: resolve(__dirname, "./src/lib")
             }
         },
 
