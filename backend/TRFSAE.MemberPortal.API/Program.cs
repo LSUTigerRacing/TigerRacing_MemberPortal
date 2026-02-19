@@ -12,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddScoped<IRoleService, RoleService>();
     builder.Services.AddScoped<ITaskService, TaskService>();
     builder.Services.AddScoped<IProjectService, ProjectService>();
-    builder.Services.AddScoped<IGoogleSheetsService, GoogleSheetsService>();
+    // builder.Services.AddScoped<IGoogleSheetsService, GoogleSheetsService>();
 }
 
 // register Supabase client as scoped for reuse across project
