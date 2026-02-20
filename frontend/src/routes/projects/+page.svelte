@@ -110,9 +110,9 @@
         <div class="lg:flex justify-between items-center">
             <h1 class="text-2xl font-bold">Projects</h1>
             <div class="flex flex-col lg:flex-row gap-2 mt-2 lg:mt-0">
-                <Input class="lg:w-[300px]!" type="text" placeholder="Search projects..." bind:value={filters.title} autocomplete="off" />
+                <Input class="lg:w-75!" type="text" placeholder="Search projects..." bind:value={filters.title} autocomplete="off" />
                 <Select type="single" name="status-select" bind:value={filters.status}>
-                    <SelectTrigger class="w-full lg:w-[180px] bg-background">{filters.status}</SelectTrigger>
+                    <SelectTrigger class="w-full lg:w-45 bg-background">{filters.status}</SelectTrigger>
                     <SelectContent>
                         <SelectItem label="All Status" value="All Status" disabled={filters.status === "All Status"}>All Status</SelectItem>
                         {#each Object.values(ProjectStatus) as value, i (i)}
@@ -121,7 +121,7 @@
                     </SelectContent>
                 </Select>
                 <Select type="single" name="priority-select" bind:value={filters.priority}>
-                    <SelectTrigger class="w-full lg:w-[180px] bg-background">{filters.priority}</SelectTrigger>
+                    <SelectTrigger class="w-full lg:w-45 bg-background">{filters.priority}</SelectTrigger>
                     <SelectContent>
                         <SelectItem label="All Priorities" value="All Priorities" disabled={filters.priority === "All Priorities"}>All Priorities</SelectItem>
                         {#each Object.values(ProjectPriority) as value, i (i)}

@@ -23,9 +23,17 @@ export const Project = pgTable("project", t => ({
     updatedAt: t.timestamp({ withTimezone: true }).notNull().defaultNow()
 }));
 
+export const ProjectColumn = pgTable("project_column", t => ({
+    id: t.uuid().primaryKey().defaultRandom(),
+    projectId: t.serial().notNull().references(() => Project.id, { onDelete: "cascade" }),
+    title: t.text().notNull().default("Untitled"),
+    color: t.integer().notNull().default(0)
+}));
+
 export const ProjectTask = pgTable("project_task", t => ({
     id: t.uuid().primaryKey().defaultRandom(),
     projectId: t.serial().notNull().references(() => Project.id, { onDelete: "cascade" }),
+    columnId: t.uuid().notNull().references(() => ProjectColumn.id, { onDelete: "cascade" }),
     authorId: t.uuid().notNull().references(() => User.id, { onDelete: "cascade" }),
 
     title: t.text().notNull().default("Untitled"),
@@ -54,11 +62,16 @@ export const ProjectRelations = relations(Project, ({ one, many }) => ({
         fields: [Project.authorId],
         references: [User.id]
     }),
+    columns: many(ProjectColumn),
     tasks: many(ProjectTask),
     members: many(ProjectUser)
 }));
 
-export const ProjectTaskRelations = relations(ProjectTask, ({ many }) => ({
+export const ProjectTaskRelations = relations(ProjectTask, ({ one, many }) => ({
+    column: one(ProjectColumn, {
+        fields: [ProjectTask.columnId],
+        references: [ProjectColumn.id]
+    }),
     assignees: many(ProjectTaskUser)
 }));
 

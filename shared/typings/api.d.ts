@@ -209,11 +209,20 @@ export namespace TRAPI {
         startDate: string
         deadline: string
 
+        columns: ProjectColumn[]
         tasks: ProjectTask[]
         users: ProjectUser[]
 
         createdAt: string
         updatedAt: string
+    }
+
+    interface ProjectColumn {
+        id: string
+        title: string
+        color: string
+
+        tasks: ProjectTask[]
     }
 
     interface ProjectTask {
