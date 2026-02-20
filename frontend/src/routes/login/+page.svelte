@@ -16,7 +16,7 @@
                 <div class="flex flex-col justify-around items-center mt-30">
                     <div class="flex flex-col gap-6">
                         <img src={Logo} alt="TigerRacing logo" />
-                        <a class="{buttonVariants({ variant: "ghost" })} bg-background text-muted-foreground font-black! text-2xl! p-8! hover:bg-primary hover:text-background active:bg-foreground active:scale-95" href={resolve("/api/auth/microsoft", {})}>
+                        <a class="{buttonVariants({ variant: "ghost" })} bg-background text-muted-foreground font-black! text-2xl! p-8! hover:bg-primary hover:text-background active:bg-foreground motion-safe:active:scale-95" href={resolve("/api/auth/microsoft", {})}>
                             <img src={Microsoft} alt="Microsoft logo" />
                             Sign in with Microsoft
                         </a>

@@ -48,7 +48,7 @@
     /* eslint-enable svelte/indent */
 </script>
 
-<Card class="gap-2 cursor-pointer transition-all hover:shadow-lg hover:scale-95 active:scale-90" onclick={() => window.open(`/projects/${project.id}`, "_self")}>
+<Card class="gap-2 cursor-pointer transition-all hover:shadow-lg motion-safe:hover:scale-95 motion-safe:active:scale-90" onclick={() => window.open(`/projects/${project.id}`, "_self")}>
     <CardHeader>
         <div class="flex justify-between items-center">
             <CardTitle class="text-md">{project.title}</CardTitle>
