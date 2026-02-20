@@ -13,8 +13,30 @@ public class TaskService : ITaskService
     {
         _supabaseClient = supabaseClient;
     }
+ 
+    public async Task<List<TaskDetailDto>> GetAllTasksAsync(Guid projectId)
+    {
+        var response = await _supabaseClient
+        .From<ProjectTaskModel>()
+        .Where(x => x.ProjectId == projectId)
+        .Get();
 
-    public async Task<TaskResponseDto> GetTasksByIdAsync(Guid id)
+        return response.Models.Select(task => new TaskDetailDto
+        {
+            Id = task.Id,
+            ProjectId = task.ProjectId,
+            AuthorId = task.AuthorId,
+            AssigneeId = task.AssigneeId,
+            Title = task.Title,
+            Description = task.Description,
+            Status = task.Status,
+            Deadline = task.Deadline,
+            CreatedAt = task.CreatedAt,
+            UpdatedAt = task.UpdatedAt
+        }).ToList();
+    }
+
+    public async Task<TaskDetailDto> GetTasksByIdAsync(Guid id)
     {
         var response = await _supabaseClient
         .From<ProjectTaskModel>()
@@ -26,27 +48,24 @@ public class TaskService : ITaskService
             throw new Exception("Task not found");
         }
 
-        var taskResponse = new TaskResponseDto
+        var taskDetail = new TaskDetailDto
         {
             Id = response.Id,
-            Title = response.Title
+            ProjectId = response.ProjectId,
+            AuthorId = response.AuthorId,
+            AssigneeId = response.AssigneeId,
+            Title = response.Title,
+            Description = response.Description,
+            Status = response.Status,
+            Deadline = response.Deadline,
+            CreatedAt = response.CreatedAt,
+            UpdatedAt = response.UpdatedAt
         };
 
-        return taskResponse;
+        return taskDetail;
     }
 
-
-    public async Task<List<TaskResponseDto>> GetAllTasksAsync(TaskSearchDto searchDto)
-    {
-        var response = await _supabaseClient
-        .From<ProjectTaskModel>()
-        .Get() ?? throw new Exception("No tasks found");
-
-        return new List<TaskResponseDto>();
-    }
-
-
-    public async Task<TaskResponseDto> CreateTaskAsync(CreateTaskDto createDto)
+    public async Task<TaskDetailDto> CreateTaskAsync(Guid projectId, CreateTaskDto createDto)
     {
         var newTask = new ProjectTaskModel
         {
@@ -60,10 +79,42 @@ public class TaskService : ITaskService
         .Insert(newTask);
 
 
-        return new TaskResponseDto
+        return new TaskDetailDto
         {
             Id = newTask.Id,
             Title = newTask.Title
         };
+    }
+
+    public async Task<TaskDetailDto> UpdateTaskAsync(Guid projectId, UpdateTaskDto createDto)
+    {
+        var newTask = new ProjectTaskModel
+        {
+            Id = Guid.NewGuid(),
+            Title = createDto.Title,
+            Deadline = createDto.Deadline
+        };
+
+        var response = await _supabaseClient
+        .From<ProjectTaskModel>()
+        .Insert(newTask);
+
+
+        return new TaskDetailDto
+        {
+            Id = newTask.Id,
+            Title = newTask.Title
+        };
+    }
+    
+    public async Task<TaskDetailDto> DeleteTaskAsync(Guid id)
+    {
+        await _supabaseClient
+        .From<ProjectTaskModel>()
+        .Where(x => x.Id == id)
+        .Delete();
+
+
+
     }
 }
