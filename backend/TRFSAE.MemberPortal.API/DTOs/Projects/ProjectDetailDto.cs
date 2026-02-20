@@ -12,7 +12,7 @@ public class ProjectDetailDto
     public Guid AuthorId { get; set; }
 
     [JsonPropertyName("title")]
-    public string Title { get; set; } = "Untitled";
+    public string Title { get; set; } = null!;
 
     [JsonPropertyName("description")]
     public string Description { get; set; } = string.Empty;

@@ -8,18 +8,18 @@ public class CreateProjectDto
     [JsonPropertyName("title")]
     public string Title { get; set; } = "Untitled";
 
-    [JsonPropertyName("description")]
-    public string? Description { get; set; }
-
     [JsonPropertyName("subsystem")]
-    public required Subsystem Subsystem { get; set; }
-
-    [JsonPropertyName("priority")]
-    public ProjectPriority Priority { get; set; }
+    public Subsystem Subsystem { get; set; }
 
     [JsonPropertyName("startDate")]
     public DateTime StartDate { get; set; }
 
     [JsonPropertyName("deadline")]
     public DateTime Deadline { get; set; }
+
+    [JsonPropertyName("description")]
+    public string? Description { get; set; }
+
+    [JsonPropertyName("priority")]
+    public ProjectPriority? Priority { get; set; }
 }

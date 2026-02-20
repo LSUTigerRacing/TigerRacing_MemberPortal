@@ -16,9 +16,9 @@ public class ProjectController : ControllerBase
     }
 
     [HttpGet("list")]
-    public async Task<IActionResult> GetAllProjects(string? search, ProjectPriority? priority, Subsystem? subsystem, int pageNumber = 1, int pageSize = 8)
+    public async Task<IActionResult> GetAllProjects()
     {
-        var projects = await _ProjectService.GetAllProjectsAsync(pageNumber, pageSize, search, priority, subsystem);
+        var projects = await _ProjectService.GetAllProjectsAsync();
         return Ok(projects);
     }
 
@@ -30,9 +30,9 @@ public class ProjectController : ControllerBase
     }
 
     [HttpPost("create")]
-    public async Task<IActionResult> CreateNewProject(CreateProjectDto createDto)
+    public async Task<IActionResult> CreateProject(CreateProjectDto createDto)
     {
-        var project = await _ProjectService.CreateNewProjectAsync(createDto);
+        var project = await _ProjectService.CreateProjectAsync(createDto);
         return Ok(project);
     }
 
@@ -48,27 +48,5 @@ public class ProjectController : ControllerBase
     {
         // var projects = await _ProjectService.DeleteProjectAsync(id);
         return Ok();
-    }
-
-
-    [HttpGet("{projectId}/users")]
-    public async Task<IActionResult> GetProjectUsers(Guid projectId)
-    {
-        var users = await _ProjectService.GetAllProjectUsersAsync(projectId);
-        return Ok(users);
-    }
-
-    [HttpPost("{projectId}/users/{userId}")]
-    public async Task<IActionResult> AssignProjectUser(Guid userId, Guid projectId)
-    {
-        var assign = await _ProjectService.AssignProjectUserAsync(userId, projectId);
-        return Ok(assign);
-    }
-
-    [HttpDelete("{projectId}/users/{userId}")]
-    public async Task<IActionResult> RemoveProjectUser(Guid userId, Guid projectId)
-    {
-        var assign = await _ProjectService.RemoveProjectUserAsync(userId, projectId);
-        return Ok(assign);
     }
 }

@@ -14,32 +14,13 @@ public class ProjectService : IProjectService
         _supabaseClient = supabaseClient;
     }
 
-    public async Task<IEnumerable<ProjectSummaryDto>> GetAllProjectsAsync(
-        int pageNumber, int pageSize, string? search, ProjectPriority? priority, Subsystem? subsystem)
+    public async Task<IEnumerable<ProjectSummaryDto>> GetAllProjectsAsync()
     {
         var query = _supabaseClient.From<ProjectModel>();
 
-        if (!string.IsNullOrEmpty(search))
-        {
-            query = (Supabase.Interfaces.ISupabaseTable<ProjectModel, Supabase.Realtime.RealtimeChannel>)
-            query.Where(p => p.Title == search);
-        }
-
-        if (priority != null)
-        {
-            query = (Supabase.Interfaces.ISupabaseTable<ProjectModel, Supabase.Realtime.RealtimeChannel>)
-            query.Where(p => p.Priority == priority);
-        }
-
-        if (subsystem != null)
-        {
-            query = (Supabase.Interfaces.ISupabaseTable<ProjectModel, Supabase.Realtime.RealtimeChannel>)
-            query.Where(p => p.Subsystem == subsystem);
-        }
-
         var response = await query
             .Order(p => p.CreatedAt, Supabase.Postgrest.Constants.Ordering.Ascending)
-            .Range((pageNumber - 1) * pageSize, pageNumber * pageSize - 1)
+            // .Range((pageNumber - 1) * pageSize, pageNumber * pageSize - 1)
             .Select("id,name,deadline,priority")
             .Get();
 
@@ -84,7 +65,7 @@ public class ProjectService : IProjectService
         return projectDetail;
     }
 
-    public async Task<CreateProjectResponse> CreateNewProjectAsync(CreateProjectDto createDto)
+    public async Task<bool> CreateProjectAsync(CreateProjectDto createDto)
     {
         var projectId = Guid.NewGuid();
 
@@ -174,56 +155,8 @@ public class ProjectService : IProjectService
         }
     }
 
-    public async Task<bool> AssignProjectUserAsync(Guid userId, Guid projectId)
+    public async Task<bool> DeleteProjectAsync(Guid id)
     {
-        try
-        {
-            var userProject = new ProjectUserModel
-            {
-                UserId = userId,
-                ProjectId = projectId
-            };
-
-            var response = await _supabaseClient
-                .From<ProjectUserModel>()
-                .Insert(userProject);
-
-            return true;
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error assigning project: {ex.Message}");
-            return false;
-        }
-    }
-
-    public async Task<bool> RemoveProjectUserAsync(Guid userId, Guid projectId)
-    {
-        try
-        {
-            await _supabaseClient
-                .From<ProjectUserModel>()
-                .Where(pm => pm.UserId == userId && pm.ProjectId == projectId)
-                .Delete();
-            return true;
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error removing user from project: {ex.Message}");
-            return false;
-        }
-    }
-
-    public async Task<IEnumerable<Guid>> GetAllProjectUsersAsync(Guid projectId)
-    {
-        var response = await _supabaseClient
-            .From<ProjectUserModel>()
-            .Select("userId")
-            .Where(up => up.ProjectId == projectId)
-            .Get();
-
-        var userIds = response.Models.Select(up => up.UserId);
-
-        return userIds;
+        return false;
     }
 }

@@ -1,6 +1,6 @@
-// using System.ComponentModel.DataAnnotations.Schema;
 using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
+using TRFSAE.MemberPortal.API.Enums;
 
 namespace TRFSAE.MemberPortal.API.Models;
 
@@ -17,16 +17,16 @@ public class ProjectTaskModel : BaseModel
     public Guid AuthorId { get; set; }
 
     [Column("assigneeId")]
-    public Guid AssigneeId { get; set; }
+    public Guid? AssigneeId { get; set; }
 
     [Column("title")]
-    public string Title { get; set; } = "Untitled";
+    public string Title { get; set; } = null!;
 
     [Column("description")]
     public string? Description { get; set; }
 
     [Column("status")]
-    public bool Status { get; set; } = false;
+    public ProjectStatus Status { get; set; }
 
     [Column("deadline")]
     public DateTime Deadline { get; set; }
