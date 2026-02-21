@@ -20,13 +20,12 @@ public class ProjectService : IProjectService
 
         var response = await query
             .Order(p => p.CreatedAt, Supabase.Postgrest.Constants.Ordering.Ascending)
-            // .Range((pageNumber - 1) * pageSize, pageNumber * pageSize - 1)
-            .Select("id,name,deadline,priority")
+            .Select("id,title,deadline,priority")
             .Get();
 
         var projectSummaries = response.Models.Select(p => new ProjectSummaryDto
         {
-            ProjectId = p.Id,
+            Id = p.Id,
             Title = p.Title,
             Deadline = p.Deadline,
             Priority = p.Priority
@@ -72,11 +71,11 @@ public class ProjectService : IProjectService
         var newProject = new ProjectModel
         {
             Id = projectId,
-            AuthorId = new Guid("d168954f-f68c-479a-9740-a9034cb44edb"), // temp until JWT is setup
+            AuthorId = new Guid("8cff6494-d336-4d38-947e-ff299ae3d204"), // temp until JWT is setup
             Title = createDto.Title,
             Description = createDto.Description,
             Subsystem = createDto.Subsystem,
-            Priority = createDto.Priority,
+            Priority = createDto.Priority ?? ProjectPriority.Medium,
             StartDate = createDto.StartDate,
             Deadline = createDto.Deadline,
             CreatedAt = DateTime.UtcNow,
@@ -95,11 +94,7 @@ public class ProjectService : IProjectService
             throw;
         }
 
-        return new CreateProjectResponse
-        {
-            ProjectId = projectId,
-            Location = $"/api/projects/{projectId}"
-        };
+        return true;
     }
 
     public async Task<bool> UpdateProjectAsync(Guid id, UpdateProjectDto updateDto)
@@ -132,13 +127,13 @@ public class ProjectService : IProjectService
             {
                 model.Priority = updateDto.Priority.Value;
             }
-            if (updateDto.ProjectStartDate != null)
+            if (updateDto.StartDate != null)
             {
-                model.StartDate = updateDto.ProjectStartDate.Value;
+                model.StartDate = updateDto.StartDate.Value;
             }
-            if (updateDto.ProjectDueDate != null)
+            if (updateDto.Deadline != null)
             {
-                model.Deadline = updateDto.ProjectDueDate.Value;
+                model.Deadline = updateDto.Deadline.Value;
             }
             model.UpdatedAt = DateTime.UtcNow;
 
@@ -155,8 +150,21 @@ public class ProjectService : IProjectService
         }
     }
 
-    public async Task<bool> DeleteProjectAsync(Guid id)
+    public async Task<bool> DeleteProjectAsync(Guid id) // needs to be turned into RPC; return value is true as long as GUID is valid
     {
-        return false;
+        try
+        {
+            await _supabaseClient
+            .From<ProjectModel>()
+            .Where(x => x.Id == id)
+            .Delete();
+
+            return true;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Delete Failed: {e.Message}");
+            return false;
+        }
     }
 }

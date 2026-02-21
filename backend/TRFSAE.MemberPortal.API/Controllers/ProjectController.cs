@@ -39,14 +39,14 @@ public class ProjectController : ControllerBase
     [HttpPatch("update")]
     public async Task<IActionResult> UpdateProject([FromQuery] Guid id, UpdateProjectDto updateDto)
     {
-        var projects = await _ProjectService.UpdateProjectAsync(id, updateDto);
-        return Ok(projects);
+        var project = await _ProjectService.UpdateProjectAsync(id, updateDto);
+        return Ok(project);
     }
 
     [HttpDelete("delete")]
-    public async Task<IActionResult> DeleteProject([FromQuery] Guid id)
+    public async Task<IActionResult> DeleteProject([FromQuery] Guid id) // needs to be turned into RPC; return value is true as long as GUID is valid
     {
-        // var projects = await _ProjectService.DeleteProjectAsync(id);
-        return Ok();
+        var project = await _ProjectService.DeleteProjectAsync(id);
+        return Ok(project);
     }
 }
