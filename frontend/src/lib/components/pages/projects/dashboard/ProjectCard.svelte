@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { parseDate } from "@internationalized/date";
+
     import {
         Avatar,
         AvatarFallback,
@@ -61,7 +63,7 @@
         <div class="grid grid-cols-2 gap-1">
             <span class="text-xs text-gray-500 font-bold font-manrope uppercase">Due Date</span>
             <span class="text-xs text-gray-500 font-bold font-manrope uppercase">Team</span>
-            <span class="text-sm font-semibold">{new Date(project.deadline).toLocaleDateString()}</span>
+            <span class="text-sm font-semibold">{parseDate(project.deadline).}</span>
             <span class="text-sm font-semibold">{project.users.length} {project.users.length === 1 ? "Member" : "Members"}</span>
         </div>
         <div class="flex justify-between items-center mt-4 mb-2">

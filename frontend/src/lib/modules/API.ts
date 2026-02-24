@@ -113,7 +113,7 @@ export class API extends Axios {
      */
     updateProjectTask = async (
         id: TRAPI.ProjectTask["id"],
-        data: Partial<MutableDocument<Omit<TRAPI.Project, "tasks" | "users">>>
+        data: Partial<MutableDocument<Omit<TRAPI.ProjectTask, "author">>>
     ) => await this.patch<
         boolean,
         AxiosResponse<boolean>,
