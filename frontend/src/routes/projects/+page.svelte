@@ -40,7 +40,7 @@
             title: "Project 1",
             priority: ProjectPriority.High,
             status: ProjectStatus.Draft,
-            deadline: "Dec 1, 2025",
+            deadline: "2025-12-01T06:00:00.000Z",
             users: ["T D", "C T", "R L"],
             progress: 25
         },
@@ -49,7 +49,7 @@
             title: "Project 2",
             priority: ProjectPriority.Medium,
             status: ProjectStatus.OnHold,
-            deadline: "Dec 2, 2025",
+            deadline: "2025-12-02T06:00:00.000Z",
             users: ["T D", "C T", "R L"],
             progress: 67
         },
@@ -58,7 +58,7 @@
             title: "Project 3",
             priority: ProjectPriority.Low,
             status: ProjectStatus.Active,
-            deadline: "Dec 2, 2025",
+            deadline: "2025-01-16T06:00:00.000Z",
             users: ["T D", "C T", "R L"],
             progress: 93
         },
@@ -67,7 +67,7 @@
             title: "Project 4",
             priority: ProjectPriority.High,
             status: ProjectStatus.Completed,
-            deadline: "Dec 2, 2025",
+            deadline: "2025-02-28T06:00:00.000Z",
             users: ["T D", "C T", "R L"],
             progress: 55
         }
